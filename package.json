@@ -1,0 +1,49 @@
+{
+  "name": "vue_vite_electron",
+  "private": true,
+  "version": "0.0.0",
+  "main": "electron/main.js",
+  "scripts": {
+    "electron:serve": "concurrently -k \"npm run dev\" \"npm run start\"",
+    "electron:build": "electron-builder",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "wait-on tcp:5173 && cross-env NODE_ENV=development electron . --watch ./ --ext .js,.html,.css,.vue",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "vite-plugin-optimizer": "^1.4.2",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "concurrently": "^8.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-win-state": "^1.1.22",
+    "nodemon": "^3.0.1",
+    "vite": "^4.4.5",
+    "wait-on": "^7.0.1"
+  },
+  "build": {
+    "productName": "Electron + Vue3 开发桌面应用",
+    "copyright": "Copyright © year",
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    },
+    "mac": {
+      "category": "public.app.category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
