@@ -1,8 +1,7 @@
-const { contextBridge, ipcRenderer, dialog} = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 const openDialog = async (data) => {
-  console.log(data, 'data')
   let result = await ipcRenderer.invoke('open-dialog', data)
-  console.log(result)
+  return result;
 }
 contextBridge.exposeInMainWorld('myApi', {
   openDialog

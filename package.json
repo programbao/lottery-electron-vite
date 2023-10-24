@@ -13,6 +13,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "node-xlsx": "^0.23.0",
     "vite-plugin-optimizer": "^1.4.2",
     "vue": "^3.3.4"
   },

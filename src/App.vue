@@ -1,7 +1,11 @@
 <script setup>
-const importFile = () => {
+const getUsers = (users) => {
+  console.log(users, 'users---')
+}
+const importFile = async () => {
   console.log('执行导入操作')
-  myApi.openDialog('222222')
+  let userData = await myApi.openDialog()
+  console.log(userData, 'userData')
 }
 </script>
 
