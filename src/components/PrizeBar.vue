@@ -40,39 +40,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { lotteryDataStore } from '../store'
+const lotteryData = lotteryDataStore();
 
-const prizes = [
-    {
-    type: 1,
-    count: 1,
-    text: "Hadiah Utama PERJALANAN ROHANI",
-    title: "特等奖",
-    img: "../img/gift.png"
-  },
-  {
-    type: 2,
-    count: 3,
-    text: "Hadiah pertama  一等奖",
-    title: "一等奖",
-    img: "../img/gift.png"
-  },
-  {
-    type: 3,
-    count: 5,
-    text: "Hadiah kedua  二等奖",
-    title: "二等奖",
-    img: "../img/gift.png"
-  },
-  {
-    type: 4,
-    count: 10,
-    text: "Hadiah ketiga  三等奖",
-    title: "三等奖",
-    img: "../img/gift.png"
+// console.log(lotteryData, 'lotteryDatalotteryData')
+const currentPrize = ref({});
+const prizes = computed(() => {
+  let prizes = lotteryData.prizeConfig.prizes;
+  if (prizes) {
+    currentPrize.value = prizes[prizes.length - 1]
   }
-];
-const currentPrize = ref(prizes[0])
+  return prizes
+});
 </script>
 
 <style lang="scss" scoped>

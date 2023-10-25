@@ -3,8 +3,9 @@ import './style.css'
 import App from './App.vue'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
+import { createPinia } from 'pinia'
 const app = createApp(App);
-app.mount('#app')
+const state = createPinia();
 const options = {
   position: "top-right",
   timeout: 5000,
@@ -19,4 +20,7 @@ const options = {
   icon: true,
   rtl: false
 }
-app.use(Toast, options)
+app.use(Toast, options);
+app.use(state);
+
+app.mount('#app')

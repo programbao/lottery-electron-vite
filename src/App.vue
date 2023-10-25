@@ -1,18 +1,27 @@
 <script setup>
+import { onMounted } from "vue"
 import BgBox from "./components/BgBox.vue";
 import LotteryContainer from "./components/LotteryContainer.vue";
 import MusicBtn from "./components/MusicBtn.vue";
 import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
-const getUsers = (users) => {
-  console.log(users, 'users---')
-}
+// 引入store
+import { lotteryDataStore } from './store'
+const lotteryData = lotteryDataStore();
 const importFile = async () => {
   console.log('执行导入操作')
   let userData = await myApi.openDialog()
   console.log(userData, 'userData')
 }
+
+onMounted(async () => {
+  const config = await myApi.getPrizeConfig();
+  if (config) {
+    lotteryData.setPrizeConfig(config.prizeConfig);
+  }
+})
+
 </script>
 
 <template>

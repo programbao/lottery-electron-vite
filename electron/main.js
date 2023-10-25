@@ -1,7 +1,20 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-const openDialog = require('../controller/openDialog')
+
 const NODE_ENV = process.env.NODE_ENV
+
+// 全局变量
+global.sharedObject = {
+  curData: {},
+  luckyData: {},
+  errorData: [],
+  defaultPage: `default data`,
+}
+
+const openDialog = require('./controller/openDialog')
+const { getPrizeConfig } = require('./controller/getPrizeConfig')
+
+
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1000,
@@ -30,6 +43,9 @@ const createWindow = () => {
 
   // 打开dialog
   openDialog();
+
+  // 获取奖品配置
+  getPrizeConfig();
 }
 
 app.whenReady().then(() => {

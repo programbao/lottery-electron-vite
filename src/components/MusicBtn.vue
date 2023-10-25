@@ -4,7 +4,7 @@
   >
     <audio
       ref="music"
-      src="../assets/data/music.mp3"
+      src="./data/music.mp3"
       class="music-item"
       loop
     ></audio>
@@ -33,7 +33,7 @@ const animate = () => {
       return
     }
     rotated = rotated % 360
-    musicBox.style.transform = 'rotate(' + rotated + 'deg)'
+    musicBox.value.style.transform = 'rotate(' + rotated + 'deg)'
     rotated += 1
     animate()
   })

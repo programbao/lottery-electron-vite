@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "node-xlsx": "^0.23.0",
+    "pinia": "^2.1.7",
     "vite-plugin-optimizer": "^1.4.2",
     "vue": "^3.3.4",
     "vue-toastification": "^2.0.0-rc.5"

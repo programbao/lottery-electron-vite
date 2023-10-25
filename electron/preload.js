@@ -3,8 +3,14 @@ const openDialog = async (data) => {
   let result = await ipcRenderer.invoke('open-dialog', data)
   return result;
 }
+const getPrizeConfig = async () => {
+  let result = await ipcRenderer.invoke('getPrizeConfig')
+  return result
+}
+// 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
-  openDialog
+  openDialog,
+  getPrizeConfig
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
