@@ -1,4 +1,10 @@
 <script setup>
+import BgBox from "./components/BgBox.vue";
+import LotteryContainer from "./components/LotteryContainer.vue";
+import MusicBtn from "./components/MusicBtn.vue";
+import OperationBtn from "./components/OperationBtn.vue";
+import PrizeBar from "./components/PrizeBar.vue";
+import PrizeMark from "./components/PrizeMark.vue";
 const getUsers = (users) => {
   console.log(users, 'users---')
 }
@@ -11,17 +17,21 @@ const importFile = async () => {
 
 <template>
   <div>
+    <BgBox />
+    <LotteryContainer />
+    <MusicBtn />
+    <OperationBtn />
+    <PrizeBar />
+    <PrizeMark />
     <button @click="importFile">导入</button>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    
   </div>
 </template>
 
 <style scoped>
+html,body {
+  overflow: hidden;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
