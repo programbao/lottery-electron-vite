@@ -31,13 +31,13 @@ export const lotteryDataStore = defineStore('LOTTERY', {
     },
 
     async initConfigData () {
+      const usersData = await myApi.getStaticUsersData();
       const config = await myApi.getTempData();
       if (config) {
         // lotteryData.setPrizeConfig(config.prizeConfig);
         this.prizeConfig = config.prizeConfig
         this.prizes = config.prizeConfig.prizes;
       }
-      const usersData = await myApi.getStaticUsersData();
       // 抽奖用户
       Object.assign(this, usersData);
       // 总牌数
@@ -46,7 +46,9 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       // 每次抽取的奖品个数
       this.eachCount = this.prizes.map(prize => prize.count);
       // 中奖用户
-      this.luckyUsers = config.luckyData
+      this.luckyUsers = config.luckyData;
+      // 读取当前已设置的抽奖结果
+      this.leftUsers = config.leftUsers;
       // 设置当前抽奖index
       let prizeIndex = this.prizes.length - 1;
       for (; prizeIndex > -1; prizeIndex--) {

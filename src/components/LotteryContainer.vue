@@ -9,7 +9,7 @@ import bus from '../libs/bus'
 const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { createCard } from './handleElements'
+import { createCard, getCardHTML } from './handleElements'
 let camera;
 let scene;
 let renderer;
@@ -273,6 +273,7 @@ const shineCard = () => {
         continue;
       }
       shine(cardIndex);
+      // console.log(cardIndex, index, basicData.leftUsers, '22222');
       changeCard(cardIndex, basicData.leftUsers[index]);
     }
   }, 500);
@@ -313,14 +314,14 @@ onBeforeUnmount(() => {
 #container {
   z-index: 3;
   position: relative;
-  /* margin: 0 15vh; */
-  /* margin: 0 5vh; */
 }
 #container.prize .element:not(.prize) {
   opacity: 0.50;
   transition: opacity 0.3s;
 }
 
+</style>
+<style>
 .element {
   width: 9vw;
   height: 18vh;
@@ -353,7 +354,6 @@ onBeforeUnmount(() => {
   font-size: 3vh;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.75);
-  /* text-shadow: 0 0 1vh rgba(0, 255, 255, 0.95); */
   text-shadow: 0 0 0vh rgba(0, 255, 255, 0.95);
 }
 
