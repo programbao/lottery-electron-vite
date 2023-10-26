@@ -20,6 +20,7 @@ const options = {
   icon: true,
   rtl: false
 }
+
 app.use(Toast, options);
 app.use(state);
 

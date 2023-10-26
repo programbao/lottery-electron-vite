@@ -16,10 +16,16 @@ const importFile = async () => {
 }
 
 onMounted(async () => {
-  const config = await myApi.getPrizeConfig();
-  if (config) {
-    lotteryData.setPrizeConfig(config.prizeConfig);
-  }
+  lotteryData.initConfigData();
+  // 处理初始化数据
+  // const config = await myApi.getTempData();
+  // if (config) {
+  //   lotteryData.setPrizeConfig(config.prizeConfig);
+  //   lotteryData.prizes = config.prizeConfig.prizes;
+  // }
+  // const usersData = await myApi.getStaticUsersData();
+  // // 抽奖用户
+  // lotteryData.users = usersData;
 })
 
 </script>

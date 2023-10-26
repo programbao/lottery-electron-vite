@@ -4,12 +4,14 @@
   >
     <audio
       ref="music"
+      id="music"
       src="./data/music.mp3"
       class="music-item"
       loop
     ></audio>
     <div
       @click="musicBoxClick"
+      id="musicBox"
       ref="musicBox"
       class="music-box"
       title="播放/暂停背景音乐"
@@ -22,11 +24,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useToast } from "vue-toastification";
+const toast = useToast();
 const musicBox = ref(null)
 const music = ref(null)
 let rotated = 0,
   stopAnimate = false;
-const toast = useToast();
 const animate = () => {
   requestAnimationFrame(function () {
     if (stopAnimate) {

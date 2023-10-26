@@ -12,7 +12,8 @@ global.sharedObject = {
 }
 
 const openDialog = require('./controller/openDialog')
-const { getPrizeConfig } = require('./controller/getPrizeConfig')
+const { getTempData } = require('./controller/getTempData')
+const { getStaticUsersData } = require('./controller/dataHandle')
 
 
 const createWindow = () => {
@@ -45,7 +46,10 @@ const createWindow = () => {
   openDialog();
 
   // 获取奖品配置
-  getPrizeConfig();
+  getTempData();
+
+  // 获取静态用户数据
+  getStaticUsersData();
 }
 
 app.whenReady().then(() => {

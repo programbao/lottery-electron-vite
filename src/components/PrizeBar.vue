@@ -65,11 +65,17 @@ const prizes = computed(() => {
 }
 
 .prize-list {
-  margin: 0;
+  position: fixed;
+  top: 10vh;
+  left: 20px;
+  height: 90vh;
+  overflow-y: auto;
+  width: 25vw;
   padding: 0;
-  list-style: none;
 }
-
+.prize-list::-webkit-scrollbar {
+    display: none;
+  }
 .prize-item {
   padding: 9px;
   margin: 20px 0;

@@ -24,8 +24,8 @@ const getLeftUsers = () => {
   });
   curData.leftUsers = leftUsers;
 }
-const getPrizeConfig = () => {
-  ipcMain.handle('getPrizeConfig', async (e, ...args) => {
+const getTempData = () => {
+  ipcMain.handle('getTempData', async (e, ...args) => {
     getLeftUsers();
     return {
       prizeConfig: cfg,
@@ -37,5 +37,5 @@ const getPrizeConfig = () => {
 
 
 module.exports = {
-  getPrizeConfig
+  getTempData
 };
