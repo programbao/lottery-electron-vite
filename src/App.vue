@@ -38,7 +38,7 @@ onMounted(async () => {
     <OperationBtn />
     <PrizeBar />
     <PrizeMark />
-    <button @click="importFile">导入</button>
+    <!-- <button @click="importFile">导入</button> -->
     
   </div>
 </template>

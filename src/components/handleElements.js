@@ -51,9 +51,24 @@ export const createImageAndTextContainer = (imageSrc) => {
     </div>
   `;
 }
-export const  getCardHTML = (user, row_column) => {
-  var companyContainerHTML = createImageAndTextContainer("http://172.90.0.10/_nuxt/img/logo.acb8f74.png");
-  var companyElementHTML = `<div class="company">${companyContainerHTML}</div>`;
+export const  getCardHTML = (user, basicData) => {
+  const cardConfigStyle = basicData.cardConfigStyle;
+  // var companyContainerHTML = createImageAndTextContainer("http://172.90.0.10/_nuxt/img/logo.acb8f74.png");
+  var companyElementHTML = `
+    <div 
+      class="company"
+      style="
+        top: ${cardConfigStyle.companyTop}px;
+        font-size: ${cardConfigStyle.companyFontSize}px;
+      ">
+      <div class="image-text-container">
+        <img 
+          src="http://172.90.0.10/_nuxt/img/logo.acb8f74.png" 
+          style="width: 100%;
+          height: 20px;
+          object-fit: contain;">
+      </div>
+    </div>`;
   var avatarElementHTML = `<div 
           class="avatar"
           style="height: 100%;
@@ -64,12 +79,24 @@ export const  getCardHTML = (user, row_column) => {
           z-index: -1">
           <div style="width: 100%;height: 100%;background-color: rgba(0,0,0,0.1);position: absolute;top: 0;left:0;"></div>
       </div>`;
-  var nameElementHTML = `<div class="name" id="user-name">${user[2]}</div>`;
+  var nameElementHTML = `
+    <div 
+      style="
+        top: ${cardConfigStyle.nameTop};
+        font-size: ${cardConfigStyle.nameFontSize}px; 
+      "
+      class="name">${user[2]}</div>`;
   
-  var detailsElementHTML = `<div class="details">
-        <span style="display: none" class="cardIdTxt" id="card-${user[0]}">${user[0]}</span>
-        <br/>
-        <span id="user-dept">${user[1]}</span>
+  var detailsElementHTML = `
+      <div 
+        style="
+          bottom: ${cardConfigStyle.detailsBottom};
+          font-size: ${cardConfigStyle.detailsFontsize}px;
+        "
+        class="details">
+          <span style="display: none" class="cardIdTxt" id="card-${user[0]}">${user[0]}</span>
+          <br/>
+          <span id="user-dept">${user[1]}</span>
       </div>`;
 
   var cardHTML = `
@@ -81,6 +108,35 @@ export const  getCardHTML = (user, row_column) => {
   return cardHTML
 }
 
+export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, basicData) => {
+  let elementClassName = '';
+  let elementCss = '';
+  const cardConfigStyle = basicData.cardConfigStyle;
+  if (isBold) {
+    elementClassName = "element lightitem";
+    if (showTable) {
+      elementClassName += ' highlight';
+    }
+  } else {
+    elementClassName = "element";
+    elementCss = "background-repeat: no-repeat; " +
+      "background-size: 100% 120%; " +
+      "background-position: center center; " +
+      "background-color: rgba(0,127,127," +
+      (Math.random() * 0.7 + 0.25) +
+      ");";
+  }
+
+  elementCss += `
+    width: ${cardConfigStyle.cardWidth};
+    height: ${cardConfigStyle.cardHeight};
+  `
+  return `
+    <div id="${"card-" + id}" class="${elementClassName}" style="${elementCss}">
+       ${getCardHTML(user, basicData)} 
+    </div>
+  `
+}
 
 export const createCard = (user, isBold, id, showTable, row_column) => {
   var element = getElement(id);

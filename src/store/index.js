@@ -16,7 +16,21 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       currentPrizeIndex: 0, // 当前抽取的奖品
       currentPrize: {}, // 当前抽取的奖品
       resolution: 1.1, // 当前圆球比例
-
+      containerConfigStyle: {
+        scale: 0.5, // 容器卡片缩放比例
+        top: '-23vh',
+        left: '-8vw',
+      },
+      cardConfigStyle: {
+        cardWidth: "7vw", // 抽奖牌宽度
+        cardHeight: "13vh", // 抽奖牌高度
+        companyTop: 19, // 公司logo距离顶部的距离
+        companyFontSize: 16, // 公司logo字体大小
+        nameTop: '4vh', // 名称距离顶部的距离
+        nameFontSize: 16, // 名称字体大小
+        detailsBottom: '1vh', // 详情距离底部的距离
+        detailsFontsize: 16, // 详情字体大小
+      }
     }
   },
 
