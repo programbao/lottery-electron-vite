@@ -2,7 +2,7 @@
   <div id="menu">
      <div class="begin-lottery">
         <button id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
-        <button id="lottery" v-show="!noBeginLottery">
+        <button id="lottery" v-show="!noBeginLottery" @click="beginLottery">
           开始抽奖 <br/> mulai undian
         </button>
      </div>
@@ -27,6 +27,9 @@ const enterLottery = () => {
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
   console.log(noBeginLottery.value, '28309482034880958290358')
+}
+const beginLottery = () => {
+  bus.emit('beginLottery')
 }
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)

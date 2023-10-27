@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-
+const WinState = require('electron-win-state').default;
 const NODE_ENV = process.env.NODE_ENV
 
 // 全局变量
@@ -17,9 +17,14 @@ const { getStaticUsersData } = require('./controller/dataHandle')
 
 
 const createWindow = () => {
+  const winState = new WinState({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  })
   const win = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    // width: 1000,
+    // height: 800,
+    ...winState.winOptions,
     webPreferences: {
       preload: path.join(__dirname, './preload.js'),
       // webSecurity: false, // 取消跨域
@@ -28,6 +33,7 @@ const createWindow = () => {
       // enableRemoteModule:true //v10版本 打开remote模块
     }
   })
+  winState.manage(win);
   console.log(NODE_ENV, 'NODE_ENVNODE_ENVNODE_ENV')
   win.loadURL(
     NODE_ENV === 'development' ?

@@ -3,18 +3,18 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeMount, onBeforeUnmount, ref, getCurrentInstance } from 'vue'
 import { useToast } from "vue-toastification";
 import bus from '../libs/bus'
 const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { createCard, getCardHTML, getCardWithParentHtml, createCardWithParentDom } from './handleElements'
+import { shineCard, getCardWithParentHtml, createCardWithParentDom } from './handleElements'
 let camera;
 let scene;
 let renderer;
 let controls;
-let threeDCards = [];
+// let threeDCards = [];
 let targets = {
   table: [],
   sphere: []
@@ -23,16 +23,37 @@ let targets = {
 let isAnimating = false;
 let rotateObj;
 
-let selectedCardIndex = [];
+// let selectedCardIndex = [];
 let rotate = false;
 // 正在抽奖
-let isLotting = false;
-let currentLuckys = [];
+// let isLotting = false;
+// let currentLuckys = [];
 let luckyUsersCard = {};
 let prizeMark = null;
 let isNextPrize = false;
 
 
+// let member = basicData.users.slice();
+// let isBold = false;
+// let showTable = basicData.leftUsers.length === basicData.users.length;
+// let totalMember = member.length;
+// let ROW_COUNT = basicData.rowCount
+// let COLUMN_COUNT = basicData.columnCount;
+// let HIGHLIGHT_CELL = [];
+let member = basicData.users.slice();
+let paramsFields = {
+  threeDCards: [],
+  selectedCardIndex: [],
+  currentLuckys: [],
+  member,
+  isBold:  false,
+  showTable: basicData.leftUsers.length === basicData.users.length,
+  totalMember: member.length,
+  ROW_COUNT: basicData.rowCount,
+  COLUMN_COUNT: basicData.columnCount,
+  HIGHLIGHT_CELL: [],
+  isLotting: false
+}
 
 const animate = () => {
   // 让场景通过x轴或者y轴旋转
@@ -50,8 +71,8 @@ const animate = () => {
 const transform = (targets, duration) => {
   isAnimating = true
   // TWEEN.removeAll();
-  for (var i = 0; i < threeDCards.length; i++) {
-    var object = threeDCards[i];
+  for (var i = 0; i < paramsFields.threeDCards.length; i++) {
+    var object = paramsFields.threeDCards[i];
     var target = targets[i];
     // object.element.style.setProperty('position', 'absolute', 'important');
     new TWEEN.Tween(object.position)
@@ -95,33 +116,16 @@ function switchScreen(type) {
   // debugger
   switch (type) {
     case "enter":
-      // btns.enter.classList.remove("none");
-      // btns.lotteryBar.classList.add("none");
-      // transformEntry(targets.table, 1500);
       break;
     default:
       animate();
-      // btns.enter.classList.add("none");
-      // btns.lotteryBar.classList.remove("none");
       transform(targets.sphere, 1500);
       setTimeout(() => {
         isNextPrize = true
         if (basicData.currentPrizeIndex === basicData.prizes.length - 1) {
-          // btns.lottery.innerHTML = "第一个奖项<br />undian pertama"
         } else {
-          // btns.lottery.innerHTML = "下一个奖项<br/>undian selanjutnya";
           basicData.currentPrizeIndex--;
           basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-          // if (currentPrizeIndex <= 2) {
-          //   //进入特等奖抽取 
-          //   document.querySelectorAll("[id^='prize-item']").forEach(prizeDom => {
-          //     prizeDom.style.display = "none"
-          //     if (["prize-item-1", "prize-item-2","prize-item-3"].includes(prizeDom.id)) {
-          //       prizeDom.style.display = "block";
-          //     }
-          //   })
-          // }
-          // setPrizeData(basicData.currentPrizeIndex, 0, true);
         }
       }, 2000);
       break;
@@ -131,7 +135,6 @@ function switchScreen(type) {
 const render = () => {
   renderer.render(scene, camera);
 }
-const showUsers = ref([]);
 
 const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -141,28 +144,28 @@ const onWindowResize = () => {
 }
 const enterAnimate = () => {
   document.getElementById("container").innerHTML = '';
-  let member = basicData.users.slice();
-  let showCards = [];
-  let length = member.length;
-  let isBold = false;
-  let showTable = basicData.leftUsers.length === basicData.users.length;
+  camera = new THREE.PerspectiveCamera(
+    40,
+    window.innerWidth / window.innerHeight,
+    1,
+    10000
+  );
+  camera.position.z = 3000;
+  scene = scene ? scene : new THREE.Scene();
+
+  paramsFields.threeDCards = [];
   let index = 0;
-  let totalMember = member.length;
-  let ROW_COUNT = basicData.rowCount
-  let COLUMN_COUNT = basicData.columnCount;
-  let HIGHLIGHT_CELL = [];
-  threeDCards = [];
-  for (let i = 0; i < ROW_COUNT; i++) {
-    if (index > totalMember - 1) break;
-    for (let j = 0; j < COLUMN_COUNT; j++) {
-      if (index > totalMember - 1) break;
-      isBold = HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
-      let user = member[index % length];
+  for (let i = 0; i < paramsFields.ROW_COUNT; i++) {
+    if (index > paramsFields.totalMember - 1) break;
+    for (let j = 0; j < paramsFields.COLUMN_COUNT; j++) {
+      if (index > paramsFields.totalMember - 1) break;
+      let isBold = paramsFields.HIGHLIGHT_CELL.includes(i + "-" + j);
+      let user = paramsFields.member[index % paramsFields.totalMember];
       var element = createCardWithParentDom(
         user,
         isBold,
         index,
-        showTable,
+        paramsFields.showTable,
         `${i} - ${j}`,
         basicData
       );
@@ -171,7 +174,7 @@ const enterAnimate = () => {
       object.position.y = Math.random() * 4000 - 2000;
       object.position.z = Math.random() * 4000 - 2000;
       scene.add(object);
-      threeDCards.push(object);
+      paramsFields.threeDCards.push(object);
       index++;
     }
   }
@@ -179,7 +182,7 @@ const enterAnimate = () => {
 
   var vector = new THREE.Vector3();
 
-  for (var i = 0, l = threeDCards.length; i < l; i++) {
+  for (var i = 0, l = paramsFields.threeDCards.length; i < l; i++) {
     var phi = Math.acos(-1 + (2 * i) / l);
     var theta = Math.sqrt(l * Math.PI) * phi;
     var object = new THREE.Object3D();
@@ -205,38 +208,22 @@ const enterAnimate = () => {
 }
 
 let containerHtml = '';
+
+// 初始化卡片
 const initCards = (isInit = true) => {
-  let member = basicData.users.slice();
-  let showCards = [];
-  let length = member.length;
-  let isBold = false;
-  let showTable = basicData.leftUsers.length === basicData.users.length;
   let index = 0;
-  let totalMember = member.length;
-  let ROW_COUNT = basicData.rowCount
-  let COLUMN_COUNT = basicData.columnCount;
-  let HIGHLIGHT_CELL = [];
-  camera = new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth / window.innerHeight,
-    1,
-    10000
-  );
-  camera.position.z = 3000;
 
-  scene = scene ? scene : new THREE.Scene();
-
-  for (let i = 0; i < ROW_COUNT; i++) {
-    if (index > totalMember - 1) break;
-    for (let j = 0; j < COLUMN_COUNT; j++) {
-      if (index > totalMember - 1) break;
-      isBold = HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
-      let user = member[index % length];
+  for (let i = 0; i < paramsFields.ROW_COUNT; i++) {
+    if (index > paramsFields.totalMember - 1) break;
+    for (let j = 0; j < paramsFields.COLUMN_COUNT; j++) {
+      if (index > paramsFields.totalMember - 1) break;
+      let isBold = paramsFields.HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
+      let user = paramsFields.member[index % paramsFields.totalMember];
       containerHtml += getCardWithParentHtml(
         user,
         isBold,
         index,
-        showTable,
+        paramsFields.showTable,
         `${i} - ${j}`,
         basicData
       );
@@ -261,89 +248,106 @@ const initCards = (isInit = true) => {
     display: grid;
   `
   document.querySelectorAll('.element').forEach(element => {
-      threeDCards.push(element);
+    paramsFields.threeDCards.push(element);
   })
-  
-}
-
-/**
- * 随机抽奖
- */
-const random = (num) => {
-  // Math.floor取到0-num-1之间数字的概率是相等的
-  return Math.floor(Math.random() * num);
-}
-/**
- * 随机切换背景和人员信息
- */
-/**
- * 切换名牌背景
- */
- function shine(cardIndex, color) {
-  if (!threeDCards[cardIndex]) {
-    // debugger
-  }
-  let card = threeDCards[cardIndex].element ? threeDCards[cardIndex].element : threeDCards[cardIndex];
-  // card.style.backgroundImage = "url(" + '../img/huawei.png' + ") no-repeat center center";
-  card.style.backgroundColor =
-    color || "rgba(0,127,127," + (Math.random() * 0.7 + 0.25) + ")";
-}
-/**
- * 切换名牌人员信息
- */
-const changeCard = (cardIndex, user) => {
-  if (user) {
-    if (currentLuckys.some(arr => arr[0] === user[0])) {
-      return;
-    }
-    let card = threeDCards[cardIndex].element ? threeDCards[cardIndex].element : threeDCards[cardIndex];
-    if (card.classList.value.includes("prize")) {
-      return
-    }
-    let curCardId = card.querySelector('.cardIdTxt').id 
-    if (('card-' + user[0]) != curCardId) {
-      card.innerHTML = getCardHTML(user, basicData);
-    }
-  }
-}
-const shineCard = () => {
-  let maxCard = 20,
-    maxUser;
-  let shineCard = 10 + random(maxCard);
-  setInterval(() => {
-    // 正在抽奖停止闪烁
-    // if (isLotting || currentPrizeIndex < 7 || prizeMark.style.zIndex === '6') {
-    //   return;
-    // }
-    if (isLotting || basicData.currentPrizeIndex < 2) {
-      return;
-    }
-    maxUser = basicData.leftUsers.length;
-    for (let i = 0; i < shineCard; i++) {
-      let index = random(maxUser),
-        cardIndex = random(basicData.totalCards);
-      // 当前显示的已抽中名单不进行随机切换
-      if (selectedCardIndex.includes(cardIndex)) {
-        continue;
-      }
-      shine(cardIndex);
-      // console.log(cardIndex, index, basicData.leftUsers, '22222');
-      changeCard(cardIndex, basicData.leftUsers[index]);
-    }
-  }, 500);
 }
 
 
 const initHandleData = () => {
+  member = basicData.users.slice();
+  paramsFields = {
+    threeDCards: [],
+    selectedCardIndex: [],
+    currentLuckys: [],
+    member,
+    isBold:  false,
+    showTable: basicData.leftUsers.length === basicData.users.length,
+    totalMember: member.length,
+    ROW_COUNT: basicData.rowCount,
+    COLUMN_COUNT: basicData.columnCount,
+    HIGHLIGHT_CELL: [],
+    isLotting: false
+  }
   initCards();
   // animate();
   // 随机切换背景和人员信息
-  shineCard();
+  shineCard(basicData, paramsFields);
 }
+const lotteryActiveFn = () => {
+    if (!basicData.currentPrize) {
+      // resetCard(500).then(res => {
+      //   showAllPrizes();
+      // })
+      // addQipao(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
+      // document.querySelector("#lottery").remove();
+      // return
+    }
+    // if (threeDCards.length <= 0) {
+    //   addQipao("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
+    //   return;
+    // }
+    setLotteryStatus(true);
+  //  // 每次抽奖前先保存上一次的抽奖数据
+  //  saveData();
+  //  //更新剩余抽奖数目的数据显示
+  //  changePrize(); 
+    //更新剩余抽奖数目的数据显示
+    if (!isNextPrize && prizeMark.innerHTML) {
+      // 清除当前看见奖项
+      prizeMark.innerHTML = ''
+      // 抽奖
+      lottery("lottery");
+      addQipao(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+      return
+    }
+    resetCard(500, "lottery").then(res => {
+      if (isNextPrize) {
+        // 重置选择抽奖名单
+        // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
+        //   switch (currentPrizeIndex) {
+        //     case 2:
+        //       resetBallCards(basicData.users_hinduism_buddhism_confucianism);
+        //       break;
+        //     case 1:
+        //       resetBallCards(basicData.users_christian_catholic);
+        //       break;
+        //     case 0:
+        //       resetBallCards(basicData.users_islam);
+        //       break;
+        //     default:
+        //       break;
+        //   }
+        // }
+        // 入场下一个奖项
+        nextPrize();
+        return
+      }
+      // 抽奖
+      lottery("lottery");
+      addQipao(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+    });
+  }
+const beginLottery = () => {
+  if (isAnimating) {
+    toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`);
+      return
+    }
+    // 如果正在抽奖，则禁止一切操作
+    if (paramsFields.isLotting) {
+      if (e.target.id === "lottery") {
+        rotateObj.stop();
+        // btns.lottery.innerHTML = "开始抽奖 <br/> mulai undian";
+      } else {
+        toast.info("正在抽奖，抽慢一点点～～  sedang diundi,undian perlahan~~");
+      }
+      return false;
+    }
 
+}
 // 监听数据
 bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
+bus.on('beginLottery')
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
