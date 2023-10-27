@@ -138,10 +138,10 @@ export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, b
   `
 }
 
-export const createCard = (user, isBold, id, showTable, row_column) => {
+export const createCard = (user, isBold, id, showTable, row_column, basicData) => {
   var element = getElement(id);
   addClassesAndStyles(element, isBold, showTable, row_column);
-  element.innerHTML = getCardHTML(user);
+  element.innerHTML = getCardHTML(user, basicData);
 
   return element;
 }
