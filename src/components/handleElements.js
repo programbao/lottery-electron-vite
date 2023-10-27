@@ -225,7 +225,6 @@ export const shineCard = (basicDataParam, paramsFieldsParam) => {
   let maxCard = 20,
     maxUser;
   let shineCard = 10 + random(maxCard);
-  console.log(basicData, 'basicDatabasicData88888')
   setInterval(() => {
     // 正在抽奖停止闪烁
     // if (isLotting || currentPrizeIndex < 7 || prizeMark.style.zIndex === '6') {

@@ -273,6 +273,71 @@ const initHandleData = () => {
   // 随机切换背景和人员信息
   shineCard(basicData, paramsFields);
 }
+// 球体旋转
+const rotateBall = () => {
+  return new Promise((resolve, reject) => {
+    scene.rotation.y = 0;
+    rotateObj = new TWEEN.Tween(scene.rotation);
+    rotateObj
+      .to(
+        {
+          y: Math.PI * 6 * basicData.rotateLoop
+        },
+        basicData.rotateTime * basicData.rotateLoop
+      )
+      .onUpdate(render)
+      // .easing(TWEEN.Easing.Linear)
+      .start()
+      .onStop(() => {
+        scene.rotation.y = 0;
+        resolve();
+      })
+      .onComplete(() => {
+        resolve();
+      });
+  });
+}
+/**
+ * 抽奖
+ */
+ function lottery() {
+  if (isNextPrize) return;
+  rotateBall().then(() => {
+    // 将之前的记录置空
+    paramsFields.currentLuckys = [];
+    paramsFields.selectedCardIndex = [];
+    // 当前同时抽取的数目,当前奖品抽完还可以继续抽，但是不记录数据
+    let perCount = basicData.eachCount[basicData.currentPrizeIndex];
+    let luckyData = basicData.luckyUsers[basicData.currentPrize.type];
+    let leftCount = basicData.leftUsers.length;
+    let leftPrizeCount = currentPrize.count - (luckyData ? luckyData.length : 0);
+
+    if (leftCount < perCount) {
+      toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！  Jumlah orang yang tersisa untuk berpartisipasi dalam lotere tidak mencukupi. Sekarang setel ulang semua orang untuk membuat lotere kedua!");
+      // basicData.leftUsers = basicData.users.slice();
+      // leftCount = basicData.leftUsers.length;
+      perCount = leftCount
+      return
+    }
+    for (let i = 0; i < perCount; i++) {
+      let luckyId = random(leftCount);
+      paramsFields.currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
+      leftCount--;
+      leftPrizeCount--;
+      let cardIndex = random(basicData.totalCards);
+      while (selectedCardIndex.includes(cardIndex)) {
+        cardIndex = random(basicData.totalCards);
+      }
+      paramsFields.selectedCardIndex.push(cardIndex);
+      if (leftPrizeCount === 0) {
+        break;
+      }
+    }
+
+    // console.log(currentLuckys);
+    selectCard();
+  });
+}
 const lotteryActiveFn = () => {
     if (!basicData.currentPrize) {
       // resetCard(500).then(res => {

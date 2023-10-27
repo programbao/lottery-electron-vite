@@ -16,6 +16,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       currentPrizeIndex: 0, // 当前抽取的奖品
       currentPrize: {}, // 当前抽取的奖品
       resolution: 1.1, // 当前圆球比例
+      rotateLoop: 1000, // 是否循环旋转
+      rotateTime: 3000, // 旋转时间
       containerConfigStyle: {
         scale: 0.5, // 容器卡片缩放比例
         top: '-23vh',
