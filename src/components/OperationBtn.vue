@@ -1,13 +1,13 @@
 <template>
   <div id="menu">
      <div class="begin-lottery">
-        <button id="enter">进入抽奖<br />masuk undian</button>
-        <button id="lottery">
+        <button id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
+        <button id="lottery" v-show="!noBeginLottery">
           开始抽奖 <br/> mulai undian
         </button>
      </div>
+     <button id="reLottery" v-show="!noBeginLottery">重新抽奖</button>
      <div id="lotteryBar" class="none">
-       <!-- <button id="reLottery">重新抽奖</button> -->
        <div class="fixed-bar">
          <button id="save" class="fixed-btn">导出抽奖结果<br/> hasil undian</button>
          <button id="reset" class="fixed-btn">重置<br />mengatur ulang</button>
@@ -17,7 +17,23 @@
 </template>
 
 <script setup>
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import bus from '../libs/bus'
 
+const noBeginLottery = ref(true)
+const enterLottery = () => {
+  bus.emit('enterLottery')
+}
+const handleEnterLotteryEnd = () => {
+  noBeginLottery.value = false
+  console.log(noBeginLottery.value, '28309482034880958290358')
+}
+onBeforeMount(() => {
+  bus.on('enterLotteryEnd', handleEnterLotteryEnd)
+})
+onBeforeUnmount(() => {
+  bus.off('enterLotteryEnd', handleEnterLotteryEnd)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -35,10 +51,15 @@
 .begin-lottery {
   position: fixed;
   bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+#reLottery {
   position: fixed;
   bottom: 20px;
   display: flex;
   flex-direction: column;
+  margin-left: 50px;
 }
 .fixed-bar {
   position: fixed;
@@ -51,9 +72,9 @@ button {
   background: transparent;
   outline: 1px solid rgba(127, 255, 255, 0.75);
   border: 0;
-  padding: 1.6vh 2vh;
+  padding: 1vh;
   margin: 0 4.6vh;
-  font-size: 2vh;
+  font-size: 1.2vh;
   font-weight: bold;
   cursor: pointer;
 }

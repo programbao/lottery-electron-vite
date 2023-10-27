@@ -9,7 +9,7 @@ import bus from '../libs/bus'
 const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { createCard, getCardHTML, getCardWithParentHtml } from './handleElements'
+import { createCard, getCardHTML, getCardWithParentHtml, createCardWithParentDom } from './handleElements'
 let camera;
 let scene;
 let renderer;
@@ -46,44 +46,7 @@ const animate = () => {
 /**
  * 渲染地球等
  */
-let cameraStyle = '';
- const transformEntry = (targets, duration) => {
-  isAnimating = true
-  setTimeout(() => {
-    isAnimating = false
-  }, duration * 1.5)
-   let containerConfigStyle = basicData.containerConfigStyle;
-  console.log(renderer.domElement, 'renderer.domElementrenderer.domElement')
-  let containerDom = renderer.domElement.children[0]
-  cameraStyle = containerDom.style;
-  containerDom.style = `
-    grid-template-columns: repeat(${basicData.columnCount}, 1fr);
-    grid-template-rows: repeat(${basicData.rowCount}, 1fr);  
-    grid-row-gap: 20px;
-    grid-column-gap: 20px;
-    transform: scale(${containerConfigStyle.scale});
-    top: ${containerConfigStyle.top};
-    left: ${containerConfigStyle.left};
-    position: fixed;
-    display: grid;
-  `
-  new TWEEN.Tween()
-    .to({}, duration * 2)
-    .onUpdate(render)
-    .start().onComplete(() => {
-      console.log("渲染完成", '23424')
-        // document.querySelectorAll('.element').forEach(element => {
-  //   console.log(element, 'elementelementelement')
-  //     var object = new THREE.CSS3DObject(element);
-  //     object.position.x = Math.random() * 4000 - 2000;
-  //     object.position.y = Math.random() * 4000 - 2000;
-  //     object.position.z = Math.random() * 4000 - 2000;
-  //     scene.add(object);
-  //     threeDCards.push(object);
-  // })
 
-    });
-}
 const transform = (targets, duration) => {
   isAnimating = true
   // TWEEN.removeAll();
@@ -122,7 +85,6 @@ const transform = (targets, duration) => {
     .to({}, duration * 2)
     .onUpdate(render)
     .start().onComplete(() => {
-      console.log("渲染完成", '23424')
     });
 }
 function switchScreen(type) {
@@ -135,8 +97,7 @@ function switchScreen(type) {
     case "enter":
       // btns.enter.classList.remove("none");
       // btns.lotteryBar.classList.add("none");
-      transformEntry(targets.table, 1500);
-      console.log(camera, 'cameracameracamera', scene)
+      // transformEntry(targets.table, 1500);
       break;
     default:
       animate();
@@ -172,7 +133,12 @@ const render = () => {
 }
 const showUsers = ref([]);
 
-
+const onWindowResize = () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  render();
+}
 const enterAnimate = () => {
   document.getElementById("container").innerHTML = '';
   let member = basicData.users.slice();
@@ -192,7 +158,7 @@ const enterAnimate = () => {
       if (index > totalMember - 1) break;
       isBold = HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
       let user = member[index % length];
-      var element = createCard(
+      var element = createCardWithParentDom(
         user,
         isBold,
         index,
@@ -206,17 +172,10 @@ const enterAnimate = () => {
       object.position.z = Math.random() * 4000 - 2000;
       scene.add(object);
       threeDCards.push(object);
-
-      // 这个是设置间距的 卡片之间的间距 距离
-      // var object = new THREE.Object3D();
-      // object.position.x = j * 162 - position.x;
-      // object.position.y = -(i * 165) + position.y;
-      // targets.table.push(object);
       index++;
     }
   }
 
-  // sphere
 
   var vector = new THREE.Vector3();
 
@@ -234,20 +193,15 @@ const enterAnimate = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.getElementById("container").appendChild(renderer.domElement);
   // // 创建和设置遮罩层
-  // let prizeMarkDom = createElement();
-  // prizeMarkDom.id = "prize-mark";
-  // document.getElementById("container").appendChild(prizeMarkDom);
-  // prizeMarkDom.style = ``
-
   controls = new THREE.TrackballControls(camera, renderer.domElement);
   controls.rotateSpeed = 0.5;
   controls.minDistance = 500;
   controls.maxDistance = 6000;
   controls.addEventListener("change", render);
-
-  // isInit && bindEvent();
   switchScreen("lottery");
-
+  // 触发通知处理进入抽奖结束时间
+  bus.emit("enterLotteryEnd");
+  window.addEventListener("resize", onWindowResize, false);
 }
 
 let containerHtml = '';
@@ -262,11 +216,6 @@ const initCards = (isInit = true) => {
   let ROW_COUNT = basicData.rowCount
   let COLUMN_COUNT = basicData.columnCount;
   let HIGHLIGHT_CELL = [];
-    // 设置初始卡片上下左右距离 间距
-  // let position = {
-  //   x: (108 * basicData.columnCount + 700) / 2,
-  //   y: (152 * ROW_COUNT - 20) / 2
-  // };
   camera = new THREE.PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
@@ -283,15 +232,6 @@ const initCards = (isInit = true) => {
       if (index > totalMember - 1) break;
       isBold = HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
       let user = member[index % length];
-      // var element = createCard(
-      //   user,
-      //   isBold,
-      //   index,
-      //   showTable,
-      //   `${i} - ${j}`,
-      //   basicData
-      // );
-      // showUsers.value.push(element)
       containerHtml += getCardWithParentHtml(
         user,
         isBold,
@@ -300,18 +240,6 @@ const initCards = (isInit = true) => {
         `${i} - ${j}`,
         basicData
       );
-      // three变化卡片
-      // var object = new THREE.CSS3DObject(element);
-      // object.position.x = Math.random() * 4000 - 2000;
-      // object.position.y = Math.random() * 4000 - 2000;
-      // object.position.z = Math.random() * 4000 - 2000;
-      // scene.add(object);
-      // threeDCards.push(object);
-      // // 这个是设置间距的 卡片之间的间距 距离
-      // var object = new THREE.Object3D();
-      // object.position.x = j * 162 - position.x;
-      // object.position.y = -(i * 165) + position.y;
-      // targets.table.push(object);
       index++;
     }
   }
@@ -332,57 +260,10 @@ const initCards = (isInit = true) => {
     position: fixed;
     display: grid;
   `
-
-
   document.querySelectorAll('.element').forEach(element => {
-    // console.log(element, 'elementelementelement')
-    //   var object = new THREE.CSS3DObject(element);
-    //   object.position.x = Math.random() * 4000 - 2000;
-    //   object.position.y = Math.random() * 4000 - 2000;
-    //   object.position.z = Math.random() * 4000 - 2000;
-    //   scene.add(object);
       threeDCards.push(element);
   })
   
-  // sphere
-
-  // var vector = new THREE.Vector3();
-
-  // for (var i = 0, l = threeDCards.length; i < l; i++) {
-  //   var phi = Math.acos(-1 + (2 * i) / l);
-  //   var theta = Math.sqrt(l * Math.PI) * phi;
-  //   var object = new THREE.Object3D();
-  //   object.position.setFromSphericalCoords(800 * basicData.resolution, phi, theta);
-  //   vector.copy(object.position).multiplyScalar(2);
-  //   object.lookAt(vector);
-  //   targets.sphere.push(object);
-  // }
-  // renderer = new THREE.CSS3DRenderer();
-  // renderer.setSize(window.innerWidth, window.innerHeight);
-  // document.getElementById("container").appendChild(renderer.domElement);
-
-  // // 创建和设置遮罩层
-  // let prizeMarkDom = createElement();
-  // prizeMarkDom.id = "prize-mark";
-  // document.getElementById("container").appendChild(prizeMarkDom);
-  // prizeMarkDom.style = ``
-
-  // controls = new THREE.TrackballControls(camera, renderer.domElement);
-  // controls.rotateSpeed = 0.5;
-  // controls.minDistance = 500;
-  // controls.maxDistance = 6000;
-  // controls.addEventListener("change", render);
-
-  // isInit && bindEvent();
-
-  // if (showTable && isInit) {
-    // switchScreen("enter");
-  // } else if (isInit) {
-    // switchScreen("lottery");
-  // }
-  setTimeout(() => {
-    enterAnimate();
-  }, 3000)
 }
 
 /**
@@ -459,15 +340,15 @@ const initHandleData = () => {
   // 随机切换背景和人员信息
   shineCard();
 }
+
+// 监听数据
 bus.on('initConfigDataEnd', initHandleData)
+bus.on('enterLottery', enterAnimate)
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandleData)
+  bus.off('enterLottery', enterAnimate)
 })
-// onBeforeMount(() => {
-// })
-// onMounted(() => {
-//   // 初始化所有抽奖卡片
-// })
+
 </script>
 
 <style lang="scss" scoped>
@@ -495,7 +376,7 @@ onBeforeUnmount(() => {
   text-align: center;
   cursor: default;
   transition: background-color 0.3s ease-in;
-  position: relative !important;
+  position: relative;
 }
 
 .element:hover {

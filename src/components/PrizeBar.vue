@@ -61,7 +61,7 @@ const prizes = computed(() => {
   left: 0;
   padding-left: 1.2vh;
   top: 1.2vh;
-  z-index: 2;
+  z-index: 4;
 }
 
 .prize-list {
@@ -74,8 +74,8 @@ const prizes = computed(() => {
   padding: 0;
 }
 .prize-list::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 .prize-item {
   padding: 9px;
   margin: 20px 0;
@@ -120,7 +120,7 @@ const prizes = computed(() => {
 
 .prize-title {
   margin: 4px 0;
-  font-size: 1.8vh;
+  font-size: 1vw;
 }
 
 .prize-count {
@@ -228,7 +228,7 @@ const prizes = computed(() => {
   position: absolute;
   color: #fff;
   right: 9px;
-  font-size: 1.8vh;
+  font-size: 1vw;
   line-height: 1.6vh;
   top: 50%;
   transform: translateY(-50%);

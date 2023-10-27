@@ -138,10 +138,41 @@ export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, b
   `
 }
 
+export const createCardWithParentDom = (user, isBold, id, showTable, row_column, basicData) => {
+  let elementClassName = '';
+  let elementCss = '';
+  const cardConfigStyle = basicData.cardConfigStyle;
+  if (isBold) {
+    elementClassName = "element lightitem";
+    if (showTable) {
+      elementClassName += ' highlight';
+    }
+  } else {
+    elementClassName = "element";
+    elementCss = "background-repeat: no-repeat; " +
+      "background-size: 100% 120%; " +
+      "background-position: center center; " +
+      "background-color: rgba(0,127,127," +
+      (Math.random() * 0.7 + 0.25) +
+      ");";
+  }
+
+  elementCss += `
+    width: ${cardConfigStyle.cardWidth};
+    height: ${cardConfigStyle.cardHeight};
+  `
+  let dom = document.createElement("div");
+  dom.id = "card-" + id;
+  dom.className = elementClassName;
+  dom.style = elementCss;
+  dom.innerHTML = getCardHTML(user, basicData);
+  return dom
+}
+
 export const createCard = (user, isBold, id, showTable, row_column, basicData) => {
   var element = getElement(id);
   addClassesAndStyles(element, isBold, showTable, row_column);
   element.innerHTML = getCardHTML(user, basicData);
-
+  
   return element;
 }
