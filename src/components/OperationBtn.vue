@@ -1,38 +1,57 @@
 <template>
   <div id="menu">
-     <div class="begin-lottery">
+      <div class="begin-lottery">
         <button id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
-        <button id="lottery" v-show="!noBeginLottery" @click="beginLottery">
+        <button id="showPrize" @click="showPrize" v-show="!noBeginLottery && isShowPrizeBtn">
+          {{ currentPrize.text }}
+          <!-- <br/>奖项 undian selanjutnya -->
+        </button>
+        <button id="lottery" v-show="!noBeginLottery && !isShowPrizeBtn" @click="beginLottery">
           开始抽奖 <br/> mulai undian
         </button>
-     </div>
-     <button id="reLottery" v-show="!noBeginLottery">重新抽奖</button>
-     <div id="lotteryBar" class="none">
-       <div class="fixed-bar">
-         <button id="save" class="fixed-btn">导出抽奖结果<br/> hasil undian</button>
-         <button id="reset" class="fixed-btn">重置<br />mengatur ulang</button>
-       </div>
-     </div>
+      </div>
+      <button id="reLottery" v-show="!noBeginLottery && !isShowPrizeBtn">重新抽奖</button>
+      <button id="showAllLucks">
+        展示全部中奖名单<br/>daftar nama pemenang
+      </button>
+      <div id="lotteryBar" class="none">
+        <div class="fixed-bar">
+          <button id="save" class="fixed-btn">导出抽奖结果<br/> hasil undian</button>
+          <button id="reset" class="fixed-btn">重置<br />mengatur ulang</button>
+        </div>
+      </div>
    </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { ref, onBeforeMount, onBeforeUnmount, computed } from 'vue'
 import bus from '../libs/bus'
-
+import { lotteryDataStore } from '../store'
+const basicData = lotteryDataStore();
+const isShowPrizeBtn = ref(true);
+// console.log(lotteryData, 'lotteryDatalotteryData')
+const currentPrize = computed(() => {
+  return basicData.currentPrize;
+});
 const noBeginLottery = ref(true)
 const enterLottery = () => {
   bus.emit('enterLottery')
 }
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
-  console.log(noBeginLottery.value, '28309482034880958290358')
 }
 const beginLottery = () => {
   bus.emit('beginLottery')
 }
+const showPrize = () => {
+  bus.emit('showPrize')
+}
+const showPrizeEnd = () => {
+  isShowPrizeBtn.value = false
+}
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
+  bus.on('showPrizeEnd', showPrizeEnd)
 })
 onBeforeUnmount(() => {
   bus.off('enterLotteryEnd', handleEnterLotteryEnd)
@@ -63,6 +82,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   margin-left: 50px;
+  left: 60%;
 }
 .fixed-bar {
   position: fixed;

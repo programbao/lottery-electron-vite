@@ -9,7 +9,7 @@ import bus from '../libs/bus'
 const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { shineCard, getCardWithParentHtml, createCardWithParentDom } from './handleElements'
+import { shineCard, getCardWithParentHtml, createCardWithParentDom, random } from './handleElements'
 let camera;
 let scene;
 let renderer;
@@ -30,7 +30,6 @@ let rotate = false;
 // let currentLuckys = [];
 let luckyUsersCard = {};
 let prizeMark = null;
-let isNextPrize = false;
 
 
 // let member = basicData.users.slice();
@@ -121,7 +120,7 @@ function switchScreen(type) {
       animate();
       transform(targets.sphere, 1500);
       setTimeout(() => {
-        isNextPrize = true
+        basicData.isNextPrize = true
         if (basicData.currentPrizeIndex === basicData.prizes.length - 1) {
         } else {
           basicData.currentPrizeIndex--;
@@ -300,8 +299,8 @@ const rotateBall = () => {
 /**
  * 抽奖
  */
- function lottery() {
-  if (isNextPrize) return;
+ const lottery = () => {
+  if (basicData.isNextPrize) return;
   rotateBall().then(() => {
     // 将之前的记录置空
     paramsFields.currentLuckys = [];
@@ -310,7 +309,7 @@ const rotateBall = () => {
     let perCount = basicData.eachCount[basicData.currentPrizeIndex];
     let luckyData = basicData.luckyUsers[basicData.currentPrize.type];
     let leftCount = basicData.leftUsers.length;
-    let leftPrizeCount = currentPrize.count - (luckyData ? luckyData.length : 0);
+    let leftPrizeCount = basicData.currentPrize.count - (luckyData ? luckyData.length : 0);
 
     if (leftCount < perCount) {
       toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！  Jumlah orang yang tersisa untuk berpartisipasi dalam lotere tidak mencukupi. Sekarang setel ulang semua orang untuk membuat lotere kedua!");
@@ -324,49 +323,137 @@ const rotateBall = () => {
       paramsFields.currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
       leftCount--;
       leftPrizeCount--;
-      let cardIndex = random(basicData.totalCards);
-      while (selectedCardIndex.includes(cardIndex)) {
-        cardIndex = random(basicData.totalCards);
-      }
-      paramsFields.selectedCardIndex.push(cardIndex);
+      // let cardIndex = random(basicData.totalCards);
+      // while (selectedCardIndex.includes(cardIndex)) {
+      //   cardIndex = random(basicData.totalCards);
+      // }
+      // paramsFields.selectedCardIndex.push(cardIndex);
       if (leftPrizeCount === 0) {
         break;
       }
     }
 
+    // 动画结束处理相关状态
+    setTimeout(() => {
+      console.log(paramsFields.currentLuckys, 'selectedCardIndexselectedCardIndex')
+      paramsFields.isLotting = false;
+      // 改变奖品状态
+      // changePrize();
+      bus.emit('changePrize')
+      basicData.currentPrizeIndex--;
+      basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+      setTimeout(() => {
+        bus.emit('setPrizeData', basicData.currentPrizeIndex, 0, true)
+      }, 200)
+    }, 500)
+    // 抽中之后要处理的事
     // console.log(currentLuckys);
-    selectCard();
+    // selectCard();
   });
 }
+
+
+
+/**
+ * 重置抽奖牌内容
+ */
+const resetCard = (duration = 500, model) => {
+  if (paramsFields.currentLuckys.length === 0) {
+    return Promise.resolve();
+  }
+  // debugger
+  paramsFields.selectedCardIndex.forEach(index => {
+    let object = paramsFields.threeDCards[index],
+      target = targets.sphere[index];
+
+    new TWEEN.Tween(object.position)
+      .to(
+        {
+          x: -10000,
+          y: -10000,
+          z: -10000
+        },
+        Math.random() * duration + duration
+      )
+      .easing(TWEEN.Easing.Exponential.InOut)
+      .start();
+
+    new TWEEN.Tween(object.rotation)
+      .to(
+        {
+          x: target.rotation.x,
+          y: target.rotation.y,
+          z: target.rotation.z
+        },
+        Math.random() * duration + duration
+      )
+      .easing(TWEEN.Easing.Exponential.InOut)
+      .start();
+  });
+
+  return new Promise((resolve, reject) => {
+    new TWEEN.Tween(this)
+      .to({}, duration * 2)
+      .onUpdate(render)
+      .start()
+      .onComplete(() => {
+        paramsFields.selectedCardIndex.forEach(index => {
+          let object = paramsFields.threeDCards[index];
+          if (!object)  {
+            // debugger
+            return
+          }
+          // debugger
+          if(object.element.classList.value.includes("prize") && model === "lottery") {
+            // object.element.remove();
+            scene.remove(object);
+            paramsFields.threeDCards[index] = null
+            basicData.totalCards--;
+            // console.log(object.element, 'object.element')
+          } else {
+            object.element.classList.remove("prize");
+          }
+        });
+        paramsFields.threeDCards = paramsFields.threeDCards.filter(item => item)
+        // if (model === "lottery") {
+        //   currentLuckys = []
+        // }
+      });
+    setTimeout(() => {
+      resolve();
+    }, duration * 1)
+  });
+}
+
+
 const lotteryActiveFn = () => {
     if (!basicData.currentPrize) {
-      // resetCard(500).then(res => {
-      //   showAllPrizes();
-      // })
-      // addQipao(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
-      // document.querySelector("#lottery").remove();
-      // return
+      resetCard(500).then(res => {
+        // showAllPrizes();
+        bus.emit('showAllPrizes')
+      })
+      toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
+      document.querySelector("#lottery").remove();
+      return
     }
-    // if (threeDCards.length <= 0) {
-    //   addQipao("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
-    //   return;
-    // }
-    setLotteryStatus(true);
-  //  // 每次抽奖前先保存上一次的抽奖数据
-  //  saveData();
-  //  //更新剩余抽奖数目的数据显示
-  //  changePrize(); 
+    if (paramsFields.threeDCards.length <= 0) {
+      toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
+      return;
+    }
+    basicData.isLotting = true
+    paramsFields.isLotting = true;
     //更新剩余抽奖数目的数据显示
     if (!isNextPrize && prizeMark.innerHTML) {
       // 清除当前看见奖项
-      prizeMark.innerHTML = ''
+      // prizeMark.innerHTML = ''
+      bus.emit('hidePrizeMark')
       // 抽奖
       lottery("lottery");
-      addQipao(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+      toast.info(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
       return
     }
     resetCard(500, "lottery").then(res => {
-      if (isNextPrize) {
+      if (basicData.isNextPrize) {
         // 重置选择抽奖名单
         // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
         //   switch (currentPrizeIndex) {
@@ -384,35 +471,37 @@ const lotteryActiveFn = () => {
         //   }
         // }
         // 入场下一个奖项
-        nextPrize();
+        bus.emit('showPrize')
         return
       }
       // 抽奖
       lottery("lottery");
-      addQipao(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+      toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
     });
   }
 const beginLottery = () => {
   if (isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`);
-      return
-    }
-    // 如果正在抽奖，则禁止一切操作
-    if (paramsFields.isLotting) {
-      if (e.target.id === "lottery") {
-        rotateObj.stop();
-        // btns.lottery.innerHTML = "开始抽奖 <br/> mulai undian";
-      } else {
-        toast.info("正在抽奖，抽慢一点点～～  sedang diundi,undian perlahan~~");
-      }
-      return false;
-    }
-
+    return
+  }
+  // 如果正在抽奖，则禁止一切操作
+  if (paramsFields.isLotting) {
+    rotateObj.stop();
+    // if (e.target.id === "lottery") {
+    //   rotateObj.stop();
+    //   // btns.lottery.innerHTML = "开始抽奖 <br/> mulai undian";
+    // } else {
+    //   toast.info("正在抽奖，抽慢一点点～～  sedang diundi,undian perlahan~~");
+    // }
+    bus.emit('lotteryActive');
+    return false;
+  }
+  lotteryActiveFn();
 }
 // 监听数据
 bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
-bus.on('beginLottery')
+bus.on('beginLottery', beginLottery)
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)

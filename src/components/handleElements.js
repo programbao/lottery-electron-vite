@@ -180,7 +180,7 @@ export const createCardWithParentDom = (user, isBold, id, showTable, row_column,
 /**
  * 随机抽奖
  */
-const random = (num) => {
+export const random = (num) => {
   // Math.floor取到0-num-1之间数字的概率是相等的
   return Math.floor(Math.random() * num);
 }

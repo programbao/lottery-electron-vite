@@ -41,18 +41,93 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
-const lotteryData = lotteryDataStore();
+const basicData = lotteryDataStore();
 
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = ref({});
 const prizes = computed(() => {
-  let prizes = lotteryData.prizeConfig.prizes;
+  let prizes = basicData.prizeConfig.prizes;
   if (prizes) {
     currentPrize.value = prizes[prizes.length - 1]
   }
   return prizes
 });
+const setPrizeData = (currentPrizeIndex, count, isInit) => {
+  let prizeElement = {};
+  let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
+    type: -1,
+    count: 0,
+    text: "谢谢参与 undian telah selesai,terima kasih telah bergabung",
+    title: "已结束",
+    img: ""
+  },
+    type = currentPrize.type,
+    elements = prizeElement[type],
+    totalCount = currentPrize.count;
+
+  if (!elements) {
+    elements = {
+      box: document.querySelector(`#prize-item-${type}`),
+      bar: document.querySelector(`#prize-bar-${type}`),
+      text: document.querySelector(`#prize-count-${type}`)
+    };
+    prizeElement[type] = elements;
+  }
+
+  if (!prizeElement.prizeType) {
+    prizeElement.prizeType = document.querySelector("#prizeType");
+    prizeElement.prizeLeft = document.querySelector("#prizeLeft");
+    prizeElement.prizeText = document.querySelector("#prizeText");
+  }
+
+  if (isInit) {
+    for (let i = prizes.length - 1; i > currentPrizeIndex; i--) {
+      let type = prizes[i]["type"];
+      document.querySelector(`#prize-item-${type}`).className =
+        "prize-item done";
+      document.querySelector(`#prize-bar-${type}`).style.width = "0";
+      document.querySelector(`#prize-count-${type}`).textContent =
+        "0" + "/" + prizes[i]["count"];
+    }
+  }
+
+  if (basicData.lasetPrizeIndex !== currentPrizeIndex) {
+    let lastPrize = basicData.prizes[basicData.lasetPrizeIndex],
+      lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
+    lastBox.classList.remove("shine");
+    lastBox.classList.add("done");
+    elements.box && elements.box.classList.add("shine");
+    prizeElement.prizeType.textContent = currentPrize.text;
+    prizeElement.prizeText.textContent = currentPrize.title;
+
+    basicData.lasetPrizeIndex = currentPrizeIndex;
+  }
+
+  if (currentPrizeIndex < 0) {
+    prizeElement.prizeType.textContent = "抽奖结束了，谢谢参与  undian telah selesai,terima kasih telah bergabung";
+    prizeElement.prizeText.textContent = " ";
+    prizeElement.prizeLeft.textContent = "";
+    return;
+  }
+
+  count = totalCount - count;
+  count = count < 0 ? 0 : count;
+  let percent = (count / totalCount).toFixed(2);
+  elements.bar && (elements.bar.style.width = percent * 100 + "%");
+  elements.text && (elements.text.textContent = count + "/" + totalCount);
+  prizeElement.prizeLeft.textContent = count;
+};
+const changePrize = () => {
+  let luckys = basicData.currentPrize ? basicData.luckyUsers[basicData.currentPrize.type] : null;
+  let luckyCount = (luckys ? luckys.length : 0) + (basicData.currentPrizeIndex >= 0 ? basicData.eachCount[basicData.currentPrizeIndex] : 0);
+  // 修改左侧prize的数目和百分比
+  setPrizeData(basicData.currentPrizeIndex, luckyCount);
+}
+
+bus.on('changePrize', changePrize)
+bus.on('setPrizeData', setPrizeData)
 </script>
 
 <style lang="scss" scoped>

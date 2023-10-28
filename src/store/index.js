@@ -18,6 +18,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       resolution: 1.1, // 当前圆球比例
       rotateLoop: 1000, // 是否循环旋转
       rotateTime: 3000, // 旋转时间
+      lasetPrizeIndex: 0, // 上一次抽奖的奖品
+      isNextPrize: false, // 是否下一次抽奖
       containerConfigStyle: {
         scale: 0.5, // 容器卡片缩放比例
         top: '-23vh',
@@ -76,6 +78,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
           continue;
         }
         this.currentPrizeIndex = prizeIndex;
+        this.lasetPrizeIndex = prizeIndex;
         this.currentPrize = this.prizes[this.currentPrizeIndex];
         break;
       }
