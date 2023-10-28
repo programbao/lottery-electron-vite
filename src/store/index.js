@@ -20,6 +20,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       rotateTime: 3000, // 旋转时间
       lasetPrizeIndex: 0, // 上一次抽奖的奖品
       isNextPrize: false, // 是否下一次抽奖
+      isLotting: false, // 是否正在抽奖
       containerConfigStyle: {
         scale: 0.5, // 容器卡片缩放比例
         top: '-23vh',

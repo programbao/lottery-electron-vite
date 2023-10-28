@@ -23,7 +23,7 @@ const currentPrize = computed(() => {
   return basicData.currentPrize;
 });
 const prizeMark = ref(null);
-const enterAnimate = ref("slide-in-elliptic-top-fwd")
+const enterAnimate = ref("")
 // 显示中奖全部大名单
 const showAllPrizes = () => {
   let prizeListBox = '';
@@ -73,7 +73,6 @@ const showAllPrizes = () => {
   }, 5000)
 }
 const showPrize = () => {
-  console.log(prizeMark)
   prizeMark.value.style.zIndex = "6";
   enterAnimate.value = basicData.currentPrizeIndex < 1 ? "bounce-in-top" : "slide-in-elliptic-top-fwd"
   setTimeout(() => {
@@ -85,7 +84,7 @@ const showPrize = () => {
 }
 const hidePrizeMark = () => {
   enterAnimate.value = '';
-  prizeMark.style.zIndex = '-2'
+  prizeMark.value.style.zIndex = '-2'
 }
 bus.on('showPrize', showPrize);
 bus.on('showAllPrizes', showAllPrizes);

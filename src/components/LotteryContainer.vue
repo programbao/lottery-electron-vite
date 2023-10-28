@@ -51,7 +51,7 @@ let paramsFields = {
   ROW_COUNT: basicData.rowCount,
   COLUMN_COUNT: basicData.columnCount,
   HIGHLIGHT_CELL: [],
-  isLotting: false
+  // isLotting: false
 }
 
 const animate = () => {
@@ -265,7 +265,7 @@ const initHandleData = () => {
     ROW_COUNT: basicData.rowCount,
     COLUMN_COUNT: basicData.columnCount,
     HIGHLIGHT_CELL: [],
-    isLotting: false
+    // isLotting: false
   }
   initCards();
   // animate();
@@ -336,7 +336,7 @@ const rotateBall = () => {
     // 动画结束处理相关状态
     setTimeout(() => {
       console.log(paramsFields.currentLuckys, 'selectedCardIndexselectedCardIndex')
-      paramsFields.isLotting = false;
+      basicData.isLotting = false;
       // 改变奖品状态
       // changePrize();
       bus.emit('changePrize')
@@ -345,6 +345,7 @@ const rotateBall = () => {
       setTimeout(() => {
         bus.emit('setPrizeData', basicData.currentPrizeIndex, 0, true)
       }, 200)
+      basicData.isNextPrize = true;
     }, 500)
     // 抽中之后要处理的事
     // console.log(currentLuckys);
@@ -427,65 +428,66 @@ const resetCard = (duration = 500, model) => {
 
 
 const lotteryActiveFn = () => {
-    if (!basicData.currentPrize) {
-      resetCard(500).then(res => {
-        // showAllPrizes();
-        bus.emit('showAllPrizes')
-      })
-      toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
-      document.querySelector("#lottery").remove();
-      return
-    }
-    if (paramsFields.threeDCards.length <= 0) {
-      toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
-      return;
-    }
-    basicData.isLotting = true
-    paramsFields.isLotting = true;
-    //更新剩余抽奖数目的数据显示
-    if (!isNextPrize && prizeMark.innerHTML) {
-      // 清除当前看见奖项
-      // prizeMark.innerHTML = ''
-      bus.emit('hidePrizeMark')
-      // 抽奖
-      lottery("lottery");
-      toast.info(`正在抽取[${currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
-      return
-    }
-    resetCard(500, "lottery").then(res => {
-      if (basicData.isNextPrize) {
-        // 重置选择抽奖名单
-        // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
-        //   switch (currentPrizeIndex) {
-        //     case 2:
-        //       resetBallCards(basicData.users_hinduism_buddhism_confucianism);
-        //       break;
-        //     case 1:
-        //       resetBallCards(basicData.users_christian_catholic);
-        //       break;
-        //     case 0:
-        //       resetBallCards(basicData.users_islam);
-        //       break;
-        //     default:
-        //       break;
-        //   }
-        // }
-        // 入场下一个奖项
-        bus.emit('showPrize')
-        return
-      }
-      // 抽奖
-      lottery("lottery");
-      toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
-    });
+  if (!basicData.currentPrize) {
+    resetCard(500).then(res => {
+      // showAllPrizes();
+      bus.emit('showAllPrizes')
+    })
+    toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
+    document.querySelector("#lottery").remove();
+    return
   }
+  if (paramsFields.threeDCards.length <= 0) {
+    toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！");
+    return;
+  }
+  basicData.isLotting = true
+  // paramsFields.isLotting = true;
+  //更新剩余抽奖数目的数据显示
+  if (!basicData.isNextPrize) {
+    // 清除当前看见奖项
+    // prizeMark.innerHTML = ''
+    bus.emit('hidePrizeMark')
+    // 抽奖
+    lottery("lottery");
+    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+    return
+  }
+  resetCard(500, "lottery").then(res => {
+    if (basicData.isNextPrize) {
+      // 重置选择抽奖名单
+      // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
+      //   switch (currentPrizeIndex) {
+      //     case 2:
+      //       resetBallCards(basicData.users_hinduism_buddhism_confucianism);
+      //       break;
+      //     case 1:
+      //       resetBallCards(basicData.users_christian_catholic);
+      //       break;
+      //     case 0:
+      //       resetBallCards(basicData.users_islam);
+      //       break;
+      //     default:
+      //       break;
+      //   }
+      // }
+      // 入场下一个奖项
+      bus.emit('showPrize')
+      basicData.isLotting = false
+      return
+    }
+    // 抽奖
+    lottery("lottery");
+    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+  });
+}
 const beginLottery = () => {
   if (isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`);
     return
   }
   // 如果正在抽奖，则禁止一切操作
-  if (paramsFields.isLotting) {
+  if (basicData.isLotting) {
     rotateObj.stop();
     // if (e.target.id === "lottery") {
     //   rotateObj.stop();
