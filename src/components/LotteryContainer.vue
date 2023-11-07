@@ -335,28 +335,90 @@ const rotateBall = () => {
 
     // 动画结束处理相关状态
     setTimeout(() => {
-      console.log(paramsFields.currentLuckys, 'selectedCardIndexselectedCardIndex')
       basicData.isLotting = false;
       // 改变奖品状态
       // changePrize();
       bus.emit('changePrize')
-      basicData.currentPrizeIndex--;
-      basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-      setTimeout(() => {
-        bus.emit('setPrizeData', {
-          currentPrizeIndex: basicData.currentPrizeIndex,
-          count: 0,
-          isInit: true
-        })
-      }, 200)
-      basicData.isNextPrize = true;
+      changePrizeStatus();
+      // basicData.currentPrizeIndex--;
+      // basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+      // setTimeout(() => {
+      //   bus.emit('setPrizeData', {
+      //     currentPrizeIndex: basicData.currentPrizeIndex,
+      //     count: 0,
+      //     isInit: true
+      //   })
+      // }, 200)
+      // basicData.isNextPrize = true;
     }, 500)
     // 抽中之后要处理的事
     // console.log(currentLuckys);
     // selectCard();
   });
 }
+const changePrizeStatus = () => {
+  let type = basicData.currentPrize.type,
+    curLucky = basicData.luckyUsers[type] || [];
 
+  curLucky = curLucky.concat(paramsFields.currentLuckys);
+
+  basicData.luckyUsers[type] = curLucky;
+
+  if (basicData.currentPrize.count <= curLucky.length) {
+    basicData.currentPrizeIndex--;
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+    setTimeout(() => {
+      bus.emit('setPrizeData', {
+        currentPrizeIndex: basicData.currentPrizeIndex,
+        count: 0,
+        isInit: true
+      })
+    }, 200)
+    basicData.isNextPrize = true;
+    // if (currentPrizeIndex <= -1) {
+    //   currentPrizeIndex = 0;
+    // }
+    // currentPrize = basicData.prizes[currentPrizeIndex];
+  }
+}
+/**
+ * 保存上一次的抽奖结果
+ */
+const saveData = () => {
+  if (!basicData.currentPrize) {
+    //若奖品抽完，则不再记录数据，但是还是可以进行抽奖
+    return;
+  }
+  let type = basicData.currentPrize.type
+  // let type = basicData.currentPrize.type,
+  //   curLucky = basicData.luckyUsers[type] || [];
+
+  // curLucky = curLucky.concat(paramsFields.currentLuckys);
+
+  // basicData.luckyUsers[type] = curLucky;
+
+  // if (basicData.currentPrize.count <= curLucky.length) {
+  //   basicData.currentPrizeIndex--;
+  //   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+  //   setTimeout(() => {
+  //     bus.emit('setPrizeData', {
+  //       currentPrizeIndex: basicData.currentPrizeIndex,
+  //       count: 0,
+  //       isInit: true
+  //     })
+  //   }, 200)
+  //   basicData.isNextPrize = true;
+  //   // if (currentPrizeIndex <= -1) {
+  //   //   currentPrizeIndex = 0;
+  //   // }
+  //   // currentPrize = basicData.prizes[currentPrizeIndex];
+  // }
+  if (paramsFields.currentLuckys.length > 0) {
+    // todo by xc 添加数据保存机制，以免服务器挂掉数据丢失
+    return myApi.setData(type, JSON.stringify(paramsFields.currentLuckys));
+  }
+  return Promise.resolve();
+}
 
 
 /**
@@ -431,7 +493,7 @@ const resetCard = (duration = 500, model) => {
 }
 
 
-const lotteryActiveFn = () => {
+const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
     resetCard(500).then(res => {
       // showAllPrizes();
@@ -452,12 +514,14 @@ const lotteryActiveFn = () => {
     // 清除当前看见奖项
     // prizeMark.innerHTML = ''
     bus.emit('hidePrizeMark')
+    // 每次抽奖前先保存上一次的抽奖数据
+    await saveData();
     // 抽奖
     lottery("lottery");
     toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
     return
   }
-  resetCard(500, "lottery").then(res => {
+  resetCard(500, "lottery").then(async res => {
     if (basicData.isNextPrize) {
       // 重置选择抽奖名单
       // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
@@ -480,6 +544,8 @@ const lotteryActiveFn = () => {
       basicData.isLotting = false
       return
     }
+    // 每次抽奖前先保存上一次的抽奖数据
+    await saveData();
     // 抽奖
     lottery("lottery");
     toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);

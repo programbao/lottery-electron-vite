@@ -11,11 +11,17 @@ const getStaticUsersData = async () => {
   let result = await ipcRenderer.invoke('getStaticUsersData')
   return result
 }
+// 保存数据
+const setData = async (...args) => {
+  let result = await ipcRenderer.invoke('setData', ...args)
+  return result
+}
 // 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
   openDialog,
   getTempData,
-  getStaticUsersData
+  getStaticUsersData,
+  setData
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

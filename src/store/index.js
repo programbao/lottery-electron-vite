@@ -12,7 +12,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       rowCount: 10, // 行数
       company: '',
       totalCards: 0, // 总牌数
-      eachCount: [], // 每次抽取的奖品个数
+      eachCount: [18, 10, 1, 1, 5, 3, 2, 10], // 每次抽取的奖品个数
       currentPrizeIndex: 0, // 当前抽取的奖品
       currentPrize: {}, // 当前抽取的奖品
       resolution: 1.1, // 当前圆球比例
@@ -63,7 +63,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       this.totalCards = this.columnCount * this.rowCount;
 
       // 每次抽取的奖品个数
-      this.eachCount = this.prizes.map(prize => prize.count);
+      // this.eachCount = this.prizes.map(prize => prize.count);
       // 中奖用户
       this.luckyUsers = config.luckyData;
       // 读取当前已设置的抽奖结果

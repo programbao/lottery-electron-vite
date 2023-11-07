@@ -13,7 +13,7 @@ global.sharedObject = {
 
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
-const { getStaticUsersData } = require('./controller/dataHandle')
+const { getStaticUsersData, setData } = require('./controller/dataHandle')
 
 
 const createWindow = () => {
@@ -56,6 +56,9 @@ const createWindow = () => {
 
   // 获取静态用户数据
   getStaticUsersData();
+
+  // 设置和保存数据 
+  setData();
 }
 
 app.whenReady().then(() => {

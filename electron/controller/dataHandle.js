@@ -40,6 +40,26 @@ const getStaticUsersData = async () => {
     return sharedObject.curData;
   })
 }
+const setLucky = async (type, data) => {
+  let sharedObject =  global.sharedObject;
+  if (sharedObject.luckyData[type]) {
+    sharedObject.luckyData[type] = sharedObject.luckyData[type].concat(data);
+  } else {
+    sharedObject.luckyData[type] = Array.isArray(data) ? data : [data];
+  }
+
+  return saveDataFile(sharedObject.luckyData);
+}
+
+const setData = async () => {
+  ipcMain.handle('setData', async (e, ...args) => {
+    const type = args[0];
+    const data = JSON.parse(args[1]);
+    const res = await setLucky(type, data);
+    console.log(res, 'setData-----')
+  })
+}
 module.exports = {
-  getStaticUsersData
+  getStaticUsersData,
+  setData
 };
