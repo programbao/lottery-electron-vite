@@ -54,7 +54,7 @@ const prizes = computed(() => {
   }
   return prizes
 });
-const setPrizeData = (currentPrizeIndex, count, isInit) => {
+const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   let prizeElement = {};
   let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
     type: -1,
@@ -123,7 +123,7 @@ const changePrize = () => {
   let luckys = basicData.currentPrize ? basicData.luckyUsers[basicData.currentPrize.type] : null;
   let luckyCount = (luckys ? luckys.length : 0) + (basicData.currentPrizeIndex >= 0 ? basicData.eachCount[basicData.currentPrizeIndex] : 0);
   // 修改左侧prize的数目和百分比
-  setPrizeData(basicData.currentPrizeIndex, luckyCount);
+  setPrizeData({currentPrizeIndex: basicData.currentPrizeIndex, count: luckyCount});
 }
 
 bus.on('changePrize', changePrize)

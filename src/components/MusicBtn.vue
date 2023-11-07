@@ -58,7 +58,7 @@ const musicBoxClick = (e) => {
 }
 onMounted(() => {
   setTimeout(function () {
-    musicBoxClick()
+    // musicBoxClick()
   }, 1000)
 })
 </script>

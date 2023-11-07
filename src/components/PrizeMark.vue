@@ -114,9 +114,12 @@ bus.on('hidePrizeMark', hidePrizeMark);
 .next-prize .prize-img {
   height: 20vh;
   width: 20vw;
+  margin-left: 1vw;
 }
 .next-prize .prize-img img{
   object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
 .next-prize .prize-text {
   width: 35vw;
@@ -129,8 +132,10 @@ bus.on('hidePrizeMark', hidePrizeMark);
   text-align: right;
 }
 .next-prize .prize-text .prize-title {
+  margin: 0;
+  padding: 0;
   margin-left: 2vh;
-  font-size: 4vh;
+  font-size: 2.5vh;
 }
 /* 入场动画 */
 .slide-in-elliptic-top-fwd {

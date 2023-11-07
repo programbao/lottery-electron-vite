@@ -343,7 +343,11 @@ const rotateBall = () => {
       basicData.currentPrizeIndex--;
       basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
       setTimeout(() => {
-        bus.emit('setPrizeData', basicData.currentPrizeIndex, 0, true)
+        bus.emit('setPrizeData', {
+          currentPrizeIndex: basicData.currentPrizeIndex,
+          count: 0,
+          isInit: true
+        })
       }, 200)
       basicData.isNextPrize = true;
     }, 500)
