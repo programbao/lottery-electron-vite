@@ -363,7 +363,7 @@ const changePrizeStatus = () => {
   curLucky = curLucky.concat(paramsFields.currentLuckys);
 
   basicData.luckyUsers[type] = curLucky;
-
+  basicData.lastTimePrizeIndex = basicData.currentPrizeIndex;
   if (basicData.currentPrize.count <= curLucky.length) {
     basicData.currentPrizeIndex--;
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
@@ -389,7 +389,7 @@ const saveData = () => {
     //若奖品抽完，则不再记录数据，但是还是可以进行抽奖
     return;
   }
-  let type = basicData.currentPrize.type
+  let type = basicData.prizes[basicData.lastTimePrizeIndex]['type']
   // let type = basicData.currentPrize.type,
   //   curLucky = basicData.luckyUsers[type] || [];
 
@@ -541,6 +541,8 @@ const lotteryActiveFn = async () => {
       // }
       // 入场下一个奖项
       bus.emit('showPrize')
+      // 每次抽奖前先保存上一次的抽奖数据
+      await saveData();
       basicData.isLotting = false
       return
     }

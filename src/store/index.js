@@ -18,7 +18,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       resolution: 1.1, // 当前圆球比例
       rotateLoop: 1000, // 是否循环旋转
       rotateTime: 3000, // 旋转时间
-      lasetPrizeIndex: 0, // 上一次抽奖的奖品
+      lasetPrizeIndex: 0, // 上一次抽奖的奖品 - 切换奖项之后就会变化
+      lastTimePrizeIndex: 0, // 上一次抽奖的奖品 - 真正开始下一个奖项抽奖才会变化
       isNextPrize: false, // 是否下一次抽奖
       isLotting: false, // 是否正在抽奖
       containerConfigStyle: {
@@ -80,6 +81,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         }
         this.currentPrizeIndex = prizeIndex;
         this.lasetPrizeIndex = prizeIndex;
+        this.lastTimePrizeIndex = prizeIndex;
         this.currentPrize = this.prizes[this.currentPrizeIndex];
         break;
       }

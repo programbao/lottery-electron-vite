@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, computed } from 'vue'
+import { ref, onBeforeUnmount, onMounted, computed, nextTick } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
@@ -94,7 +94,9 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   }
 
   if (basicData.lasetPrizeIndex !== currentPrizeIndex) {
-    let lastPrize = basicData.prizes[basicData.lasetPrizeIndex],
+    const isCpThenLP = currentPrizeIndex > basicData.lasetPrizeIndex;
+    let handleIndex = isCpThenLP ? currentPrizeIndex : basicData.lasetPrizeIndex;
+    let lastPrize = basicData.prizes[handleIndex],
       lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
     lastBox.classList.remove("shine");
     lastBox.classList.add("done");
@@ -102,7 +104,7 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     prizeElement.prizeType.textContent = currentPrize.text;
     prizeElement.prizeText.textContent = currentPrize.title;
 
-    basicData.lasetPrizeIndex = currentPrizeIndex;
+    if (!isCpThenLP) basicData.lasetPrizeIndex = currentPrizeIndex;
   }
 
   if (currentPrizeIndex < 0) {
@@ -125,22 +127,33 @@ const changePrize = () => {
   // 修改左侧prize的数目和百分比
   setPrizeData({currentPrizeIndex: basicData.currentPrizeIndex, count: luckyCount});
 }
+let isInitPrizeData = false
 const initHandlePrizeData = () => {
-  const totalPrizeLen = basicData.prizeConfig.prizes.length - 1
-  const currentIndex = basicData.currentPrizeIndex
-  const needCount = totalPrizeLen - currentIndex
-  let needChangeIndex = totalPrizeLen;
-  const prizes = basicData.prizeConfig.prizes 
-  for (let i = 0; i < needCount + 1; i++) {
-    setPrizeData({ currentPrizeIndex: needChangeIndex, count: basicData.luckyUsers[prizes[needChangeIndex]["type"]].length })
-    needChangeIndex -=1
-  }
+  nextTick(() => {
+    if (!basicData.prizeConfig.prizes || isInitPrizeData) return
+    isInitPrizeData = true
+    const totalPrizeLen = basicData.prizeConfig.prizes.length - 1
+    const currentIndex = basicData.currentPrizeIndex
+    const needCount = totalPrizeLen - currentIndex
+    let needChangeIndex = totalPrizeLen;
+    const prizes = basicData.prizeConfig.prizes 
+    for (let i = 0; i < needCount + 1; i++) {
+      let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
+      console.log(itemLucky, '23402983409234', basicData.luckyUsers, needChangeIndex)
+      if (itemLucky === undefined) {
+        setPrizeData({ currentPrizeIndex: needChangeIndex, count: 0, isInit: true })
+        return
+      }
+      setPrizeData({ currentPrizeIndex: needChangeIndex, count: itemLucky.length })
+      needChangeIndex -=1
+    }
+  })
 }
 // 监听数据
-// bus.on('initConfigDataEnd', initHandlePrizeData)
-// onBeforeUnmount(() => {
-//   bus.off('initConfigDataEnd', initHandlePrizeData)
-// })
+bus.on('initConfigDataEnd', initHandlePrizeData)
+onBeforeUnmount(() => {
+  bus.off('initConfigDataEnd', initHandlePrizeData)
+})
 onMounted(() => {
   initHandlePrizeData();
 })
