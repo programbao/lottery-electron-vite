@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, protocol } = require('electron')
 const path = require('path')
 const WinState = require('electron-win-state').default;
 const NODE_ENV = process.env.NODE_ENV
@@ -68,3 +68,9 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function() {
   if (process.platform !== 'darwin') app.quit();
 })
+app.on('ready', () => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const filePath = path.normalize(request.url.replace(/^file:\/\//, ''));
+    callback({ path: filePath });
+  });
+});

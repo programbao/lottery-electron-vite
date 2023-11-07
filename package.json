@@ -19,7 +19,8 @@
     "pinia": "^2.1.7",
     "vite-plugin-optimizer": "^1.4.2",
     "vue": "^3.3.4",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "electron-win-state": "^1.1.22"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
@@ -27,7 +28,6 @@
     "cross-env": "^7.0.3",
     "electron": "^27.0.0",
     "electron-builder": "^24.6.4",
-    "electron-win-state": "^1.1.22",
     "nodemon": "^3.0.1",
     "sass": "^1.69.4",
     "vite": "^4.4.5",
