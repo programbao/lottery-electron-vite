@@ -5,7 +5,7 @@
       <label id="prizeText" class="prize-shine">{{currentPrize.title}}</label>
       ，剩余<label id="prizeLeft" class="prize-shine">{{currentPrize.count}}</label>个
     </div>
-    <ul class="prize-list">
+    <ul class="prize-list" ref="prizeList">
       <li 
         v-for="item in prizes"
         :key="item.type"
@@ -43,10 +43,12 @@
 import { ref, onBeforeUnmount, onMounted, computed, nextTick } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
+import anime from 'animejs'
 const basicData = lotteryDataStore();
 
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = ref({});
+const prizeList = ref(null);
 const prizes = computed(() => {
   let prizes = basicData.prizeConfig.prizes;
   if (prizes) {
@@ -54,6 +56,21 @@ const prizes = computed(() => {
   }
   return prizes
 });
+// 滑动到特定位置
+const scrollTop = () => {
+  const handleDom = prizeList.value;
+  const oldScrollTop = handleDom.scrollTop
+  const type = prizes.value[prizes.value.length - 1].type
+  const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().bottom - oldScrollTop;
+  nextTick(() => {
+    anime({
+      targets: handleDom,
+      scrollTop: [oldScrollTop, scrollTop],
+      duration: 2000,
+      easing: 'cubicBezier(0.17, 0.08, 0.25, 1.00)'
+    })
+  })
+}
 const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   let prizeElement = {};
   let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
@@ -93,6 +110,8 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     }
   }
 
+  count = totalCount - count;
+  count = count < 0 ? 0 : count;
   if (basicData.lasetPrizeIndex !== currentPrizeIndex) {
     const isCpThenLP = currentPrizeIndex > basicData.lasetPrizeIndex;
     let handleIndex = isCpThenLP ? currentPrizeIndex : basicData.lasetPrizeIndex;
@@ -100,11 +119,11 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
       lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
     lastBox.classList.remove("shine");
     lastBox.classList.add("done");
-    elements.box && elements.box.classList.add("shine");
+     elements.box && elements.box.classList.add("shine");
     prizeElement.prizeType.textContent = currentPrize.text;
     prizeElement.prizeText.textContent = currentPrize.title;
 
-    if (!isCpThenLP) basicData.lasetPrizeIndex = currentPrizeIndex;
+    basicData.lasetPrizeIndex = currentPrizeIndex;
   }
 
   if (currentPrizeIndex < 0) {
@@ -114,8 +133,6 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     return;
   }
 
-  count = totalCount - count;
-  count = count < 0 ? 0 : count;
   let percent = (count / totalCount).toFixed(2);
   elements.bar && (elements.bar.style.width = percent * 100 + "%");
   elements.text && (elements.text.textContent = count + "/" + totalCount);
@@ -137,6 +154,8 @@ const initHandlePrizeData = () => {
     const needCount = totalPrizeLen - currentIndex
     let needChangeIndex = totalPrizeLen;
     const prizes = basicData.prizeConfig.prizes 
+    // 滚动位置
+    scrollTop();
     for (let i = 0; i < needCount + 1; i++) {
       let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
       console.log(itemLucky, '23402983409234', basicData.luckyUsers, needChangeIndex)

@@ -109,7 +109,9 @@ const transform = (targets, duration) => {
 }
 function switchScreen(type) {
   if (isAnimating) {
-    toast.info("请等待动画加载完成  harap tunggu hingga animasi dimuat");
+    toast.info("请等待动画加载完成  harap tunggu hingga animasi dimuat", { 
+      timeout: 2000
+    });
     return
   }
   // debugger
@@ -121,11 +123,11 @@ function switchScreen(type) {
       transform(targets.sphere, 1500);
       setTimeout(() => {
         basicData.isNextPrize = true
-        if (basicData.currentPrizeIndex === basicData.prizes.length - 1) {
-        } else {
-          basicData.currentPrizeIndex--;
-          basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-        }
+        // if (basicData.currentPrizeIndex === basicData.prizes.length - 1) {
+        // } else {
+        //   basicData.currentPrizeIndex--;
+        //   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+        // }
       }, 2000);
       break;
   }
@@ -499,7 +501,9 @@ const lotteryActiveFn = async () => {
       // showAllPrizes();
       bus.emit('showAllPrizes')
     })
-    toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`);
+    toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`, { 
+      duration: 3000
+    });
     document.querySelector("#lottery").remove();
     return
   }
@@ -518,7 +522,9 @@ const lotteryActiveFn = async () => {
     await saveData();
     // 抽奖
     lottery("lottery");
-    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`, { 
+      timeout: 2000
+    });
     return
   }
   resetCard(500, "lottery").then(async res => {
@@ -550,12 +556,16 @@ const lotteryActiveFn = async () => {
     await saveData();
     // 抽奖
     lottery("lottery");
-    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`);
+    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`, { 
+      timeout: 2000
+    });
   });
 }
 const beginLottery = () => {
   if (isAnimating) {
-    toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`);
+    toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
+      timeout: 2000
+    });
     return
   }
   // 如果正在抽奖，则禁止一切操作
