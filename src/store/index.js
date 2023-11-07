@@ -72,7 +72,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       let prizeIndex = this.prizes.length - 1;
       for (; prizeIndex > -1; prizeIndex--) {
         if (
-          this.luckyUsers[prizeIndex] &&
+          this.luckyUsers[this.prizes[prizeIndex].type] &&
           this.luckyUsers[this.prizes[prizeIndex].type].length >=
             this.prizes[prizeIndex].count
         ) {

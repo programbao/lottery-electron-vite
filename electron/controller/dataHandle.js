@@ -28,7 +28,6 @@ const getStaticUsersData = async () => {
     shuffle(sharedObject.curData.users_islam);
     shuffle(sharedObject.curData.users_christian_catholic);
     shuffle(sharedObject.curData.users_hinduism_buddhism_confucianism);
-    console.log(2222, '28304823加载')
     // 读取已经抽取的结果
     try {
       const tempData = await loadTempData();

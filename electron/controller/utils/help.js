@@ -31,7 +31,7 @@ function loadTempData() {
           resolve([]);
           return;
         }
-        resolve(JSON.parse(data));
+        console.log(data)
       });
     })
   );

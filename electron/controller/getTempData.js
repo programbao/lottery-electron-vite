@@ -1,13 +1,16 @@
 const cfg = require("../config");
 const { ipcMain } = require('electron')
 
-let luckyData = global.sharedObject.luckyData;
-let errorData = global.sharedObject.errorData;
-let curData = global.sharedObject.curData;
+
 const getLeftUsers = () => {
+  let luckyData = global.sharedObject.luckyData;
+  let errorData = global.sharedObject.errorData;
+  let curData = global.sharedObject.curData;
   //  记录当前已抽取的用户
   let lotteredUser = {};
   for (let key in luckyData) {
+    if (!key) delete luckyData[key];
+    luckyData[key] = luckyData[key].filter(item => item);
     let luckys = luckyData[key];
     luckys.forEach(item => {
       lotteredUser[item[0]] = true;
@@ -23,10 +26,15 @@ const getLeftUsers = () => {
     return !lotteredUser[user[0]];
   });
   curData.leftUsers = leftUsers;
+  return {
+    luckyData,
+    errorData,
+    curData
+  }
 }
 const getTempData = () => {
   ipcMain.handle('getTempData', async (e, ...args) => {
-    getLeftUsers();
+    const { luckyData, errorData, curData } = getLeftUsers();
     return {
       prizeConfig: cfg,
       leftUsers: curData.leftUsers,

@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onBeforeUnmount, onMounted, computed } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
@@ -125,7 +125,25 @@ const changePrize = () => {
   // 修改左侧prize的数目和百分比
   setPrizeData({currentPrizeIndex: basicData.currentPrizeIndex, count: luckyCount});
 }
-
+const initHandlePrizeData = () => {
+  const totalPrizeLen = basicData.prizeConfig.prizes.length - 1
+  const currentIndex = basicData.currentPrizeIndex
+  const needCount = totalPrizeLen - currentIndex
+  let needChangeIndex = totalPrizeLen;
+  const prizes = basicData.prizeConfig.prizes 
+  for (let i = 0; i < needCount + 1; i++) {
+    setPrizeData({ currentPrizeIndex: needChangeIndex, count: basicData.luckyUsers[prizes[needChangeIndex]["type"]].length })
+    needChangeIndex -=1
+  }
+}
+// 监听数据
+// bus.on('initConfigDataEnd', initHandlePrizeData)
+// onBeforeUnmount(() => {
+//   bus.off('initConfigDataEnd', initHandlePrizeData)
+// })
+onMounted(() => {
+  initHandlePrizeData();
+})
 bus.on('changePrize', changePrize)
 bus.on('setPrizeData', setPrizeData)
 </script>
