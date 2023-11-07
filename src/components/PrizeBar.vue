@@ -158,7 +158,6 @@ const initHandlePrizeData = () => {
     scrollTop();
     for (let i = 0; i < needCount + 1; i++) {
       let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
-      console.log(itemLucky, '23402983409234', basicData.luckyUsers, needChangeIndex)
       if (itemLucky === undefined) {
         setPrizeData({ currentPrizeIndex: needChangeIndex, count: 0, isInit: true })
         return

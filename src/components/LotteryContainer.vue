@@ -354,7 +354,7 @@ const rotateBall = () => {
       // basicData.isNextPrize = true;
     }, 500)
     // 抽中之后要处理的事
-    // console.log(currentLuckys);
+    console.log(paramsFields.currentLuckys);
     // selectCard();
   });
 }

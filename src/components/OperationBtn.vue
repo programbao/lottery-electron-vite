@@ -7,7 +7,7 @@
           <!-- <br/>奖项 undian selanjutnya -->
         </button>
         <button id="lottery" v-show="!noBeginLottery && !isShowPrizeBtn" @click="beginLottery">
-          开始抽奖 <br/> mulai undian
+          {{ isLotting ? '结束抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
         </button>
       </div>
       <button id="reLottery" v-show="!noBeginLottery && !isShowPrizeBtn">重新抽奖</button>
@@ -33,6 +33,9 @@ const isShowPrizeBtn = ref(true);
 const currentPrize = computed(() => {
   return basicData.currentPrize;
 });
+const isLotting = computed(() => {
+  return basicData.isLotting;
+})
 const noBeginLottery = ref(true)
 const enterLottery = () => {
   bus.emit('enterLottery')
