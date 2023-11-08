@@ -22,10 +22,30 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       lastTimePrizeIndex: 0, // 上一次抽奖的奖品 - 真正开始下一个奖项抽奖才会变化
       isNextPrize: false, // 是否下一次抽奖
       isLotting: false, // 是否正在抽奖
+      currentLuckys: [], // 当前中奖用户
+      isShowLuckyUser: false, // 是否显示中奖用户
+      luckysRowColObj: {
+        rowCount: 5,
+        columnCount: 2,
+        tileSize: 112,
+        titleHeight: 32,
+        type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
+
+      }, // 中奖行列对象
       containerConfigStyle: {
         scale: 0.5, // 容器卡片缩放比例
         top: '-23vh',
         left: '-8vw',
+      },
+      luckyCardConfigStyle: {
+        cardWidth: "16vw", // 抽奖牌宽度
+        cardHeight: "23vh", // 抽奖牌高度
+        companyTop: 19, // 公司logo距离顶部的距离
+        companyFontSize: 16, // 公司logo字体大小
+        nameTop: '7vh', // 名称距离顶部的距离
+        nameFontSize: 18, // 名称字体大小
+        detailsBottom: '1vh', // 详情距离底部的距离
+        detailsFontsize: 18, // 详情字体大小
       },
       cardConfigStyle: {
         cardWidth: "7vw", // 抽奖牌宽度
@@ -47,7 +67,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
   actions: {
     setPrizeConfig (config) {  // 注意，这里就不要写箭头函数了，不然 this 指向会出问题。
       this.prizeConfig = config
-      console.log(config, '22')
     },
 
     async initConfigData () {

@@ -51,8 +51,8 @@
 //     </div>
 //   `;
 // }
-export const  getCardHTML = (user, basicData) => {
-  const cardConfigStyle = basicData.cardConfigStyle;
+export const  getCardHTML = (user, basicData, isLucky) => {
+  const cardConfigStyle = isLucky ? basicData.luckyCardConfigStyle : basicData.cardConfigStyle;
   // var companyContainerHTML = createImageAndTextContainer("http://172.90.0.10/_nuxt/img/logo.acb8f74.png");
   var companyElementHTML = `
     <div 
@@ -108,10 +108,10 @@ export const  getCardHTML = (user, basicData) => {
   return cardHTML
 }
 
-export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, basicData) => {
+export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, basicData, isLucky) => {
   let elementClassName = '';
   let elementCss = '';
-  const cardConfigStyle = basicData.cardConfigStyle;
+  const cardConfigStyle = isLucky? basicData.luckyCardConfigStyle : basicData.cardConfigStyle;
   if (isBold) {
     elementClassName = "element lightitem";
     if (showTable) {
@@ -133,7 +133,7 @@ export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, b
   `
   return `
     <div id="${"card-" + id}" class="${elementClassName}" style="${elementCss}">
-       ${getCardHTML(user, basicData)} 
+       ${getCardHTML(user, basicData, isLucky)} 
     </div>
   `
 }
@@ -206,7 +206,7 @@ export function shine(cardIndex, color) {
  */
 export const changeCard = (cardIndex, user) => {
   if (user) {
-    if (paramsFields.currentLuckys.some(arr => arr[0] === user[0])) {
+    if (basicData.currentLuckys.some(arr => arr[0] === user[0])) {
       return;
     }
     let card = paramsFields.threeDCards[cardIndex].element ? paramsFields.threeDCards[cardIndex].element : paramsFields.threeDCards[cardIndex];

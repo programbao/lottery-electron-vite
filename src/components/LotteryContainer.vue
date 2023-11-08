@@ -43,7 +43,7 @@ let member = basicData.users.slice();
 let paramsFields = {
   threeDCards: [],
   selectedCardIndex: [],
-  currentLuckys: [],
+  // currentLuckys: [],
   member,
   isBold:  false,
   showTable: basicData.leftUsers.length === basicData.users.length,
@@ -259,7 +259,7 @@ const initHandleData = () => {
   paramsFields = {
     threeDCards: [],
     selectedCardIndex: [],
-    currentLuckys: [],
+    // currentLuckys: [],
     member,
     isBold:  false,
     showTable: basicData.leftUsers.length === basicData.users.length,
@@ -305,7 +305,7 @@ const rotateBall = () => {
   if (basicData.isNextPrize) return;
   rotateBall().then(() => {
     // 将之前的记录置空
-    paramsFields.currentLuckys = [];
+    basicData.currentLuckys = [];
     paramsFields.selectedCardIndex = [];
     // 当前同时抽取的数目,当前奖品抽完还可以继续抽，但是不记录数据
     let perCount = basicData.eachCount[basicData.currentPrizeIndex];
@@ -322,7 +322,7 @@ const rotateBall = () => {
     }
     for (let i = 0; i < perCount; i++) {
       let luckyId = random(leftCount);
-      paramsFields.currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
+      basicData.currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
       leftCount--;
       leftPrizeCount--;
       // let cardIndex = random(basicData.totalCards);
@@ -354,7 +354,8 @@ const rotateBall = () => {
       // basicData.isNextPrize = true;
     }, 500)
     // 抽中之后要处理的事
-    console.log(paramsFields.currentLuckys);
+    basicData.isShowLuckyUser = true;
+    console.log(basicData.currentLuckys);
     // selectCard();
   });
 }
@@ -362,7 +363,7 @@ const changePrizeStatus = () => {
   let type = basicData.currentPrize.type,
     curLucky = basicData.luckyUsers[type] || [];
 
-  curLucky = curLucky.concat(paramsFields.currentLuckys);
+  curLucky = curLucky.concat(basicData.currentLuckys);
 
   basicData.luckyUsers[type] = curLucky;
   basicData.lastTimePrizeIndex = basicData.currentPrizeIndex;
@@ -415,9 +416,9 @@ const saveData = () => {
   //   // }
   //   // currentPrize = basicData.prizes[currentPrizeIndex];
   // }
-  if (paramsFields.currentLuckys.length > 0) {
+  if (basicData.currentLuckys.length > 0) {
     // todo by xc 添加数据保存机制，以免服务器挂掉数据丢失
-    return myApi.setData(type, JSON.stringify(paramsFields.currentLuckys));
+    return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
   }
   return Promise.resolve();
 }
@@ -427,7 +428,7 @@ const saveData = () => {
  * 重置抽奖牌内容
  */
 const resetCard = (duration = 500, model) => {
-  if (paramsFields.currentLuckys.length === 0) {
+  if (basicData.currentLuckys.length === 0) {
     return Promise.resolve();
   }
   // debugger
@@ -518,6 +519,8 @@ const lotteryActiveFn = async () => {
     // 清除当前看见奖项
     // prizeMark.innerHTML = ''
     bus.emit('hidePrizeMark')
+    // 隐藏抽奖名单
+    basicData.isShowLuckyUser = false;
     // 每次抽奖前先保存上一次的抽奖数据
     await saveData();
     // 抽奖
@@ -547,11 +550,15 @@ const lotteryActiveFn = async () => {
       // }
       // 入场下一个奖项
       bus.emit('showPrize')
+      // 隐藏抽奖名单
+      basicData.isShowLuckyUser = false;
       // 每次抽奖前先保存上一次的抽奖数据
       await saveData();
       basicData.isLotting = false
       return
     }
+     // 隐藏抽奖名单
+     basicData.isShowLuckyUser = false;
     // 每次抽奖前先保存上一次的抽奖数据
     await saveData();
     // 抽奖
@@ -653,5 +660,15 @@ onBeforeUnmount(() => {
   right: 0;
   font-size: 2.0vh;
   color: rgba(127, 255, 255, 0.75);
+}
+.highlight {
+  background-color: rgba(253, 105, 0, 0.95) !important;
+  box-shadow: 0 0 12px rgba(253, 105, 0, 0.95);
+  border: 1px solid rgba(253, 105, 0, 0.25);
+}
+.highlight .company,
+.highlight .name,
+.highlight .details {
+  color: rgba(255, 255, 255, 0.85);
 }
 </style>

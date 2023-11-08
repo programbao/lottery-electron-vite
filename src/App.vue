@@ -6,6 +6,7 @@ import MusicBtn from "./components/MusicBtn.vue";
 import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
+import LuckyUser from "./components/LuckyUser.vue"
 // 引入store
 import { lotteryDataStore } from './store'
 const lotteryData = lotteryDataStore();
@@ -38,6 +39,7 @@ onMounted(async () => {
     <OperationBtn />
     <PrizeBar />
     <PrizeMark />
+    <LuckyUser />
     <!-- <button @click="importFile">导入</button> -->
     
   </div>
