@@ -18,6 +18,9 @@
         :key="index">
       </div>
     </div>
+    <button class="closeBtn" @click="closeBtn">
+      Close
+    </button>
   </div>
 </template>
 
@@ -92,6 +95,9 @@ const currentLuckys = ref([
     "Muhammad Syamsul Ali, S.IP"
   ]
 ]);
+const closeBtn = () => {
+  basicData.isShowLuckyUser = false;
+}
 // const currentLuckys = computed(() => {
 //   return basicData.currentLuckys;
 // });
@@ -123,7 +129,15 @@ const currentLuckys = ref([
 .lucky-item .element:hover {
   border: 1px solid rgba(253, 105, 0, 0.95) !important;
 }
-
+.closeBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5vh;
+  padding: 1vh 2vw;
+  margin: 0;
+}
 
 .slide-in-right {
 	-webkit-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;

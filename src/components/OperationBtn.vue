@@ -17,7 +17,7 @@
       <div id="lotteryBar" class="none">
         <div class="fixed-bar">
           <button id="save" class="fixed-btn">导出抽奖结果<br/> hasil undian</button>
-          <button id="reset" class="fixed-btn">重置<br />mengatur ulang</button>
+          <button id="reset" class="fixed-btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
         </div>
       </div>
    </div>
@@ -52,6 +52,9 @@ const showPrize = () => {
 const showPrizeEnd = () => {
   isShowPrizeBtn.value = false
 }
+const resetBtnClick = () => {
+  bus.emit('resetBtnClick')
+}
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
   bus.on('showPrizeEnd', showPrizeEnd)
@@ -61,7 +64,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #menu {
   z-index: 400;
   position: fixed;
