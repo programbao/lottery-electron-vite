@@ -139,6 +139,11 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   elements.bar && (elements.bar.style.width = percent * 100 + "%");
   elements.text && (elements.text.textContent = count + "/" + totalCount);
   prizeElement.prizeLeft.textContent = count;
+  if (count !== totalCount && count !== 0) {
+    basicData.isContinueLottery = true
+  } else {
+    basicData.isContinueLottery = false
+  }
 };
 const changePrize = () => {
   let luckys = basicData.currentPrize ? basicData.luckyUsers[basicData.currentPrize.type] : null;

@@ -219,13 +219,14 @@ export const changeCard = (cardIndex, user) => {
     }
   }
 }
+let shineTimer = null;
 export const shineCard = (basicDataParam, paramsFieldsParam) => {
   basicData = basicDataParam;
   paramsFields = paramsFieldsParam;
   let maxCard = 20,
     maxUser;
   let shineCard = 10 + random(maxCard);
-  setInterval(() => {
+  shineTimer = setInterval(() => {
     // 正在抽奖停止闪烁
     // if (isLotting || currentPrizeIndex < 7 || prizeMark.style.zIndex === '6') {
     //   return;
@@ -246,4 +247,7 @@ export const shineCard = (basicDataParam, paramsFieldsParam) => {
       changeCard(cardIndex, basicData.leftUsers[index]);
     }
   }, 500);
+}
+export const removeShineCard = () => {
+  clearInterval(shineTimer);
 }

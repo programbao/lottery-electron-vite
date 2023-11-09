@@ -2,15 +2,19 @@
   <div id="menu">
       <div class="begin-lottery">
         <button id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
-        <button id="showPrize" @click="showPrize" v-show="!noBeginLottery && isShowPrizeBtn">
-          {{ currentPrize.text }}
+        <button 
+          id="showPrize" 
+          @click="showPrize" 
+          v-show="!noBeginLottery && isNextPrize">
+          <div v-html="currentPrize.text">
+          </div>
           <!-- <br/>奖项 undian selanjutnya -->
         </button>
-        <button id="lottery" v-show="!noBeginLottery && !isShowPrizeBtn" @click="beginLottery">
-          {{ isLotting ? '结束抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
+        <button id="lottery" v-show="!noBeginLottery && !isNextPrize" @click="beginLottery">
+          {{ isLotting ? '结束抽奖' : isContinueLottery ? '继续抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
         </button>
       </div>
-      <button id="reLottery" v-show="!noBeginLottery && !isShowPrizeBtn">重新抽奖<br />Gambar ulang</button>
+      <button id="reLottery" v-show="!noBeginLottery && !isNextPrize">重新抽奖<br />Gambar ulang</button>
       <button id="showAllLucks" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
@@ -28,15 +32,21 @@ import { ref, onBeforeMount, onBeforeUnmount, computed } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-const isShowPrizeBtn = ref(true);
+// const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
   return basicData.currentPrize;
 });
+const isNextPrize = computed(() => {
+  return basicData.isNextPrize;
+})
 const isLotting = computed(() => {
   return basicData.isLotting;
+});
+const isContinueLottery = computed(() => {
+  return basicData.isContinueLottery;
 })
-const noBeginLottery = ref(true)
+const noBeginLottery = ref(true);
 const enterLottery = () => {
   bus.emit('enterLottery')
 }
@@ -49,16 +59,16 @@ const beginLottery = () => {
 const showPrize = () => {
   bus.emit('showPrize')
 }
-const showPrizeEnd = () => {
-  isShowPrizeBtn.value = false
-}
+// const showPrizeEnd = () => {
+//   isShowPrizeBtn.value = false
+// }
 const resetBtnClick = () => {
   bus.emit('resetBtnClick')
   noBeginLottery.value = true;
 }
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
-  bus.on('showPrizeEnd', showPrizeEnd)
+  // bus.on('showPrizeEnd', showPrizeEnd)
 })
 onBeforeUnmount(() => {
   bus.off('enterLotteryEnd', handleEnterLotteryEnd)
@@ -103,7 +113,7 @@ button {
   outline: 1px solid rgba(127, 255, 255, 0.75);
   border: 0;
   padding: 1vh;
-  margin: 0 4.6vh;
+  margin: 0 0.6vh;
   font-size: 1.2vh;
   font-weight: bold;
   cursor: pointer;
@@ -117,5 +127,4 @@ button:active {
   color: #000000;
   background-color: rgba(0, 255, 255, 0.75);
 }
-
 </style>

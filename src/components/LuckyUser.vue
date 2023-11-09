@@ -36,11 +36,11 @@ const luckyUserBoxStyle = ref({
   'z-index': '-2',
 })
 let showTimer = null;
+// 控制入场和退场动画
 watch(
   () => basicData.isShowLuckyUser,
   () => {
     clearTimeout(showTimer);
-    console.log(basicData.isShowLuckyUser, '2384092834092834234');
     if (basicData.isShowLuckyUser) {
       showTimer = setTimeout(() => {
         luckyUserBoxStyle.value['z-index'] = '400'

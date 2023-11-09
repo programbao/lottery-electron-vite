@@ -27,7 +27,7 @@ const createWindow = () => {
     ...winState.winOptions,
     webPreferences: {
       preload: path.join(__dirname, './preload.js'),
-      // webSecurity: false, // 取消跨域
+      webSecurity: false, // 取消跨域
       // nodeIntegration: true, // v5版本开始需要加多这一行
       // contextIsolation: false, // v12版本需要加多这一行
       // enableRemoteModule:true //v10版本 打开remote模块

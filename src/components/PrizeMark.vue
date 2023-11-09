@@ -79,12 +79,12 @@ const showPrize = () => {
     basicData.isNextPrize = false
     // btns.lottery.innerHTML = "开始抽奖 <br/> mulai undian"
     basicData.isLottery = false
-    bus.emit('showPrizeEnd')
+    // bus.emit('showPrizeEnd')
   }, 500)
 }
 const hidePrizeMark = () => {
   enterAnimate.value = '';
-  prizeMark.value.style.zIndex = '-2'
+  prizeMark.value.style.zIndex = '-2';
 }
 bus.on('showPrize', showPrize);
 bus.on('showAllPrizes', showAllPrizes);

@@ -9,7 +9,7 @@ import bus from '../libs/bus'
 const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { shineCard, getCardWithParentHtml, createCardWithParentDom, random } from './handleElements'
+import { shineCard, getCardWithParentHtml, createCardWithParentDom, random, removeShineCard } from './handleElements'
 let camera;
 let scene;
 let renderer;
@@ -632,7 +632,12 @@ const resetBtnClick = async () => {
   basicData.luckyUsers = {};
   basicData.currentPrizeIndex = basicData.prizes.length - 1;
   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-  document.getElementById("container").classList.remove('slide-in-fwd-center')
+  basicData.isShowLuckyUser = false;
+  basicData.isContinueLottery = false
+  document.getElementById("container").classList.remove('slide-in-fwd-center');
+  bus.emit('hidePrizeMark');
+  // 移除闪烁定时器
+  removeShineCard();
   initHandleData();
   bus.emit('resetPrizes');
   await myApi.resetData();
