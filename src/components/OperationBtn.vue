@@ -14,7 +14,10 @@
           {{ isLotting ? '结束抽奖' : isContinueLottery ? '继续抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
         </button>
       </div>
-      <button id="reLottery" v-show="!noBeginLottery && !isNextPrize">重新抽奖<br />Gambar ulang</button>
+      <button 
+        @click="reLottery"
+        id="reLottery" 
+        v-show="!noBeginLottery && !isNextPrize">重新抽奖<br />Gambar ulang</button>
       <button id="showAllLucks" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
@@ -58,6 +61,9 @@ const beginLottery = () => {
 }
 const showPrize = () => {
   bus.emit('showPrize')
+}
+const reLottery = () => {
+  bus.emit('reLottery')
 }
 // const showPrizeEnd = () => {
 //   isShowPrizeBtn.value = false

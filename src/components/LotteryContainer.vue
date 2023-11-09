@@ -643,16 +643,21 @@ const resetBtnClick = async () => {
   await myApi.resetData();
   rotateObj && rotateObj.stop();
 }
+const reLottery = () => {
+  lottery();
+}
 // 监听数据
 bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
+bus.on('reLottery', reLottery)
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
   bus.off('beginLottery', beginLottery)
   bus.off('resetBtnClick', resetBtnClick)
+  bus.off('reLottery', reLottery)
 })
 
 </script>
