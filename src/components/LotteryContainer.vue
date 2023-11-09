@@ -53,11 +53,11 @@ let paramsFields = {
   HIGHLIGHT_CELL: [],
   // isLotting: false
 }
-
+let animationId;
 const animate = () => {
   // 让场景通过x轴或者y轴旋转
   // rotate && (scene.rotation.y += 0.088);
-  requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
   TWEEN.update();
   controls.update();
   // 渲染循环
@@ -143,8 +143,15 @@ const onWindowResize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   render();
 }
+
+// 球父盒子样式
+let renderDomStyle = '';
+
 const enterAnimate = () => {
-  document.getElementById("container").innerHTML = '';
+  let containerDom = document.getElementById("container");
+  containerDom.innerHTML = '';
+  containerDom.style = '';
+  containerDom.classList.remove('slide-in-fwd-center');
   camera = new THREE.PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
@@ -195,6 +202,7 @@ const enterAnimate = () => {
 
   renderer = new THREE.CSS3DRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  // renderer.domElement.style = renderDomStyle;
   document.getElementById("container").appendChild(renderer.domElement);
   // // 创建和设置遮罩层
   controls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -207,13 +215,39 @@ const enterAnimate = () => {
   bus.emit("enterLotteryEnd");
   window.addEventListener("resize", onWindowResize, false);
 }
+// 清除销毁 three.js对象 相关绑定和处理对象
+const cleanUp = () => {
+  if (renderer) {
+    controls.dispose(); // Dispose of the controls to prevent memory leaks
 
-let containerHtml = '';
+    // Remove all objects from the scene
+    for (let i = scene.children.length - 1; i >= 0; i--) {
+      const obj = scene.children[i];
+      scene.remove(obj);
+    }
+
+    renderer.domElement.addEventListener('dblclick', null, false);
+    window.removeEventListener('resize', onWindowResize, false);
+
+    // Remove renderer and domElement
+    document.getElementById('container').removeChild(renderer.domElement);
+    renderer = null;
+    // Set scene, camera, and other objects to null or undefined
+    scene = null;
+    camera = null;
+    controls = null;
+    // Clean up any additional variables if necessary
+    // otherVar = null;
+  }
+};
 
 // 初始化卡片
 const initCards = (isInit = true) => {
+  let containerHtml = '';
   let index = 0;
-
+  let containerDom = document.getElementById("container");
+  containerDom.innerHTML = '';
+  containerDom.classList.add('slide-in-fwd-center')
   for (let i = 0; i < paramsFields.ROW_COUNT; i++) {
     if (index > paramsFields.totalMember - 1) break;
     for (let j = 0; j < paramsFields.COLUMN_COUNT; j++) {
@@ -232,12 +266,12 @@ const initCards = (isInit = true) => {
     }
   }
   let containerConfigStyle = basicData.containerConfigStyle;
-  renderer = new THREE.CSS3DRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.getElementById("container").appendChild(renderer.domElement);
-  let containerDom = renderer.domElement;
+  // renderer = new THREE.CSS3DRenderer();
+  // renderer.setSize(window.innerWidth, window.innerHeight);
+  // document.getElementById("container").appendChild(renderer.domElement);
+  // containerDom = renderer.domElement;
   containerDom.innerHTML = containerHtml;
-  containerDom.style = `
+  renderDomStyle = `
     grid-template-columns: repeat(${basicData.columnCount}, 1fr);
     grid-template-rows: repeat(${basicData.rowCount}, 1fr);  
     grid-row-gap: 20px;
@@ -248,6 +282,7 @@ const initCards = (isInit = true) => {
     position: fixed;
     display: grid;
   `
+  containerDom.style = renderDomStyle
   document.querySelectorAll('.element').forEach(element => {
     paramsFields.threeDCards.push(element);
   })
@@ -255,6 +290,7 @@ const initCards = (isInit = true) => {
 
 
 const initHandleData = () => {
+  cleanUp();
   member = basicData.users.slice();
   paramsFields = {
     threeDCards: [],
@@ -269,6 +305,7 @@ const initHandleData = () => {
     HIGHLIGHT_CELL: [],
     // isLotting: false
   }
+  cancelAnimationFrame(animationId);
   initCards();
   // animate();
   // 随机切换背景和人员信息
@@ -589,8 +626,17 @@ const beginLottery = () => {
   }
   lotteryActiveFn();
 }
-const resetBtnClick = () => {
-  
+const resetBtnClick = async () => {
+  basicData.currentLuckys = [];
+  basicData.leftUsers = Object.assign([], basicData.users);
+  basicData.luckyUsers = {};
+  basicData.currentPrizeIndex = basicData.prizes.length - 1;
+  basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+  document.getElementById("container").classList.remove('slide-in-fwd-center')
+  initHandleData();
+  bus.emit('resetPrizes');
+  await myApi.resetData();
+  rotateObj && rotateObj.stop();
 }
 // 监听数据
 bus.on('initConfigDataEnd', initHandleData)
@@ -676,5 +722,35 @@ onBeforeUnmount(() => {
 .highlight .name,
 .highlight .details {
   color: rgba(255, 255, 255, 0.85);
+}
+
+
+.slide-in-fwd-center {
+	-webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@-webkit-keyframes slide-in-fwd-center {
+  0% {
+    -webkit-transform: translateZ(-1400px) scale(0);
+            transform: translateZ(-1400px) scale(0);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateZ(0) scale(0.5);
+            transform: translateZ(0) scale(0.5);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-fwd-center {
+  0% {
+    -webkit-transform: translateZ(-1400px) scale(0);
+            transform: translateZ(-1400px) scale(0);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateZ(0) scale(0.5);
+            transform: translateZ(0) scale(0.5);
+    opacity: 1;
+  }
 }
 </style>

@@ -71,6 +71,8 @@ const scrollTop = () => {
     })
   })
 }
+const prizesListConfig = {
+}
 const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   let prizeElement = {};
   let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
@@ -167,14 +169,38 @@ const initHandlePrizeData = () => {
     }
   })
 }
+const resetPrizes = () => {
+  const totalPrizeLen = basicData.prizeConfig.prizes.length
+  for (let i = 0; i < totalPrizeLen; i++) {
+    let prize = basicData.prizes[i]
+    const type = prize.type
+    let elements = {
+      box: document.querySelector(`#prize-item-${type}`),
+      bar: document.querySelector(`#prize-bar-${type}`),
+      text: document.querySelector(`#prize-count-${type}`)
+    };
+    elements.box.classList.remove("shine"); 
+    elements.box.classList.remove("done"); 
+    if (i === totalPrizeLen -1) {
+      elements.box.classList.add("shine");
+    }
+
+    const count = prize.count;
+    elements.bar && (elements.bar.style.width = 100 + "%");
+    elements.text && (elements.text.textContent = count + "/" + count);
+  }
+  basicData.lasetPrizeIndex = basicData.prizes.length - 1;
+}
 // 监听数据
 bus.on('initConfigDataEnd', initHandlePrizeData)
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandlePrizeData)
+  bus.on("resetPrizes", resetPrizes)
 })
 onMounted(() => {
   initHandlePrizeData();
 })
+bus.on("resetPrizes", resetPrizes)
 bus.on('changePrize', changePrize)
 bus.on('setPrizeData', setPrizeData)
 </script>

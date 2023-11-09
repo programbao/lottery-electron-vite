@@ -58,7 +58,26 @@ const setData = async () => {
     console.log(res, 'setData-----')
   })
 }
+
+const handleResetData = async () => {
+  let sharedObject =  global.sharedObject;
+  sharedObject.luckyData = {};
+  sharedObject.errorData = [];
+  await saveDataFile(sharedObject.luckyData);
+}
+const resetData = async () => {
+  ipcMain.handle('resetData', async (e, ...args) => {
+    let isTrue = true
+    try {
+      await handleResetData();
+    } catch (error) {
+      isTrue = false
+    }
+    return isTrue;
+  })
+}
 module.exports = {
   getStaticUsersData,
-  setData
+  setData,
+  resetData
 };

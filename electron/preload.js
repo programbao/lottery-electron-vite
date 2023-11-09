@@ -16,12 +16,19 @@ const setData = async (...args) => {
   let result = await ipcRenderer.invoke('setData', ...args)
   return result
 }
+
+// 重置数据
+const resetData = async (...args) => {
+  let result = await ipcRenderer.invoke('resetData', ...args)
+  return result
+}
 // 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
   openDialog,
   getTempData,
   getStaticUsersData,
-  setData
+  setData,
+  resetData
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

@@ -54,6 +54,7 @@ const showPrizeEnd = () => {
 }
 const resetBtnClick = () => {
   bus.emit('resetBtnClick')
+  noBeginLottery.value = true;
 }
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
