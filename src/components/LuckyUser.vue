@@ -1,13 +1,12 @@
 <template>
   <div 
     id="lucky-user-box"
-    :style="{
-      zIndex: basicData.isShowLuckyUser ? '400' : '-2',
-    }"
+    :style="luckyUserBoxStyle"
     class="lucky-user-box">
     <div 
       :class="{
-        'slide-in-right': basicData.isShowLuckyUser
+        'slide-in-right': basicData.isShowLuckyUser,
+        'slide-out-left': !basicData.isShowLuckyUser
       }"
       class="lucky-content" 
       :style="lucksContentStyle">
@@ -25,7 +24,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import { getCardWithParentHtml } from './handleElements'
@@ -33,6 +32,26 @@ import { getCardWithParentHtml } from './handleElements'
 const luckysRowColObj = computed(() => {
   return basicData.luckysRowColObj;
 });
+const luckyUserBoxStyle = ref({
+  'z-index': '-2',
+})
+let showTimer = null;
+watch(
+  () => basicData.isShowLuckyUser,
+  () => {
+    clearTimeout(showTimer);
+    console.log(basicData.isShowLuckyUser, '2384092834092834234');
+    if (basicData.isShowLuckyUser) {
+      showTimer = setTimeout(() => {
+        luckyUserBoxStyle.value['z-index'] = '400'
+      });
+    } else {
+      showTimer = setTimeout(() => {
+        luckyUserBoxStyle.value['z-index'] = '-2'
+      }, 400);
+    }
+  }
+)
 const lucksContentStyle = computed(() => {
   const type = luckysRowColObj.type;
   let rowCount = luckysRowColObj.rowCount;
@@ -63,38 +82,9 @@ const lucksContentStyle = computed(() => {
     'width': `calc(calc(${columnCount * luckysRowColObj.tileSize}px  + '1px') + '12px')`
   }
 });
-const currentLuckys = ref([
-  [
-    5123072414,
-    "镍铁事业部",
-    "魏圆"
-  ],
-  [
-    1422062812,
-    "后勤部",
-    "高金"
-  ],
-  [
-    8230523005,
-    "Civil Construction",
-    "Ferdinand Delto Wattimena"
-  ],
-  [
-    8221122035,
-    "Civil Construction",
-    "Ekhsan Rehalat"
-  ],
-  [
-    "C8201102009",
-    "Quality Control",
-    "Muhammad Syamsul Ali, S.IP"
-  ],
-  [
-    "C8201102009",
-    "Quality Control",
-    "Muhammad Syamsul Ali, S.IP"
-  ]
-]);
+const currentLuckys = computed(() => {
+  return basicData.currentLuckys;
+});
 const closeBtn = () => {
   basicData.isShowLuckyUser = false;
 }
@@ -167,4 +157,33 @@ const closeBtn = () => {
     opacity: 1;
   }
 }
+.slide-out-left {
+	-webkit-animation: slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+ @-webkit-keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+            transform: translateX(-1000px);
+    opacity: 0;
+  }
+}
+@keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+            transform: translateX(-1000px);
+    opacity: 0;
+  }
+}
+
 </style>

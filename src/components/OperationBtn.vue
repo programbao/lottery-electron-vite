@@ -10,8 +10,8 @@
           {{ isLotting ? '结束抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
         </button>
       </div>
-      <button id="reLottery" v-show="!noBeginLottery && !isShowPrizeBtn">重新抽奖</button>
-      <button id="showAllLucks">
+      <button id="reLottery" v-show="!noBeginLottery && !isShowPrizeBtn">重新抽奖<br />Gambar ulang</button>
+      <button id="showAllLucks" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
       <div id="lotteryBar" class="none">
@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
   box-shadow: 0px 0px 15px rgb(127 255 255 / 75%);
   margin-top: 20px;
 }
-.begin-lottery {
+.begin-lottery, #showAllLucks {
   position: fixed;
   bottom: 20px;
   display: flex;
