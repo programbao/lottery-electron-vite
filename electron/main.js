@@ -9,11 +9,12 @@ global.sharedObject = {
   luckyData: {},
   errorData: [],
   defaultPage: `default data`,
+  cfg: {},
 }
 
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
-const { getStaticUsersData, setData, resetData } = require('./controller/dataHandle')
+const { getStaticUsersData, setData, resetData, handleExportData } = require('./controller/dataHandle')
 
 
 const createWindow = () => {
@@ -62,6 +63,9 @@ const createWindow = () => {
 
   // 重置数据
   resetData();
+
+  // 处理数据导出
+  handleExportData();
 }
 
 app.whenReady().then(() => {

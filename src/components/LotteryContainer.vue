@@ -432,7 +432,7 @@ const changePrizeStatus = () => {
 const saveData = () => {
   if (!basicData.currentPrize) {
     //若奖品抽完，则不再记录数据，但是还是可以进行抽奖
-    return;
+    return Promise.resolve();
   }
   let type = basicData.prizes[basicData.lastTimePrizeIndex]['type']
   // let type = basicData.currentPrize.type,
@@ -669,18 +669,28 @@ const reLottery = () => {
   removeLuckyUser();
   lottery();
 }
+
+// 导出数据
+const exportData = () => {
+  saveData().then(async res => {
+    let result = await myApi.handleExportData(); 
+    console.log(result)
+  })
+}
 // 监听数据
 bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
+bus.on('exportData', exportData)
 onBeforeUnmount(() => {
   bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
   bus.off('beginLottery', beginLottery)
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
+  bus.off('exportData', exportData)
 })
 
 </script>

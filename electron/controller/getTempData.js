@@ -34,7 +34,9 @@ const getLeftUsers = () => {
 }
 const getTempData = () => {
   ipcMain.handle('getTempData', async (e, ...args) => {
+    let sharedObject =  global.sharedObject;
     const { luckyData, errorData, curData } = getLeftUsers();
+    sharedObject.cfg = cfg;
     return {
       prizeConfig: cfg,
       leftUsers: curData.leftUsers,

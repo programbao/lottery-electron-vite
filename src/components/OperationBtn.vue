@@ -30,7 +30,7 @@
       </button>
       <div id="lotteryBar" class="none">
         <div class="fixed-bar">
-          <button id="save" class="fixed-btn">导出抽奖结果<br/> hasil undian</button>
+          <button id="save" class="fixed-btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
           <button id="reset" class="fixed-btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
         </div>
       </div>
@@ -80,6 +80,9 @@ const reLottery = () => {
 // const showPrizeEnd = () => {
 //   isShowPrizeBtn.value = false
 // }
+const exportData = () => {
+  bus.emit('exportData')
+}
 const resetBtnClick = () => {
   bus.emit('resetBtnClick')
   noBeginLottery.value = true;

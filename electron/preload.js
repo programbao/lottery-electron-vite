@@ -22,13 +22,20 @@ const resetData = async (...args) => {
   let result = await ipcRenderer.invoke('resetData', ...args)
   return result
 }
+
+// 处理数据导出
+const handleExportData = async (...args) => {
+  let result = await ipcRenderer.invoke('handleExportData', ...args)
+  return result
+}
 // 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
   openDialog,
   getTempData,
   getStaticUsersData,
   setData,
-  resetData
+  resetData,
+  handleExportData
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

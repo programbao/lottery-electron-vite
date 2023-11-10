@@ -76,8 +76,46 @@ const resetData = async () => {
     return isTrue;
   })
 }
+const hanldeExportDataFn = async () => {
+  let outData = [["工号", "DEPT部门", "NAMA 姓名"]];
+  let sharedObject =  global.sharedObject;
+  
+  sharedObject.cfg.prizes.forEach(item => {
+    outData.push([item.text]);
+    outData = outData.concat(sharedObject.luckyData[item.type] || []);
+  });
+  let result = {};
+  writeXML(outData, "/抽奖结果.xlsx")
+    .then(dt => {
+      // res.download('/抽奖结果.xlsx');
+      result = {
+        type: "success",
+        url: "抽奖结果.xlsx"
+      };
+      console.log(`导出数据成功！`);
+    })
+    .catch(err => {
+      result = {
+        type: "error",
+        error: err.error
+      };
+      console.log(`导出数据失败！`);
+    });
+}
+const handleExportData = async () => {
+  ipcMain.handle('handleExportData', async (e, ...args) => {
+    let result = {};
+    try {
+      result = await hanldeExportDataFn();
+    } catch (error) {
+      console.log(error, '2348092384')
+    }
+    return result; 
+  })
+}
 module.exports = {
   getStaticUsersData,
   setData,
-  resetData
+  resetData,
+  handleExportData
 };
