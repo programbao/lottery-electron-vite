@@ -1,4 +1,4 @@
-const { app, BrowserWindow, protocol } = require('electron')
+const { app, BrowserWindow, protocol, Menu } = require('electron')
 const path = require('path')
 const WinState = require('electron-win-state').default;
 const NODE_ENV = process.env.NODE_ENV
@@ -15,7 +15,7 @@ global.sharedObject = {
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
 const { getStaticUsersData, setData, resetData, handleExportData } = require('./controller/dataHandle')
-
+const { toggleFullScreen } = require('./controller/systemEventHandle')
 
 const createWindow = () => {
   const winState = new WinState({
@@ -26,6 +26,9 @@ const createWindow = () => {
     // width: 1000,
     // height: 800,
     ...winState.winOptions,
+    // frame: false, // 隐藏窗口的默认操作菜单
+    // icon: path.join(__dirname, 'path/to/your/icon.png'), // 设置程序图标
+    title: 'Your App Title', // 设置标题
     webPreferences: {
       preload: path.join(__dirname, './preload.js'),
       webSecurity: false, // 取消跨域
@@ -34,7 +37,23 @@ const createWindow = () => {
       // enableRemoteModule:true //v10版本 打开remote模块
     }
   })
+
   winState.manage(win);
+  // 最大化
+  win.maximize()
+  win.show() 
+
+  // Alt + Enter 切换全屏
+  win.on('keyup', (e) => {
+    if(e.altKey && e.key === 'Enter') {
+      win.setFullScreen(!win.isFullScreen()); 
+    }
+  });
+
+  // 窗口恢复正常大小事件
+  win.on('unmaximize', () => {
+    winState.isMaximized = false;
+  });
   console.log(NODE_ENV, 'NODE_ENVNODE_ENVNODE_ENV')
   win.loadURL(
     NODE_ENV === 'development' ?
@@ -66,6 +85,9 @@ const createWindow = () => {
 
   // 处理数据导出
   handleExportData();
+
+  // 全屏切换
+  toggleFullScreen();
 }
 
 app.whenReady().then(() => {
@@ -76,6 +98,7 @@ app.on('window-all-closed', function() {
   if (process.platform !== 'darwin') app.quit();
 })
 app.on('ready', () => {
+  Menu.setApplicationMenu(null);
   protocol.registerFileProtocol('file', (request, callback) => {
     const filePath = path.normalize(request.url.replace(/^file:\/\//, ''));
     callback({ path: filePath });

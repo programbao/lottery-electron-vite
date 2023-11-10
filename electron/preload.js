@@ -28,6 +28,12 @@ const handleExportData = async (...args) => {
   let result = await ipcRenderer.invoke('handleExportData', ...args)
   return result
 }
+
+// 全屏切换
+const toggleFullScreen = async (...args) => {
+  let result = await ipcRenderer.invoke('toggleFullScreen', ...args)
+  return result
+}
 // 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
   openDialog,
@@ -35,7 +41,8 @@ contextBridge.exposeInMainWorld('myApi', {
   getStaticUsersData,
   setData,
   resetData,
-  handleExportData
+  handleExportData,
+  toggleFullScreen
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

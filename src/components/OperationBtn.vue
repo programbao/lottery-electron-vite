@@ -34,6 +34,7 @@
           <button id="reset" class="fixed-btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
         </div>
       </div>
+      <button id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
    </div>
 </template>
 
@@ -61,6 +62,7 @@ const isShowPrizeMark = computed(() => {
 })
 const isFirstPrize = ref(true);
 const noBeginLottery = ref(true);
+const isFullScreen = ref(false)
 const enterLottery = () => {
   bus.emit('enterLottery')
 }
@@ -80,6 +82,10 @@ const reLottery = () => {
 // const showPrizeEnd = () => {
 //   isShowPrizeBtn.value = false
 // }
+const toggleFullScreen = async () => {
+  let fullScreenStatus = await myApi.toggleFullScreen();
+  isFullScreen.value = fullScreenStatus;
+}
 const exportData = () => {
   bus.emit('exportData')
 }
@@ -121,6 +127,13 @@ onBeforeUnmount(() => {
   flex-direction: column;
   margin-left: 50px;
   left: 60%;
+}
+#fullScreen {
+  position: fixed;
+  right: 30px;
+  top: 20vh;
+  right: 4vh;
+  z-index: 5;
 }
 .fixed-bar {
   position: fixed;
