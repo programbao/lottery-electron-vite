@@ -73,6 +73,7 @@ const showAllPrizes = () => {
   }, 5000)
 }
 const showPrize = () => {
+  basicData.isShowPrizeMark = true
   prizeMark.value.style.zIndex = "6";
   enterAnimate.value = basicData.currentPrizeIndex < 1 ? "bounce-in-top" : "slide-in-elliptic-top-fwd"
   setTimeout(() => {
@@ -85,6 +86,7 @@ const showPrize = () => {
 const hidePrizeMark = () => {
   enterAnimate.value = '';
   prizeMark.value.style.zIndex = '-2';
+  basicData.isShowPrizeMark = false;
 }
 bus.on('showPrize', showPrize);
 bus.on('showAllPrizes', showAllPrizes);

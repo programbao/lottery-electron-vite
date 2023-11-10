@@ -17,7 +17,14 @@
       <button 
         @click="reLottery"
         id="reLottery" 
-        v-show="!noBeginLottery && !isNextPrize">重新抽奖<br />Gambar ulang</button>
+        v-show="!noBeginLottery 
+          && !isShowPrizeMark
+          && !isLotting
+          && !isFirstPrize
+          && (isNextPrize || isContinueLottery)">
+          {{ isNextPrize ? '重新抽取上一轮' : '重新抽奖' }}<br />
+          {{ isNextPrize ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
+        </button>
       <button id="showAllLucks" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
@@ -49,6 +56,10 @@ const isLotting = computed(() => {
 const isContinueLottery = computed(() => {
   return basicData.isContinueLottery;
 })
+const isShowPrizeMark = computed(() => {
+  return basicData.isShowPrizeMark;
+})
+const isFirstPrize = ref(true);
 const noBeginLottery = ref(true);
 const enterLottery = () => {
   bus.emit('enterLottery')
@@ -58,6 +69,7 @@ const handleEnterLotteryEnd = () => {
 }
 const beginLottery = () => {
   bus.emit('beginLottery')
+  isFirstPrize.value = false
 }
 const showPrize = () => {
   bus.emit('showPrize')

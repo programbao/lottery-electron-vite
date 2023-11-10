@@ -340,7 +340,9 @@ const rotateBall = () => {
  */
  const lottery = () => {
   if (basicData.isNextPrize) return;
+  basicData.isLotting = true;
   rotateBall().then(() => {
+    debugger
     // 将之前的记录置空
     basicData.currentLuckys = [];
     paramsFields.selectedCardIndex = [];
@@ -377,7 +379,10 @@ const rotateBall = () => {
       basicData.isLotting = false;
       // 改变奖品状态
       // changePrize();
-      bus.emit('changePrize')
+      if (!basicData.isReLottery) {
+        bus.emit('changePrize')
+      }
+      basicData.isReLottery = false
       changePrizeStatus();
       // basicData.currentPrizeIndex--;
       // basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
@@ -643,7 +648,25 @@ const resetBtnClick = async () => {
   await myApi.resetData();
   rotateObj && rotateObj.stop();
 }
+// 移除当前中奖人员
+const removeLuckyUser = () => {
+  let type = basicData.currentPrize.type;
+  let currentLuckys = basicData.currentLuckys.map(item => item[0]); // 提取currentLuckys的第一个元素
+
+  if (basicData.luckyUsers[type]) {
+    basicData.luckyUsers[type] = basicData.luckyUsers[type].filter(user => {
+      return !currentLuckys.some(current => current === user[0]);
+    });
+  }
+};
 const reLottery = () => {
+  basicData.isReLottery = true;
+  basicData.isNextPrize = false
+  if (basicData.currentPrizeIndex !== basicData.lastTimePrizeIndex) {
+    basicData.currentPrizeIndex = basicData.lastTimePrizeIndex;
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+  }
+  removeLuckyUser();
   lottery();
 }
 // 监听数据

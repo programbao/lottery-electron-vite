@@ -25,6 +25,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       currentLuckys: [], // 当前中奖用户
       isShowLuckyUser: false, // 是否显示中奖用户
       isContinueLottery: false, // 是否继续抽奖
+      isReLottery: false, // 是否重新抽奖
+      isShowPrizeMark: false, // 是否显示奖品
       luckysRowColObj: {
         rowCount: 5,
         columnCount: 2,
