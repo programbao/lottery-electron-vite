@@ -8,16 +8,23 @@
     v-model="dialogTableVisible"
     title="系统配置">
     系统配置
+    <div class="config-setting-list">
+      <div class="item-setting" v-for="(item, index) in configList" :key="index">
+        {{ item }}
+      </div>
+      <prizeSetting />
+    </div>
   </el-dialog>
 </template>
 
 <script setup>
 import { reactive, ref, onMounted, nextTick, computed } from 'vue'
-import bus from '../libs/bus'
+import bus from '../../libs/bus'
 import { initMoveEvent } from './moveEvent'
-import { lotteryDataStore } from '../store'
+import { lotteryDataStore } from '../../store'
+import prizeSetting from './prizeSetting.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(false)
+const dialogTableVisible = ref(true)
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
@@ -36,6 +43,12 @@ const toggleConfig = () => {
 }
 let isFirstVisible = false;
 bus.on('toggleConfig', toggleConfig)
+
+
+const configList = [
+  "奖项设置", // 替换 更新 上传奖项图片相关设置
+  "卡片排列"
+]
 
 // onMounted(() => {
 //   nextTick(() => {

@@ -7,7 +7,7 @@ import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
 import LuckyUser from "./components/LuckyUser.vue"
-import ConfigDialog from "./components/ConfigDialog.vue"
+import ConfigDialog from "./components/configWidget/index.vue"
 // 引入store
 import { lotteryDataStore } from './store'
 const lotteryData = lotteryDataStore();
