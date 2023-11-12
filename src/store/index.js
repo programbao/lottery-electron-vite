@@ -27,6 +27,10 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       isContinueLottery: false, // 是否继续抽奖
       isReLottery: false, // 是否重新抽奖
       isShowPrizeMark: false, // 是否显示奖品
+      dialogStyle: {
+        top: '15vh',
+        left: '30%'
+      },
       luckysRowColObj: {
         rowCount: 5,
         columnCount: 2,

@@ -1,8 +1,9 @@
 <template>
   <div id="menu">
       <div class="begin-lottery">
-        <button id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
+        <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
+          class="btn"
           id="showPrize" 
           @click="showPrize" 
           v-show="!noBeginLottery && isNextPrize">
@@ -10,11 +11,12 @@
           </div>
           <!-- <br/>奖项 undian selanjutnya -->
         </button>
-        <button id="lottery" v-show="!noBeginLottery && !isNextPrize" @click="beginLottery">
+        <button class="btn" id="lottery" v-show="!noBeginLottery && !isNextPrize" @click="beginLottery">
           {{ isLotting ? '结束抽奖' : isContinueLottery ? '继续抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
         </button>
       </div>
       <button 
+        class="btn" 
         @click="reLottery"
         id="reLottery" 
         v-show="!noBeginLottery 
@@ -25,16 +27,17 @@
           {{ isNextPrize ? '重新抽取上一轮' : '重新抽奖' }}<br />
           {{ isNextPrize ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
         </button>
-      <button id="showAllLucks" v-show="!currentPrize">
+      <button id="showAllLucks" class="btn" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
       <div id="lotteryBar" class="none">
         <div class="fixed-bar">
-          <button id="save" class="fixed-btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-          <button id="reset" class="fixed-btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
+          <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
+          <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
         </div>
       </div>
-      <button id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
+      <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
+      <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button>
    </div>
 </template>
 
@@ -93,6 +96,9 @@ const resetBtnClick = () => {
   bus.emit('resetBtnClick')
   noBeginLottery.value = true;
 }
+const toggleConfig = () => {
+  bus.emit('toggleConfig')
+}
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
   // bus.on('showPrizeEnd', showPrizeEnd)
@@ -135,13 +141,22 @@ onBeforeUnmount(() => {
   right: 4vh;
   z-index: 5;
 }
+#configBtn {
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  right: 4vh;
+  z-index: 5;
+  min-width: 90px;
+    min-height: 47px;
+}
 .fixed-bar {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: 200px;
 }
 
-button {
+.btn {
   color: rgba(127, 255, 255, 0.75);
   background: transparent;
   outline: 1px solid rgba(127, 255, 255, 0.75);
@@ -153,11 +168,11 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.btn:hover {
   background-color: rgba(0, 255, 255, 0.5);
 }
 
-button:active {
+.btn:active {
   color: #000000;
   background-color: rgba(0, 255, 255, 0.75);
 }

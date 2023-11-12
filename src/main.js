@@ -3,6 +3,8 @@ import './style.css'
 import App from './App.vue'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
+import ElementPlus from 'element-plus' // 添加此行
+import 'element-plus/theme-chalk/index.css'  // 添加此行
 import { createPinia } from 'pinia'
 const app = createApp(App);
 const state = createPinia();
@@ -23,5 +25,6 @@ const options = {
 
 app.use(Toast, options);
 app.use(state);
+app.use(ElementPlus) // 添加此行
 
 app.mount('#app')
