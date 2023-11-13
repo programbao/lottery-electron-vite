@@ -19,8 +19,8 @@ const { toggleFullScreen } = require('./controller/systemEventHandle')
 
 const createWindow = () => {
   const winState = new WinState({
-    defaultWidth: 1000,
-    defaultHeight: 800
+    // defaultWidth: 1000,
+    // defaultHeight: 800
   })
   const win = new BrowserWindow({
     // width: 1000,

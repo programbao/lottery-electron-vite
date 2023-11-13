@@ -5,6 +5,7 @@ import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
 import ElementPlus from 'element-plus' // 添加此行
 import 'element-plus/theme-chalk/index.css'  // 添加此行
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 const app = createApp(App);
 const state = createPinia();
@@ -26,5 +27,7 @@ const options = {
 app.use(Toast, options);
 app.use(state);
 app.use(ElementPlus) // 添加此行
-
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 app.mount('#app')

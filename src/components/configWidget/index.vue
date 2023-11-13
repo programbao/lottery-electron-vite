@@ -6,13 +6,16 @@
     :modal="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
+    width="70%"
     title="系统配置">
-    系统配置
     <div class="config-setting-list">
-      <div class="item-setting" v-for="(item, index) in configList" :key="index">
-        {{ item }}
+      <div class="item-setting" >
+        <div class="setting-title">
+          <div class="left">奖项设置</div>
+          <!-- <div class="right">设置</div> -->
+        </div>
+        <prizeSetting />
       </div>
-      <prizeSetting />
     </div>
   </el-dialog>
 </template>
@@ -44,7 +47,6 @@ const toggleConfig = () => {
 let isFirstVisible = false;
 bus.on('toggleConfig', toggleConfig)
 
-
 const configList = [
   "奖项设置", // 替换 更新 上传奖项图片相关设置
   "卡片排列"
@@ -67,7 +69,7 @@ const configList = [
   height: fit-content;
   box-shadow: 0px 2px 8px 0px rgba(51, 51, 51, 0.15);
   top: 15vh;
-  left: 30%;
+  // left: 20%;
   right: auto;
   bottom: auto;
   margin: 0 !important;
@@ -91,5 +93,17 @@ const configList = [
       transform: translateX(-50%);
     }
   }
+}
+.item-setting .setting-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    padding: 10px;
+    font-weight: 700;
+   .right {
+    cursor: pointer;
+    color: #409eff;
+    font-size: 14px;
+   }
 }
 </style>

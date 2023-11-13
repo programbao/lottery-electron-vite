@@ -13,6 +13,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "animejs": "^3.2.1",
     "electron-win-state": "^1.1.22",
     "element-plus": "^2.4.2",
@@ -21,7 +22,8 @@
     "pinia": "^2.1.7",
     "vite-plugin-optimizer": "^1.4.2",
     "vue": "^3.3.4",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
