@@ -7,7 +7,7 @@
           id="showPrize" 
           @click="showPrize" 
           v-show="!noBeginLottery && isNextPrize">
-          <div v-html="currentPrize.text">
+          <div v-html="currentPrize.name">
           </div>
           <!-- <br/>奖项 undian selanjutnya -->
         </button>

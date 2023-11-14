@@ -1,8 +1,8 @@
 <template>
   <div id="prizeBar">
     <div class="prize-mess">
-      <label id="prizeType" class="prize-shine">{{currentPrize.text}}</label>
-      <label id="prizeText" class="prize-shine">{{currentPrize.title}}</label>
+      <label id="prizeType" class="prize-shine">{{currentPrize.name}}</label>
+      <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>
       ，剩余<label id="prizeLeft" class="prize-shine">{{currentPrize.count}}</label>个
     </div>
     <ul class="prize-list" ref="prizeList">
@@ -15,10 +15,10 @@
           item.type == currentPrize.type ? 'shine' : '' 
         ]">
             <div class="prize-img">
-                <img :src="item.img" :alt="item.title">
+                <img :src="item.img" :alt="item.otherName">
             </div>
             <div class="prize-text">
-              <h5 class="prize-title">{{item.text}} {{item.title}}</h5>
+              <h5 class="prize-title">{{item.name}} {{item.otherName}}</h5>
                 <div class="prize-count">
                     <div class="progress">
                         <div 
@@ -122,8 +122,8 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     lastBox.classList.remove("shine");
     lastBox.classList.add("done");
      elements.box && elements.box.classList.add("shine");
-    prizeElement.prizeType.textContent = currentPrize.text;
-    prizeElement.prizeText.textContent = currentPrize.title;
+    prizeElement.prizeType.textContent = currentPrize.name;
+    prizeElement.prizeText.textContent = currentPrize.otherName;
 
     basicData.lasetPrizeIndex = currentPrizeIndex;
   }

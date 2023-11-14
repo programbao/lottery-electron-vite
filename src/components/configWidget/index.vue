@@ -4,10 +4,22 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :modal="false"
+    :show-close="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
     width="70%"
     title="系统配置">
+    <template #header>
+      <slot name="title"><span class="title-text">系统配置</span></slot>
+      <div class="title-btn confirm-btn" type="confirm" @click="confirm">
+        <div class="label label-confirm"></div>
+        确认
+      </div>
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+        <div class="label label-cancel"></div>
+        取消
+      </div>
+    </template>
     <div class="config-setting-list">
       <div class="item-setting" >
         <div class="setting-title">
@@ -21,13 +33,13 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, nextTick, computed } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 import bus from '../../libs/bus'
 import { initMoveEvent } from './moveEvent'
 import { lotteryDataStore } from '../../store'
-import prizeSetting from './prizeSetting.vue'
+import prizeSetting from './prizeSetting/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(true)
+const dialogTableVisible = ref(false)
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
@@ -93,11 +105,14 @@ const configList = [
       transform: translateX(-50%);
     }
   }
+  .el-dialog__body {
+    padding-top: 0px;
+  }
 }
 .item-setting .setting-title {
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 14px;
     padding: 10px;
     font-weight: 700;
    .right {
@@ -105,5 +120,64 @@ const configList = [
     color: #409eff;
     font-size: 14px;
    }
+}
+.el-dialog__header {
+  .title-text {
+    margin-right: auto;
+    font-weight: 600;
+    color: #000;
+  }
+  .title-btn {
+    font-size: 14px;
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: 0px 2px 4px 0px rgba(44,39,56,0.08), 0px 1px 2px 0px rgba(44,39,56,0.00); 
+    background-color: #d7dbe6;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 4px;
+    padding-right: 10px;
+    .label {
+      width: 20px;
+      height: 20px;
+      background: #2e3644;
+      border-radius: 50%;
+      position: relative;
+      margin-right: 8px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      &.label-confirm {
+        &::before {
+          content: "";
+          width: 8px;
+          height: 8px;
+          border: 2px solid #2FCBB1;
+          border-radius: 50%;
+        }
+      }
+      &.label-cancel {
+        &::before {
+          content: "✕";
+          color: #ff6666;
+          margin: 2px 0px 0px 1px;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: #c0c7d6;
+    }
+    &:active {
+      background-color: #c0c7d6;
+      border-color: #366FFF;
+    }
+    + .title-btn {
+      margin-left: 8px;
+    }
+  }
 }
 </style>

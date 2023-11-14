@@ -2,11 +2,11 @@
   <div id="prize-mark" ref="prizeMark">
     <div class="next-prize" :class="enterAnimate">
       <div class="prize-text">
-        <h5 class="prize-title">{{ currentPrize.text }}</h5> 
-        <h5 class="prize-title">{{currentPrize.title}}</h5>
+        <h5 class="prize-title">{{ currentPrize.name }}</h5> 
+        <h5 class="prize-title">{{currentPrize.otherName}}</h5>
       </div>  
       <div class="prize-img">
-        <img :src="currentPrize.img" :alt="currentPrize.title">
+        <img :src="currentPrize.img" :alt="currentPrize.otherName">
       </div>
     </div>
   </div>

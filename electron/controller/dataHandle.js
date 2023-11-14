@@ -81,7 +81,7 @@ const hanldeExportDataFn = async () => {
   let sharedObject =  global.sharedObject;
   
   sharedObject.cfg.prizes.forEach(item => {
-    outData.push([item.text]);
+    outData.push([item.name]);
     outData = outData.concat(sharedObject.luckyData[item.type] || []);
   });
   let result = {};
