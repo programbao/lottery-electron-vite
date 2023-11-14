@@ -90,7 +90,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       this.totalCards = this.columnCount * this.rowCount;
 
       // 每次抽取的奖品个数
-      // this.eachCount = this.prizes.map(prize => prize.count);
+      this.eachCount = this.prizes.map(prize => prize.eachCount);
       // 中奖用户
       this.luckyUsers = config.luckyData;
       // 读取当前已设置的抽奖结果

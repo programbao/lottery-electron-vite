@@ -33,7 +33,7 @@
       </el-row>
       <el-row :gutter="24">
         <el-col :span="12">
-          <el-form-item label="数量" prop="count">
+          <el-form-item label="抽取总数" prop="count">
             <el-input-number
               v-model="formLabelAlign.count"
               :min="1"
@@ -78,6 +78,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import ltDialog from '../../common/lt-dialog.vue'
+
 const props = defineProps({
   editDialogVisible: {
     type: Boolean,
@@ -102,6 +103,16 @@ const dialogVisible = computed({
     emit('close', false)
   }
 })
+const checkEachCount = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('请输入抽取数量'))
+  } 
+  if (value > formLabelAlign.value.count) {
+    callback(new Error('不能大于抽取总数'))
+  } else {
+    callback()
+  }
+}
 const rules = {
   count: [
     {
@@ -113,7 +124,7 @@ const rules = {
   eachCount: [
     {
       required: true,
-      message: '请输入每轮抽取数量',
+      validator: checkEachCount,
       trigger: 'blur',
     },
   ], 
@@ -144,7 +155,10 @@ watch(
   () => props.editDialogVisible,
   () => {
     if (props.editDialogVisible) {
-      formLabelAlign.value = props.editData
+      formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
+      if (formLabelAlign.eachCount === undefined) {
+        formLabelAlign.value.eachCount = formLabelAlign.value.count
+      }
     }
   }
 );

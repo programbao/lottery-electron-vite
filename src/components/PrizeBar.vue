@@ -50,7 +50,7 @@ const basicData = lotteryDataStore();
 const currentPrize = ref({});
 const prizeList = ref(null);
 const prizes = computed(() => {
-  let prizes = basicData.prizeConfig.prizes;
+  let prizes = basicData.prizes;
   if (prizes) {
     currentPrize.value = prizes[prizes.length - 1]
   }
@@ -154,13 +154,13 @@ const changePrize = () => {
 let isInitPrizeData = false
 const initHandlePrizeData = () => {
   nextTick(() => {
-    if (!basicData.prizeConfig.prizes || isInitPrizeData) return
+    if (!basicData.prizes || isInitPrizeData) return
     isInitPrizeData = true
-    const totalPrizeLen = basicData.prizeConfig.prizes.length - 1
+    const totalPrizeLen = basicData.prizes.length - 1
     const currentIndex = basicData.currentPrizeIndex
     const needCount = totalPrizeLen - currentIndex
     let needChangeIndex = totalPrizeLen;
-    const prizes = basicData.prizeConfig.prizes 
+    const prizes = basicData.prizes 
     // 滚动位置
     scrollTop();
     for (let i = 0; i < needCount + 1; i++) {
@@ -175,7 +175,7 @@ const initHandlePrizeData = () => {
   })
 }
 const resetPrizes = () => {
-  const totalPrizeLen = basicData.prizeConfig.prizes.length
+  const totalPrizeLen = basicData.prizes.length
   for (let i = 0; i < totalPrizeLen; i++) {
     let prize = basicData.prizes[i]
     const type = prize.type

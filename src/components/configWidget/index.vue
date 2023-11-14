@@ -26,7 +26,7 @@
           <div class="left">奖项设置</div>
           <!-- <div class="right">设置</div> -->
         </div>
-        <prizeSetting />
+        <prizeSetting ref="prizeSettingRef" />
       </div>
     </div>
   </el-dialog>
@@ -63,18 +63,12 @@ const configList = [
   "奖项设置", // 替换 更新 上传奖项图片相关设置
   "卡片排列"
 ]
+const prizeSettingRef = ref();
+const confirm = () => {
+  console.dir(prizeSettingRef.value.prizes)
+  basicData.prizes = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes))
+}
 
-// onMounted(() => {
-//   nextTick(() => {
-//     console.log(1234567)
-//     let el = document.querySelector(`.base-modal-dialog.isMoveDialog`)
-//     console.log(el, '234243')
-//     initMoveEvent()
-//   })
-// })
-// const dialogMounted = () => {
-//   console.log(1234566)
-// }
 </script>
 <style lang="scss">
 .base-modal-dialog.isMoveDialog {

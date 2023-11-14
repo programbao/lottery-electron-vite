@@ -342,7 +342,6 @@ const rotateBall = () => {
   if (basicData.isNextPrize) return;
   basicData.isLotting = true;
   rotateBall().then(() => {
-    debugger
     // 将之前的记录置空
     basicData.currentLuckys = [];
     paramsFields.selectedCardIndex = [];

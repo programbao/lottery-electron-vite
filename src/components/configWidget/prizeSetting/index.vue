@@ -24,14 +24,8 @@
             :initial-index="element.index"
             fit="contain"
           /> 
-          <el-tooltip
-            class="box-item"
-            effect="dark"
-            :content="element.name"
-            placement="top-start"
-          >
-            <div class="prize-text">{{ element.name }}</div>
-          </el-tooltip>
+          <div class="prize-text">{{ element.name }}</div>
+          <div class="prize-text">{{ element.otherName }}</div>
           <div class="mark-operation">
             <el-icon class="move-icon" size="23" color="#fff"><Switch /></el-icon>
             <div class="center-btn">
@@ -75,6 +69,11 @@ const prizes = ref([]);
 const editDialogVisible = ref(false);
 const editData = ref({});
 const openType = ref('edit');
+// 暴露属性
+defineExpose({
+  prizes
+})
+import { nanoid } from 'nanoid';
 const initHandlePrizes = () => {
   if (basicData.prizes && basicData.prizes.length > 0) {
     prizes.value = JSON.parse(JSON.stringify(basicData.prizes)).map((item, index) => {
@@ -118,6 +117,7 @@ const editPrize = (element, type) => {
 const editConfirm = (data) => {
   const handleObj = prizes.value.find(item => item.type === data.type);
   if (!handleObj) {
+    const type = nanoid();
     prizes.value.push({ type, ...data, index: prizes.value.length })
   } else {
     Object.assign(handleObj, data);
@@ -138,13 +138,14 @@ onMounted(() => {
   border-radius: 10px;
 }
 .item-prize {
-  margin: 0.90%;
+  margin: 8px;
   width: 13.5%;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   position: relative;
   height: 140px;
+  padding-bottom: 15px;
   .prize-text {
     // width: 100px;
     text-align: center;
