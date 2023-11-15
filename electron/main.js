@@ -15,7 +15,7 @@ global.sharedObject = {
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
 const { getStaticUsersData, setData, resetData, handleExportData } = require('./controller/dataHandle')
-const { toggleFullScreen } = require('./controller/systemEventHandle')
+const { toggleFullScreen, toggleFullScreen } = require('./controller/systemEventHandle')
 const { importFile } = require('./controller/prizesConfigHandle')
 const createWindow = () => {
   const winState = new WinState({
@@ -89,9 +89,11 @@ const createWindow = () => {
   // 全屏切换
   toggleFullScreen();
 
-
   // 导入文件
   importFile();
+
+  // 保存配置文件
+  savePrizesConfig();
 }
 
 app.whenReady().then(() => {

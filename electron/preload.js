@@ -35,6 +35,12 @@ const toggleFullScreen = async (...args) => {
   return result
 }
 
+// 保存抽奖配置
+const savePrizesConfig = async (...args) => {
+  let result = await ipcRenderer.invoke('savePrizesConfig', ...args)
+  return result
+}
+
 // 导入文件
 const importFile = async (...args) => {
   let result = await ipcRenderer.invoke('importFile', ...args)
@@ -49,7 +55,8 @@ contextBridge.exposeInMainWorld('myApi', {
   resetData,
   handleExportData,
   toggleFullScreen,
-  importFile
+  importFile,
+  savePrizesConfig
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

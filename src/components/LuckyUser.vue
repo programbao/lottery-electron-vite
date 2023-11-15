@@ -17,7 +17,7 @@
         :key="index">
       </div>
     </div>
-    <button class="closeBtn" @click="closeBtn">
+    <button class="btn closeBtn" @click="closeBtn">
       Close
     </button>
   </div>

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const xlsx = require("node-xlsx").default;
-let cwd = path.join(__dirname, "cache");
+let cwd = path.join(__dirname, "../data");
 
 if (!fs.existsSync(cwd)) {
   fs.mkdirSync(cwd);

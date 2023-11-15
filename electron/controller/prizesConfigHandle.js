@@ -8,7 +8,7 @@ const {
   saveErrorDataFile
 } = require("./utils/help");
 const path = require('path')
-const dbPath = path.join(__dirname, '../db')
+const dbPath = path.join(__dirname, '../assets/img')
 const url = require('url');
 const fs = require("fs");
 

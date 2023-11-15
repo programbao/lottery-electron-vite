@@ -19,15 +19,16 @@
       :rules="rules"
       ref="ruleFormRef"
     >
+      <div class="tips" v-if="!!luckyUsers[formLabelAlign.type]">该奖项已有中奖名单，名称不能修改</div> 
       <el-row :gutter="24">
         <el-col :span="12">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="formLabelAlign.name" />
+            <el-input v-model="formLabelAlign.name" :disabled="!!luckyUsers[formLabelAlign.type]" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="其他语言名称" prop="otherName">
-            <el-input v-model="formLabelAlign.otherName" />
+            <el-input v-model="formLabelAlign.otherName" :disabled="!!luckyUsers[formLabelAlign.type]" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -203,6 +204,13 @@ const confirm = async () => {
 </script>
 
 <style lang="scss" scoped>
+.tips {
+  color: orange;
+  font-weight: 700;
+  margin-bottom: 20px;
+  // text-align: left;
+  // padding-left: 30px;
+}
 .upload {
   // margin: 0.90%;
   width: 33.5%;

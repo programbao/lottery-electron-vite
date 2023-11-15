@@ -9,6 +9,7 @@
         class="draggable-box" 
         handle=".move-icon"
         @end="dragEndHandle"
+        :move="dragMoveHandle"
         v-if="prizes.length > 0"
       >
       <template #item="{ element  }">
@@ -82,6 +83,7 @@ const initHandlePrizes = () => {
   if (basicData.prizes && basicData.prizes.length > 0) {
     prizes.value = JSON.parse(JSON.stringify(basicData.prizes)).map((item, index) => {
       item.index = index;
+      item.isHasLucky = !!luckyUsers[item.type];
       return item
     });
   }
@@ -110,6 +112,14 @@ const dragEndHandle = () => {
     return item
   });
 }
+// 拖拽移动 中
+const dragMoveHandle = (evt, originalEvent) => {
+  const { dragged, related } = evt;
+  const { __draggable_context } = related
+  const type = __draggable_context.element.type;
+  const isHasLucky = luckyUsers[type];
+  if (isHasLucky) return false;
+}
 // 编辑奖项
 const editPrize = (element, type) => {
   editDialogVisible.value = true;
@@ -122,7 +132,10 @@ const editConfirm = (data) => {
   const handleObj = prizes.value.find(item => item.type === data.type);
   if (!handleObj) {
     const type = nanoid();
-    prizes.value.push({ type, ...data, index: prizes.value.length })
+    let findIndex = prizes.value.findIndex(item => item.isHasLucky);
+    findIndex = findIndex === -1 ? prizes.value.length : findIndex;
+    prizes.value.splice(findIndex, 0, { type, ...data, index: findIndex, isHasLucky: false });
+    // prizes.value.push({ type, ...data, index: prizes.value.length })
   } else {
     Object.assign(handleObj, data);
   }
