@@ -27,18 +27,21 @@
           <div class="prize-text">{{ element.name }}</div>
           <div class="prize-text">{{ element.otherName }}</div>
           <div class="mark-operation">
-            <el-icon class="move-icon" size="23" color="#fff"><Switch /></el-icon>
+            <div v-if="luckyUsers[element.type]" class="mark-tips">奖项有中奖名单, 不能删除和拖动</div>
+            <el-icon v-show="!luckyUsers[element.type]" class="move-icon" size="23" color="#fff"><Switch /></el-icon>
             <div class="center-btn">
               <el-icon @click="editPrize(element, 'edit')" size="23" color="#fff"><EditPen /></el-icon>
               <el-icon @click="handlePictureCardPreview(element)" size="23" color="#fff"><ZoomIn /></el-icon>
-              <el-popconfirm 
-                title="确认删除吗?" 
-                confirm-button-type="danger"
-                @confirm="deletePrize(element)">
-                <template #reference>
-                  <el-icon  size="23" color="#fff"><Delete /></el-icon>
-                </template>
-              </el-popconfirm>
+              <span v-show="!luckyUsers[element.type]">
+                <el-popconfirm 
+                  title="确认删除吗?" 
+                  confirm-button-type="danger"
+                  @confirm="deletePrize(element)">
+                  <template #reference>
+                    <el-icon  size="23" color="#fff"><Delete /></el-icon>
+                  </template>
+                </el-popconfirm>
+              </span>
             </div>
           </div>
         </div> 
@@ -60,15 +63,16 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { lotteryDataStore } from '../../../store'
 import draggable from "vuedraggable";
 import bus from '../../../libs/bus'
 import editDialog from './editDialog.vue'
+import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
 const prizes = ref([]);
 const editDialogVisible = ref(false);
 const editData = ref({});
 const openType = ref('edit');
+const luckyUsers = basicData.luckyUsers;
 // 暴露属性
 defineExpose({
   prizes
@@ -178,6 +182,11 @@ onMounted(() => {
     opacity: 0;
     transition: opacity 0.3s;
     background-color: rgba(0, 0, 0, 0.5);
+    .mark-tips {
+      font-size: 14px;
+      color: orange;
+      margin-top: 10px;
+    }
     .move-icon {
       position: absolute;
       top: 10px;

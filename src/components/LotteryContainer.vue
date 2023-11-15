@@ -458,7 +458,7 @@ const saveData = () => {
   //   // currentPrize = basicData.prizes[currentPrizeIndex];
   // }
   if (basicData.currentLuckys.length > 0) {
-    // todo by xc 添加数据保存机制，以免服务器挂掉数据丢失
+    // todo 添加数据保存机制，以免服务器挂掉数据丢失
     return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
   }
   return Promise.resolve();

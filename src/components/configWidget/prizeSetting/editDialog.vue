@@ -78,7 +78,8 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import ltDialog from '../../common/lt-dialog.vue'
-
+import { lotteryDataStore } from '../../../store'
+const basicData = lotteryDataStore();
 const props = defineProps({
   editDialogVisible: {
     type: Boolean,
@@ -103,6 +104,9 @@ const dialogVisible = computed({
     emit('close', false)
   }
 })
+const luckyUsers = basicData.luckyUsers
+let currentLucky = undefined;
+// 校验每轮抽取数
 const checkEachCount = (rule, value, callback) => {
   if (!value) {
     return callback(new Error('请输入抽取数量'))
@@ -113,11 +117,25 @@ const checkEachCount = (rule, value, callback) => {
     callback()
   }
 }
+// 校验抽奖总数
+const checkTotalCount = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('请输入抽取总数'))
+  } 
+  if (value < formLabelAlign.value.eachCount) {
+    callback(new Error('不能小于每轮抽取数'))
+  } else {
+    if (currentLucky && value < currentLucky.length) {
+      return callback(new Error(`当前已经有${currentLucky.length}人中奖, 不能小于${currentLucky.length}人`))
+    }
+    callback()
+  }
+}
 const rules = {
   count: [
     {
       required: true,
-      message: '请输入抽取数量',
+      validator: checkTotalCount,
       trigger: 'blur',
     },
   ],
@@ -156,7 +174,8 @@ watch(
   () => {
     if (props.editDialogVisible) {
       formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
-      if (formLabelAlign.eachCount === undefined) {
+      currentLucky = luckyUsers[formLabelAlign.value.type]
+      if (formLabelAlign.value.eachCount === undefined) {
         formLabelAlign.value.eachCount = formLabelAlign.value.count
       }
     }
