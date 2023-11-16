@@ -12,7 +12,8 @@
         :id="'prize-item-' + item.type" 
         :class="[
           'prize-item', 
-          item.type == currentPrize.type ? 'shine' : '' 
+          item.type == currentPrize.type && prizesListConfig[item.type].activeClassName != 'done' ? 'shine' : '',
+          prizesListConfig[item.type].activeClassName
         ]">
             <div class="prize-img">
                 <img :src="item.img" :alt="item.otherName">
@@ -24,13 +25,13 @@
                         <div 
                           :id="'prize-bar-' + item.type" 
                           class="progress-bar progress-bar-danger progress-bar-striped active" 
-                          style="width: 100%;">
+                          :style="prizesListConfig[item.type].style">
                         </div>
                     </div>
                     <div 
                       :id="'prize-count-' + item.type" 
                       class="prize-count-left">
-                        {{item.count + "/" + item.count}}
+                        {{prizesListConfig[item.type].surplusCount + "/" + item.count}}
                     </div>
                 </div>
             </div>
@@ -40,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, computed, nextTick } from 'vue'
+import { ref, onBeforeUnmount, onBeforeMount, onMounted, computed, nextTick } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
@@ -48,6 +49,7 @@ const basicData = lotteryDataStore();
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = ref({});
 const prizeList = ref(null);
+const prizesListConfig = ref({});
 const prizes = computed(() => {
   let prizes = basicData.prizes;
   if (prizes) {
@@ -70,10 +72,10 @@ const scrollTop = () => {
     })
   })
 }
-const prizesListConfig = {
-}
+// 奖项配置
+// 标题文本对象
+// const titleTips = ref({});
 const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
-  let prizeElement = {};
   let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
     type: -1,
     count: 0,
@@ -82,62 +84,65 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     img: ""
   },
     type = currentPrize.type,
-    elements = prizeElement[type],
+    // elements = prizeElement[type],
     totalCount = currentPrize.count;
 
-  if (!elements) {
-    elements = {
-      box: document.querySelector(`#prize-item-${type}`),
-      bar: document.querySelector(`#prize-bar-${type}`),
-      text: document.querySelector(`#prize-count-${type}`)
-    };
-    prizeElement[type] = elements;
-  }
+  // if (!elements) {
+  //   elements = {
+  //     box: document.querySelector(`#prize-item-${type}`),
+  //     bar: document.querySelector(`#prize-bar-${type}`),
+  //     text: document.querySelector(`#prize-count-${type}`)
+  //   };
+  //   prizeElement[type] = elements;
+  // }
 
-  if (!prizeElement.prizeType) {
-    prizeElement.prizeType = document.querySelector("#prizeType");
-    prizeElement.prizeLeft = document.querySelector("#prizeLeft");
-    prizeElement.prizeText = document.querySelector("#prizeText");
-  }
+  // if (!prizeElement.prizeType) {
+  //   prizeElement.prizeType = document.querySelector("#prizeType");
+  //   prizeElement.prizeLeft = document.querySelector("#prizeLeft");
+  //   prizeElement.prizeText = document.querySelector("#prizeText");
+  // }
 
-  if (isInit) {
-    for (let i = prizes.length - 1; i > currentPrizeIndex; i--) {
-      let type = prizes[i]["type"];
-      document.querySelector(`#prize-item-${type}`).className =
-        "prize-item done";
-      document.querySelector(`#prize-bar-${type}`).style.width = "0";
-      document.querySelector(`#prize-count-${type}`).textContent =
-        "0" + "/" + prizes[i]["count"];
-    }
-  }
+  // if (isInit) {
+  //   for (let i = prizes.length - 1; i > currentPrizeIndex; i--) {
+  //     let type = prizes[i]["type"];
+  //     document.querySelector(`#prize-item-${type}`).className =
+  //       "prize-item done";
+  //     document.querySelector(`#prize-bar-${type}`).style.width = "0";
+  //     document.querySelector(`#prize-count-${type}`).textContent =
+  //       "0" + "/" + prizes[i]["count"];
+  //   }
+  // }
 
   count = totalCount - count;
   count = count < 0 ? 0 : count;
   if (basicData.lasetPrizeIndex !== currentPrizeIndex) {
     const isCpThenLP = currentPrizeIndex > basicData.lasetPrizeIndex;
     let handleIndex = isCpThenLP ? currentPrizeIndex : basicData.lasetPrizeIndex;
-    let lastPrize = basicData.prizes[handleIndex],
-      lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
-    lastBox.classList.remove("shine");
-    lastBox.classList.add("done");
-     elements.box && elements.box.classList.add("shine");
-    prizeElement.prizeType.textContent = currentPrize.name;
-    prizeElement.prizeText.textContent = currentPrize.otherName;
+    let lastPrize = basicData.prizes[handleIndex];
+      // lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
+    const needHandlePrize = prizesListConfig.value[lastPrize.type]
+    needHandlePrize.activeClassName = "done"
+    // lastBox.classList.remove("shine");
+    // lastBox.classList.add("done");
+    prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "shine");
+    //  elements.box && elements.box.classList.add("shine");
 
     basicData.lasetPrizeIndex = currentPrizeIndex;
   }
 
-  if (currentPrizeIndex < 0) {
-    prizeElement.prizeType.textContent = "抽奖结束了，谢谢参与  undian telah selesai,terima kasih telah bergabung";
-    prizeElement.prizeText.textContent = " ";
-    prizeElement.prizeLeft.textContent = "";
-    return;
-  }
+  // if (currentPrizeIndex < 0) {
+  //   prizeElement.prizeType.textContent = "抽奖结束了，谢谢参与  undian telah selesai,terima kasih telah bergabung";
+  //   prizeElement.prizeText.textContent = " ";
+  //   prizeElement.prizeLeft.textContent = "";
+  //   return;
+  // }
 
   let percent = (count / totalCount).toFixed(2);
-  elements.bar && (elements.bar.style.width = percent * 100 + "%");
-  elements.text && (elements.text.textContent = count + "/" + totalCount);
-  prizeElement.prizeLeft.textContent = count;
+  prizesListConfig.value[type].style.width = percent * 100 + "%";
+  // elements.bar && (elements.bar.style.width = percent * 100 + "%");
+  prizesListConfig.value[type].surplusCount = count;
+  // elements.text && (elements.text.textContent = count + "/" + totalCount);
+  // prizeElement.prizeLeft.textContent = count;
   if (count !== totalCount && count !== 0) {
     basicData.isContinueLottery = true
   } else {
@@ -152,7 +157,6 @@ const changePrize = () => {
 }
 let isInitPrizeData = false
 const initHandlePrizeData = () => {
-  nextTick(() => {
     if (!basicData.prizes || isInitPrizeData) return
     isInitPrizeData = true
     const totalPrizeLen = basicData.prizes.length - 1
@@ -160,6 +164,27 @@ const initHandlePrizeData = () => {
     const needCount = totalPrizeLen - currentIndex
     let needChangeIndex = totalPrizeLen;
     const prizes = basicData.prizes 
+    // 初始化奖项相关样式类名和数量配置
+    prizes.forEach((item, index) => {
+      const type = item.type;
+      prizesListConfig.value[type] = {
+        totalCount: item.count,
+        surplusCount: item.count,
+        activeClassName: "",
+        defaultClassName: "prize-item",
+        style: {
+          width: "100%" 
+        }
+      }
+      // const elements = {
+      //   box: document.querySelector(`#prize-item-${type}`),
+      //   bar: document.querySelector(`#prize-bar-${type}`),
+      //   text: document.querySelector(`#prize-count-${type}`)
+      // };
+      // elements.box && (elements.box.className = "prize-item");
+      // elements.bar && (elements.bar.style.width = "0");
+      // elements.text && (elements.text.textContent = "0" + "/" + item.count);
+    })
     // 滚动位置
     scrollTop();
     for (let i = 0; i < needCount + 1; i++) {
@@ -169,9 +194,8 @@ const initHandlePrizeData = () => {
         return
       }
       setPrizeData({ currentPrizeIndex: needChangeIndex, count: itemLucky.length })
-      needChangeIndex -=1
+      needChangeIndex -= 1
     }
-  })
 }
 const resetPrizes = () => {
   const totalPrizeLen = basicData.prizes.length
@@ -201,7 +225,7 @@ onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandlePrizeData)
   bus.on("resetPrizes", resetPrizes)
 })
-onMounted(() => {
+onBeforeMount(() => {
   initHandlePrizeData();
 })
 bus.on("resetPrizes", resetPrizes)

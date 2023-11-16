@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeMount, onBeforeUnmount, ref, getCurrentInstance } from 'vue'
+import { onMounted, onBeforeMount, onBeforeUnmount, ref, nextTick } from 'vue'
 import { useToast } from "vue-toastification";
 import bus from '../libs/bus'
 const toast = useToast();
@@ -679,7 +679,9 @@ onBeforeUnmount(() => {
   bus.off('exportData', exportData)
 })
 onMounted(() => {
-  initHandleData();
+  nextTick(() => {
+    initHandleData();
+  })
 })
 </script>
 

@@ -96,6 +96,7 @@ const confirm = async () => {
     basicData.prizes = prizesData;
     dialogTableVisible.value = false;
     basicData.currentPrizeIndex = basicData.currentPrizeIndex - cutNum + addNum;
+    basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
     ElMessage({
       message: '设置成功',
       type: 'success',
