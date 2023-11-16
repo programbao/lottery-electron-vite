@@ -1,6 +1,7 @@
-const cfg = require("../config");
 const { ipcMain } = require('electron')
-
+const {
+  loadTempData,
+} = require("./utils/help");
 
 const getLeftUsers = () => {
   let luckyData = global.sharedObject.luckyData;
@@ -36,9 +37,10 @@ const getTempData = () => {
   ipcMain.handle('getTempData', async (e, ...args) => {
     let sharedObject =  global.sharedObject;
     const { luckyData, errorData, curData } = getLeftUsers();
-    sharedObject.cfg = cfg;
+    const prizeConfig = await loadTempData("prizesConfig.json");
+    sharedObject.cfg = prizeConfig[0];
     return {
-      prizeConfig: cfg,
+      prizeConfig: prizeConfig[0],
       leftUsers: curData.leftUsers,
       luckyData: luckyData
     }; 

@@ -58,11 +58,11 @@ const prizes = computed(() => {
 });
 // 滑动到特定位置
 const scrollTop = () => {
-  const handleDom = prizeList.value;
-  const oldScrollTop = handleDom.scrollTop
-  const type = prizes.value[prizes.value.length - 1].type
-  const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().bottom - oldScrollTop;
   nextTick(() => {
+    const handleDom = prizeList.value;
+    const oldScrollTop = handleDom.scrollTop
+    const type = prizes.value[prizes.value.length - 1].type
+    const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().bottom - oldScrollTop;
     anime({
       targets: handleDom,
       scrollTop: [oldScrollTop, scrollTop],

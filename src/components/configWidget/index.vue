@@ -34,6 +34,7 @@
 
 <script setup>
 import { ref, onMounted, nextTick, computed } from 'vue'
+import { ElMessage } from 'element-plus'
 import bus from '../../libs/bus'
 import { initMoveEvent } from './moveEvent'
 import { lotteryDataStore } from '../../store'
@@ -64,9 +65,31 @@ const configList = [
   "卡片排列"
 ]
 const prizeSettingRef = ref();
-const confirm = () => {
-  console.dir(prizeSettingRef.value.prizes)
-  basicData.prizes = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes))
+const confirm = async () => {
+  const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
+  // 删除不必存的字段
+  const excludeFields = ['index', 'isHasLucky'];
+  prizesData.forEach((prize) => {
+    excludeFields.forEach((key) => {
+      delete prize[key];
+    })
+  })
+  const prizesDataStr = JSON.stringify(prizesData);
+  if (prizesDataStr === JSON.stringify(basicData.prizes)) {
+    dialogTableVisible.value = false;
+    return
+  }
+  const isPass = await myApi.savePrizesConfig(prizesDataStr);
+  if (isPass) {
+    basicData.prizes = prizesData;
+    dialogTableVisible.value = false;
+    ElMessage({
+      message: '设置成功',
+      type: 'success',
+    })
+  } else {
+    ElMessage.error('设置失败')
+  }
 }
 
 </script>

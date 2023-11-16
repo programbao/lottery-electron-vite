@@ -15,7 +15,7 @@ global.sharedObject = {
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
 const { getStaticUsersData, setData, resetData, handleExportData } = require('./controller/dataHandle')
-const { toggleFullScreen, toggleFullScreen } = require('./controller/systemEventHandle')
+const { toggleFullScreen, savePrizesConfig } = require('./controller/systemEventHandle')
 const { importFile } = require('./controller/prizesConfigHandle')
 const createWindow = () => {
   const winState = new WinState({

@@ -135,7 +135,6 @@ const editConfirm = (data) => {
     let findIndex = prizes.value.findIndex(item => item.isHasLucky);
     findIndex = findIndex === -1 ? prizes.value.length : findIndex;
     prizes.value.splice(findIndex, 0, { type, ...data, index: findIndex, isHasLucky: false });
-    // prizes.value.push({ type, ...data, index: prizes.value.length })
   } else {
     Object.assign(handleObj, data);
   }

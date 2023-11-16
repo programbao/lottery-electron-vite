@@ -10,11 +10,11 @@ if (!fs.existsSync(cwd)) {
 /**
  * 读取缓存的数据内容
  */
-function loadTempData() {
+function loadTempData(normalDataPathStr, errorDataPathStr) {
   let pros = [];
   pros.push(
     new Promise((resolve, reject) => {
-      fs.readFile(path.join(cwd, "temp.json"), "utf8", (err, data) => {
+      fs.readFile(path.join(cwd, normalDataPathStr), "utf8", (err, data) => {
         if (err) {
           resolve({});
           return;
@@ -23,18 +23,19 @@ function loadTempData() {
       });
     })
   );
-
-  pros.push(
-    new Promise((resolve, reject) => {
-      fs.readFile(path.join(cwd, "error.json"), "utf8", (err, data) => {
-        if (err) {
-          resolve([]);
-          return;
-        }
-        console.log(data)
-      });
-    })
-  );
+  if (errorDataPathStr) {
+    pros.push(
+      new Promise((resolve, reject) => {
+        fs.readFile(path.join(cwd, errorDataPathStr), "utf8", (err, data) => {
+          if (err) {
+            resolve([]);
+            return;
+          }
+          console.log(data)
+        });
+      })
+    );
+  }
 
   return Promise.all(pros);
 }
@@ -89,7 +90,7 @@ function writeXML(data, name) {
  * 写入文件
  * @param {*} data
  */
-function saveDataFile(data) {
+function saveDataFile(data, fileNameStr) {
   data = JSON.stringify(data, "", 2);
 
   if (!fs.existsSync(cwd)) {
@@ -97,7 +98,7 @@ function saveDataFile(data) {
   }
 
   return new Promise((resolve, reject) => {
-    fs.writeFile(path.join(cwd, "temp.json"), data, err => {
+    fs.writeFile(path.join(cwd, fileNameStr), data, err => {
       if (err) {
         reject(err);
         return;

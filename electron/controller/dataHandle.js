@@ -30,7 +30,7 @@ const getStaticUsersData = async () => {
     shuffle(sharedObject.curData.users_hinduism_buddhism_confucianism);
     // 读取已经抽取的结果
     try {
-      const tempData = await loadTempData();
+      const tempData = await loadTempData("temp.json", "error.json");
       sharedObject.luckyData = tempData[0];
       sharedObject.errorData = tempData[1];
     } catch (err) {
@@ -47,7 +47,7 @@ const setLucky = async (type, data) => {
     sharedObject.luckyData[type] = Array.isArray(data) ? data : [data];
   }
 
-  return saveDataFile(sharedObject.luckyData);
+  return saveDataFile(sharedObject.luckyData, "temp.json");
 }
 
 const setData = async () => {
@@ -63,7 +63,7 @@ const handleResetData = async () => {
   let sharedObject =  global.sharedObject;
   sharedObject.luckyData = {};
   sharedObject.errorData = [];
-  await saveDataFile(sharedObject.luckyData);
+  await saveDataFile(sharedObject.luckyData, "temp.json");
 }
 const resetData = async () => {
   ipcMain.handle('resetData', async (e, ...args) => {
