@@ -79,7 +79,9 @@ const lucksContentStyle = computed(() => {
     'overflow': 'hidden',
     'padding': '2px',
     'transition': 'opacity .3s ease-in-out',
-    'width': `calc(calc(${columnCount * luckysRowColObj.tileSize}px  + '1px') + '12px')`
+    'width': `calc(calc(${columnCount * luckysRowColObj.tileSize}px  + '1px') + '12px')`,
+    'max-height': '100vh',
+    'max-width': '100vw'
   }
 });
 const currentLuckys = computed(() => {

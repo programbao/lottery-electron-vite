@@ -662,6 +662,7 @@ const exportData = () => {
     console.log(result)
   })
 }
+
 // 监听数据
 // bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)

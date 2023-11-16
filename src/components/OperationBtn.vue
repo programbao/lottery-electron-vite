@@ -20,12 +20,10 @@
         @click="reLottery"
         id="reLottery" 
         v-show="!noBeginLottery 
-          && !isShowPrizeMark
           && !isLotting
-          && !isFirstPrize
-          && (isNextPrize || isContinueLottery)">
-          {{ isNextPrize ? '重新抽取上一轮' : '重新抽奖' }}<br />
-          {{ isNextPrize ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
+          && !isFirstPrize">
+          {{ (isNextPrize || isShowPrizeMark) ? '重新抽取上一轮' : '重新抽奖' }}<br />
+          {{ (isNextPrize || isShowPrizeMark) ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
         </button>
       <button id="showAllLucks" class="btn" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
@@ -81,6 +79,7 @@ const showPrize = () => {
 }
 const reLottery = () => {
   bus.emit('reLottery')
+  bus.emit('hidePrizeMark');
 }
 // const showPrizeEnd = () => {
 //   isShowPrizeBtn.value = false
