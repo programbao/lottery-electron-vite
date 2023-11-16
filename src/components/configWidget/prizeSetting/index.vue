@@ -74,6 +74,7 @@ const editDialogVisible = ref(false);
 const editData = ref({});
 const openType = ref('edit');
 const luckyUsers = basicData.luckyUsers;
+const emit = defineEmits(['cutPrize', 'addPrize']);
 // 暴露属性
 defineExpose({
   prizes
@@ -98,6 +99,7 @@ const srcList = computed(() => {
 });
 const deletePrize = (element) => {
   prizes.value = prizes.value.filter(item => item.type !== element.type)
+  emit('cutPrize', element)
 }
 const handlePictureCardPreview = (element) => {
   let elImageDom = document.querySelector(`.el-image-${element.index}`);
@@ -134,7 +136,9 @@ const editConfirm = (data) => {
     const type = nanoid();
     let findIndex = prizes.value.findIndex(item => item.isHasLucky);
     findIndex = findIndex === -1 ? prizes.value.length : findIndex;
-    prizes.value.splice(findIndex, 0, { type, ...data, index: findIndex, isHasLucky: false });
+    let addObj = { type, ...data, index: findIndex, isHasLucky: false };
+    prizes.value.splice(findIndex, 0, addObj);
+    emit('addPrize', addObj);
   } else {
     Object.assign(handleObj, data);
   }

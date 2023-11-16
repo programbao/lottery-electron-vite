@@ -26,7 +26,10 @@
           <div class="left">奖项设置</div>
           <!-- <div class="right">设置</div> -->
         </div>
-        <prizeSetting ref="prizeSettingRef" />
+        <prizeSetting 
+          @cutPrize="cutPrize"
+          @addPrize="addPrize"
+          ref="prizeSettingRef" />
       </div>
     </div>
   </el-dialog>
@@ -44,6 +47,8 @@ const dialogTableVisible = ref(false)
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
+let cutNum = 0;
+let addNum = 0;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
@@ -59,13 +64,20 @@ const toggleConfig = () => {
 }
 let isFirstVisible = false;
 bus.on('toggleConfig', toggleConfig)
-
+// 删除奖项
+const cutPrize = () => {
+  cutNum++
+}
+const addPrize = () => {
+  addNum++
+}
 const configList = [
   "奖项设置", // 替换 更新 上传奖项图片相关设置
   "卡片排列"
 ]
 const prizeSettingRef = ref();
 const confirm = async () => {
+  console.log(cutNum, 'cutNumcutNum')
   const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
   // 删除不必存的字段
   const excludeFields = ['index', 'isHasLucky'];
@@ -83,6 +95,7 @@ const confirm = async () => {
   if (isPass) {
     basicData.prizes = prizesData;
     dialogTableVisible.value = false;
+    basicData.currentPrizeIndex = basicData.currentPrizeIndex - cutNum + addNum;
     ElMessage({
       message: '设置成功',
       type: 'success',
