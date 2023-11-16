@@ -43,7 +43,6 @@
 import { ref, onBeforeUnmount, onMounted, computed, nextTick } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
-import anime from 'animejs'
 const basicData = lotteryDataStore();
 
 // console.log(lotteryData, 'lotteryDatalotteryData')
@@ -197,9 +196,9 @@ const resetPrizes = () => {
   basicData.lasetPrizeIndex = basicData.prizes.length - 1;
 }
 // 监听数据
-bus.on('initConfigDataEnd', initHandlePrizeData)
+// bus.on('initConfigDataEnd', initHandlePrizeData)
 onBeforeUnmount(() => {
-  bus.off('initConfigDataEnd', initHandlePrizeData)
+  // bus.off('initConfigDataEnd', initHandlePrizeData)
   bus.on("resetPrizes", resetPrizes)
 })
 onMounted(() => {

@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
-    "animejs": "^3.2.1",
     "electron-win-state": "^1.1.22",
     "element-plus": "^2.4.2",
     "mitt": "^3.0.1",

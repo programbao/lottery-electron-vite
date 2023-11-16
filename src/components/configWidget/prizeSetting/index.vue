@@ -143,7 +143,7 @@ const editConfirm = (data) => {
     Object.assign(handleObj, data);
   }
 }
-bus.on('initConfigDataEnd', initHandlePrizes)
+// bus.on('initConfigDataEnd', initHandlePrizes)
 onMounted(() => {
   initHandlePrizes();
 })

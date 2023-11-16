@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import BgBox from "./components/BgBox.vue";
 import LotteryContainer from "./components/LotteryContainer.vue";
 import MusicBtn from "./components/MusicBtn.vue";
@@ -16,24 +16,21 @@ const importFile = async () => {
   let userData = await myApi.openDialog()
   console.log(userData, 'userData')
 }
-
+const isLoadingFinish = ref(false)
 onMounted(async () => {
-  lotteryData.initConfigData();
-  // 处理初始化数据
-  // const config = await myApi.getTempData();
-  // if (config) {
-  //   lotteryData.setPrizeConfig(config.prizeConfig);
-  //   lotteryData.prizes = config.prizeConfig.prizes;
-  // }
-  // const usersData = await myApi.getStaticUsersData();
-  // // 抽奖用户
-  // lotteryData.users = usersData;
+  await lotteryData.initConfigData();
+  const loadingBoxDom = document.querySelector('.loading-box');
+  // loadingBoxDom.style.opacity = 0.4
+  loadingBoxDom.style.zIndex = -5
+  setTimeout(() => {
+    isLoadingFinish.value = true
+  }, 500)
 })
 
 </script>
 
 <template>
-  <div>
+  <div v-if="isLoadingFinish">
     <BgBox />
     <LotteryContainer />
     <MusicBtn />
@@ -43,7 +40,6 @@ onMounted(async () => {
     <LuckyUser />
     <ConfigDialog />
     <!-- <button @click="importFile">导入</button> -->
-    
   </div>
 </template>
 

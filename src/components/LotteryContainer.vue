@@ -14,7 +14,6 @@ let camera;
 let scene;
 let renderer;
 let controls;
-// let threeDCards = [];
 let targets = {
   table: [],
   sphere: []
@@ -23,22 +22,9 @@ let targets = {
 let isAnimating = false;
 let rotateObj;
 
-// let selectedCardIndex = [];
-let rotate = false;
-// 正在抽奖
-// let isLotting = false;
-// let currentLuckys = [];
-let luckyUsersCard = {};
-let prizeMark = null;
 
 
-// let member = basicData.users.slice();
-// let isBold = false;
-// let showTable = basicData.leftUsers.length === basicData.users.length;
-// let totalMember = member.length;
-// let ROW_COUNT = basicData.rowCount
-// let COLUMN_COUNT = basicData.columnCount;
-// let HIGHLIGHT_CELL = [];
+
 let member = basicData.users.slice();
 let paramsFields = {
   threeDCards: [],
@@ -677,21 +663,23 @@ const exportData = () => {
   })
 }
 // 监听数据
-bus.on('initConfigDataEnd', initHandleData)
+// bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
 onBeforeUnmount(() => {
-  bus.off('initConfigDataEnd', initHandleData)
+  // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
   bus.off('beginLottery', beginLottery)
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
   bus.off('exportData', exportData)
 })
-
+onMounted(() => {
+  initHandleData();
+})
 </script>
 
 <style lang="scss" scoped>
