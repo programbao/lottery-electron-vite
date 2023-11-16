@@ -47,15 +47,14 @@ import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 
 // console.log(lotteryData, 'lotteryDatalotteryData')
-const currentPrize = ref({});
 const prizeList = ref(null);
 const prizesListConfig = ref({});
 const prizes = computed(() => {
-  let prizes = basicData.prizes;
-  if (prizes) {
-    currentPrize.value = prizes[prizes.length - 1]
-  }
-  return prizes
+  return basicData.prizes;
+});
+const currentPrize = computed(() => {
+  
+  return basicData.prizes[basicData.currentPrizeIndex];
 });
 // 滑动到特定位置
 const scrollTop = () => {
