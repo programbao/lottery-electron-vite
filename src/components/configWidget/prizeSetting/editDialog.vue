@@ -36,6 +36,7 @@
         <el-col :span="12">
           <el-form-item label="抽取总数" prop="count">
             <el-input-number
+              :disabled="!!luckyUsers[prevPrizesData.type]"
               v-model="formLabelAlign.count"
               :min="1"
               controls-position="right"
@@ -46,6 +47,7 @@
         <el-col :span="12">
           <el-form-item label="每轮抽取数" prop="eachCount">
             <el-input-number
+              :disabled="!!luckyUsers[prevPrizesData.type]"
               v-model="formLabelAlign.eachCount"
               :min="1"
               controls-position="right"
@@ -60,6 +62,7 @@
             <div class="upload add" @click="importFile">
               <el-image
                 v-if="formLabelAlign.img"
+                :disabled="!!luckyUsers[prevPrizesData.type]"
                 :src="formLabelAlign.img"
                 :zoom-rate="1.2"
                 :max-scale="7"
@@ -106,6 +109,7 @@ const dialogVisible = computed({
   }
 })
 const luckyUsers = basicData.luckyUsers
+const prevPrizesData = ref({});
 let currentLucky = undefined;
 // 校验每轮抽取数
 const checkEachCount = (rule, value, callback) => {
@@ -176,6 +180,8 @@ watch(
     if (props.editDialogVisible) {
       formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
       currentLucky = luckyUsers[formLabelAlign.value.type]
+      const findIndex = basicData.prizes.findIndex(item => item.type === formLabelAlign.value.type)
+      prevPrizesData.value = basicData.prizes[findIndex - 1] || {}
       if (formLabelAlign.value.eachCount === undefined) {
         formLabelAlign.value.eachCount = formLabelAlign.value.count
       }

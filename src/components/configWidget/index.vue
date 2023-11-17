@@ -27,6 +27,7 @@
           <!-- <div class="right">设置</div> -->
         </div>
         <prizeSetting 
+          :key="dialogTableVisible"
           @cutPrize="cutPrize"
           @addPrize="addPrize"
           ref="prizeSettingRef" />
