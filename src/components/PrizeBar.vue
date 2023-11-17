@@ -53,7 +53,6 @@ const prizes = computed(() => {
   return basicData.prizes;
 });
 const currentPrize = computed(() => {
-  
   return basicData.prizes[basicData.currentPrizeIndex];
 });
 // 滑动到特定位置
@@ -137,7 +136,7 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   // }
 
   let percent = (count / totalCount).toFixed(2);
-  prizesListConfig.value[type].style.width = percent * 100 + "%";
+  prizesListConfig.value[type].style.width =(count / totalCount).toFixed(2);
   // elements.bar && (elements.bar.style.width = percent * 100 + "%");
   prizesListConfig.value[type].surplusCount = count;
   // elements.text && (elements.text.textContent = count + "/" + totalCount);
@@ -227,6 +226,20 @@ onBeforeUnmount(() => {
 onBeforeMount(() => {
   initHandlePrizeData();
 })
+const adjustCurrentPrize = (data) => {
+  let { beforeModifyPrize, byIndexModifyPrize, isReGet } = data
+  if (isReGet) {
+    initHandlePrizeData();
+  } else {
+    const modifyType = byIndexModifyPrize.type
+    prizesListConfig.value[beforeModifyPrize.type].activeClassName = ''
+    const adjustPrizeConfig = prizesListConfig.value[modifyType]
+    adjustPrizeConfig.activeClassName = 'shine'
+    adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - basicData.luckyUsers[modifyType].length;
+    adjustPrizeConfig.style.width = (adjustPrizeConfig.surplusCount / byIndexModifyPrize.count).toFixed(2) * 100 + '%';
+  }
+}
+bus.on('adjustCurrentPrize', adjustCurrentPrize)
 bus.on("resetPrizes", resetPrizes)
 bus.on('changePrize', changePrize)
 bus.on('setPrizeData', setPrizeData)

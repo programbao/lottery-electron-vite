@@ -108,6 +108,9 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         this.currentPrizeIndex = prizeIndex;
         this.lasetPrizeIndex = prizeIndex;
         this.lastTimePrizeIndex = prizeIndex;
+        if (prizeIndex !== this.prizes.length - 1) {
+          this.lastTimePrizeIndex = this.prizes.length - 1;
+        }
         this.currentPrize = this.prizes[this.currentPrizeIndex];
         break;
       }

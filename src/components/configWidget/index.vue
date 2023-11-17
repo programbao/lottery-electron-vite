@@ -44,7 +44,7 @@ import { initMoveEvent } from './moveEvent'
 import { lotteryDataStore } from '../../store'
 import prizeSetting from './prizeSetting/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(false)
+const dialogTableVisible = ref(false);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
@@ -78,7 +78,6 @@ const configList = [
 ]
 const prizeSettingRef = ref();
 const confirm = async () => {
-  console.log(cutNum, 'cutNumcutNum')
   const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
   // 删除不必存的字段
   const excludeFields = ['index', 'isHasLucky'];
@@ -94,14 +93,43 @@ const confirm = async () => {
   }
   const isPass = await myApi.savePrizesConfig(prizesDataStr);
   if (isPass) {
+    const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
+    const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;
+    const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
+    const byIndexModifyPrize = prizesData[modifyLastTimeIndex];
+    const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
+    const originLen = basicData.prizes.length;
     basicData.prizes = prizesData;
     dialogTableVisible.value = false;
-    basicData.currentPrizeIndex = basicData.currentPrizeIndex - cutNum + addNum;
+    // 更正当前的奖项索引
+    basicData.currentPrizeIndex = modifyCurrentIndex;
+    // 更正上一轮的奖项索引
+    basicData.lastTimePrizeIndex = modifyLastTimeIndex;
+
+    // 根据状态回显抽完奖的 奖项
+    const byIndexCurrentType = byIndexCurrentPrize.type;
+    const byIndexModifyType = byIndexModifyPrize.type
+    if (
+      byIndexModifyType ===  byIndexCurrentType && 
+        byIndexModifyPrize.count > byIndexCurrentPrize.count &&
+        basicData.luckyUsers[byIndexCurrentType] &&
+        basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
+      ) {
+        basicData.currentPrizeIndex = modifyCurrentIndex + 1;
+        bus.emit('adjustCurrentPrize', {
+          beforeModifyPrize: beforeModifyPrize,
+          byIndexModifyPrize: byIndexModifyPrize
+        })
+    }
+
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
+    if (originLen !== basicData.prizes.length) {
+      bus.emit('adjustCurrentPrize', { isReGet: true })
+    }
     ElMessage({
       message: '设置成功',
       type: 'success',
-    })
+    });
   } else {
     ElMessage.error('设置失败')
   }

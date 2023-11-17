@@ -141,14 +141,14 @@ const rules = {
     {
       required: true,
       validator: checkTotalCount,
-      trigger: 'blur',
+      trigger: 'change',
     },
   ],
   eachCount: [
     {
       required: true,
       validator: checkEachCount,
-      trigger: 'blur',
+      trigger: 'change',
     },
   ], 
   name: [
