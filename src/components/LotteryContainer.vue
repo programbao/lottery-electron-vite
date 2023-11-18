@@ -364,9 +364,9 @@ const rotateBall = () => {
       basicData.isLotting = false;
       // 改变奖品状态
       // changePrize();
-      if (!basicData.isReLottery) {
+      // if (!basicData.isReLottery) {
         bus.emit('changePrize')
-      }
+      // }
       basicData.isReLottery = false
       changePrizeStatus();
       // basicData.currentPrizeIndex--;
@@ -391,7 +391,6 @@ const changePrizeStatus = () => {
     curLucky = basicData.luckyUsers[type] || [];
 
   curLucky = curLucky.concat(basicData.currentLuckys);
-
   basicData.luckyUsers[type] = curLucky;
   basicData.lastTimePrizeIndex = basicData.currentPrizeIndex;
   if (basicData.currentPrize.count <= curLucky.length) {

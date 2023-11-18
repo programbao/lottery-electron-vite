@@ -3,7 +3,7 @@
     <div class="prize-mess">
       <label id="prizeType" class="prize-shine">{{currentPrize.name}}</label>
       <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>
-      ，剩余<label id="prizeLeft" class="prize-shine">{{currentPrize.count}}</label>个
+      ，剩余<label id="prizeLeft" class="prize-shine">{{prizesListConfig[currentPrize.type].surplusCount}}</label>个
     </div>
     <ul class="prize-list" ref="prizeList">
       <li 

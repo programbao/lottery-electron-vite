@@ -116,12 +116,16 @@ const confirm = async () => {
         basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
       ) {
         basicData.currentPrizeIndex = modifyCurrentIndex + 1;
+        // 纠正是否暂时下一个奖项状态 和 当前奖项是否继续
+        basicData.isNextPrize = false;
+        basicData.isContinueLottery = true;
         bus.emit('adjustCurrentPrize', {
           beforeModifyPrize: beforeModifyPrize,
           byIndexModifyPrize: byIndexModifyPrize
         })
     }
-
+    // 纠正当前的奖项
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
     if (originLen !== basicData.prizes.length) {
       bus.emit('adjustCurrentPrize', { isReGet: true })
