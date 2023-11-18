@@ -10,12 +10,14 @@
       }"
       class="lucky-content" 
       :style="lucksContentStyle">
+      <div class="split-box"></div>
       <div 
         class="lucky-item" 
         v-for="(lucky, index) in currentLuckys" 
         v-html="getCardWithParentHtml(lucky, false, index, true, '', basicData, true)"
         :key="index">
       </div>
+      <div class="split-box"></div>
     </div>
     <button class="btn closeBtn" @click="closeBtn">
       Close
@@ -76,7 +78,7 @@ const lucksContentStyle = computed(() => {
     'justify-content': 'center',
     'margin-bottom': '8px',
     'opacity': basicData.isShowLuckyUser ? '0' : '1',
-    'overflow': 'hidden',
+    'overflow': 'auto',
     'padding': '2px',
     'transition': 'opacity .3s ease-in-out',
     'width': `calc(calc(${columnCount * luckysRowColObj.tileSize}px  + '1px') + '12px')`,
@@ -110,6 +112,9 @@ const closeBtn = () => {
   align-items: center;
   /* display: none; */
 }
+.lucky-content::-webkit-scrollbar {
+  display: none;
+}
 .lucky-item {
   margin: 10px;
 }
@@ -131,6 +136,10 @@ const closeBtn = () => {
   margin: 0;
 }
 
+.split-box {
+  width: 100vw;
+  height: 50px;
+}
 .slide-in-right {
 	-webkit-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	        animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;

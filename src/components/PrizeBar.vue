@@ -3,7 +3,7 @@
     <div class="prize-mess">
       <label id="prizeType" class="prize-shine">{{currentPrize.name}}</label>
       <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>
-      ，剩余<label id="prizeLeft" class="prize-shine">{{prizesListConfig[currentPrize.type].surplusCount}}</label>个
+      ，剩余<label id="prizeLeft" class="prize-shine">{{getItemPrizeConfig(currentPrize.type).surplusCount}}</label>个
     </div>
     <ul class="prize-list" ref="prizeList">
       <li 
@@ -12,8 +12,8 @@
         :id="'prize-item-' + item.type" 
         :class="[
           'prize-item', 
-          item.type == currentPrize.type && prizesListConfig[item.type].activeClassName != 'done' ? 'shine' : '',
-          prizesListConfig[item.type].activeClassName
+          item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? 'shine' : '',
+          getItemPrizeConfig(item.type).activeClassName == 'done' ? 'done' : ''
         ]">
             <div class="prize-img">
                 <img :src="item.img" :alt="item.otherName">
@@ -25,13 +25,13 @@
                         <div 
                           :id="'prize-bar-' + item.type" 
                           class="progress-bar progress-bar-danger progress-bar-striped active" 
-                          :style="prizesListConfig[item.type].style">
+                          :style="getItemPrizeConfig(item.type).style">
                         </div>
                     </div>
                     <div 
                       :id="'prize-count-' + item.type" 
                       class="prize-count-left">
-                        {{prizesListConfig[item.type].surplusCount + "/" + item.count}}
+                        {{getItemPrizeConfig(item.type).surplusCount + "/" + item.count}}
                     </div>
                 </div>
             </div>
@@ -55,6 +55,13 @@ const prizes = computed(() => {
 const currentPrize = computed(() => {
   return basicData.prizes[basicData.currentPrizeIndex];
 });
+const getItemPrizeConfig = (type) => {
+  let itemPrizeConfig = prizesListConfig.value[type];
+  if (!itemPrizeConfig) {
+    itemPrizeConfig = {};
+  }
+  return itemPrizeConfig;
+}
 // 滑动到特定位置
 const scrollTop = () => {
   nextTick(() => {
@@ -154,8 +161,8 @@ const changePrize = () => {
   setPrizeData({currentPrizeIndex: basicData.currentPrizeIndex, count: luckyCount});
 }
 let isInitPrizeData = false
-const initHandlePrizeData = () => {
-    if (!basicData.prizes || isInitPrizeData) return
+const initHandlePrizeData = (toInit = false) => {
+    if (!toInit && (!basicData.prizes || isInitPrizeData)) return
     isInitPrizeData = true
     const totalPrizeLen = basicData.prizes.length - 1
     const currentIndex = basicData.currentPrizeIndex
@@ -184,7 +191,7 @@ const initHandlePrizeData = () => {
       // elements.text && (elements.text.textContent = "0" + "/" + item.count);
     })
     // 滚动位置
-    scrollTop();
+    !toInit && scrollTop();
     for (let i = 0; i < needCount + 1; i++) {
       let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
       if (itemLucky === undefined) {
@@ -229,7 +236,7 @@ onBeforeMount(() => {
 const adjustCurrentPrize = (data) => {
   let { beforeModifyPrize, byIndexModifyPrize, isReGet } = data
   if (isReGet) {
-    initHandlePrizeData();
+    initHandlePrizeData(true);
   } else {
     const modifyType = byIndexModifyPrize.type
     prizesListConfig.value[beforeModifyPrize.type].activeClassName = ''

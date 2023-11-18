@@ -98,7 +98,7 @@ const confirm = async () => {
     const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
     const byIndexModifyPrize = prizesData[modifyLastTimeIndex];
     const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
-    const originLen = basicData.prizes.length;
+    // const originLen = basicData.prizes.length;
     basicData.prizes = prizesData;
     dialogTableVisible.value = false;
     // 更正当前的奖项索引
@@ -127,9 +127,13 @@ const confirm = async () => {
     // 纠正当前的奖项
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
-    if (originLen !== basicData.prizes.length) {
+
+    if (addNum) {
       bus.emit('adjustCurrentPrize', { isReGet: true })
     }
+    // 重置添加和删除的记录数量
+    cutNum = 0;
+    addNum = 0;
     ElMessage({
       message: '设置成功',
       type: 'success',

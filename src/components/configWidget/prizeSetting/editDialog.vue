@@ -20,6 +20,7 @@
       ref="ruleFormRef"
     >
       <div class="tips" v-if="!!luckyUsers[formLabelAlign.type]">该奖项已有中奖名单，名称不能修改</div> 
+      <div class="tips" v-if="!!luckyUsers[prevPrizesData.type]">前面奖项已有中奖名单，抽取数和图片不能修改</div> 
       <el-row :gutter="24">
         <el-col :span="12">
           <el-form-item label="名称" prop="name">
@@ -59,7 +60,7 @@
       <el-row :gutter="24">
         <el-col :span="24">
           <el-form-item label="图片" prop="img">
-            <div class="upload add" @click="importFile">
+            <div class="upload add" @click="importFile(!!luckyUsers[prevPrizesData.type])">
               <el-image
                 v-if="formLabelAlign.img"
                 :disabled="!!luckyUsers[prevPrizesData.type]"
@@ -189,7 +190,8 @@ watch(
   }
 );
 
-const importFile = async () => {
+const importFile = async (disabled) => {
+  if (disabled) return
   let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
     formLabelAlign.value.img = fileUrl
