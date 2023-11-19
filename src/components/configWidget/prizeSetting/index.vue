@@ -151,20 +151,26 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .prize-setting > div {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 15.3%);
+  gap: 1.5%;
+  row-gap: 20px;
+  // display: flex;
   flex-wrap: wrap;
   padding: 20px;
   background-color: #f2fafe;
   border-radius: 10px;
 }
 .item-prize {
-  margin: 8px;
-  width: 13.5%;
+  // margin: 8px;
+  // margin: 1%;
+  box-sizing: border-box;
+  // width: 13.5%;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   position: relative;
-  height: 140px;
+  // height: 140px;
   padding-bottom: 15px;
   .prize-text {
     // width: 100px;

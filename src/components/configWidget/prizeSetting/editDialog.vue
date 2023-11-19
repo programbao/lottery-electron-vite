@@ -219,6 +219,9 @@ const confirm = async () => {
   // text-align: left;
   // padding-left: 30px;
 }
+.el-input-number {
+  width: 100% !important;
+}
 .upload {
   // margin: 0.90%;
   width: 33.5%;
@@ -226,7 +229,11 @@ const confirm = async () => {
   border: 1px solid #ccc;
   border-radius: 5px;
   position: relative;
-  height: 140px;
+  height: 200px;
+  .el-image {
+    width: 100%;
+    height: 100%;
+  }
   &:hover {
     border-color: #409eff;
     .mark-operation {

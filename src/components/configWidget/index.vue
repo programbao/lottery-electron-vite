@@ -31,6 +31,11 @@
           @cutPrize="cutPrize"
           @addPrize="addPrize"
           ref="prizeSettingRef" />
+        <div class="setting-title">
+          <div class="left">卡片设置</div>
+        </div>
+        <cardSetting />
+
       </div>
     </div>
   </el-dialog>
@@ -43,8 +48,9 @@ import bus from '../../libs/bus'
 import { initMoveEvent } from './moveEvent'
 import { lotteryDataStore } from '../../store'
 import prizeSetting from './prizeSetting/index.vue'
+import cardSetting from './cardSetting/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(false);
+const dialogTableVisible = ref(true);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
@@ -148,7 +154,7 @@ const confirm = async () => {
 .base-modal-dialog.isMoveDialog {
   height: fit-content;
   box-shadow: 0px 2px 8px 0px rgba(51, 51, 51, 0.15);
-  top: 15vh;
+  // top: 15vh;
   // left: 20%;
   right: auto;
   bottom: auto;
@@ -164,6 +170,7 @@ const confirm = async () => {
     border-bottom: 1px solid #e6e6e6;
     padding: 16px;
     cursor: move;
+    margin: 0;
     .el-dialog__title {
       font-weight: 500;
       font-size: 16px;
@@ -175,6 +182,22 @@ const confirm = async () => {
   }
   .el-dialog__body {
     padding-top: 0px;
+    height: 80vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar{
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track{
+      background: rgb(239, 239, 239);
+      border-radius:2px;
+    }
+    &::-webkit-scrollbar-thumb{
+      background: #bfbfbf;
+      border-radius:10px;
+    }
+    &::-webkit-scrollbar-thumb:hover{
+      background: #333;
+    }
   }
 }
 .item-setting .setting-title {
@@ -183,6 +206,7 @@ const confirm = async () => {
     font-size: 14px;
     padding: 10px;
     font-weight: 700;
+    margin-top: 20px;
    .right {
     cursor: pointer;
     color: #409eff;

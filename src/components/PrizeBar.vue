@@ -25,7 +25,9 @@
                         <div 
                           :id="'prize-bar-' + item.type" 
                           class="progress-bar progress-bar-danger progress-bar-striped active" 
-                          :style="getItemPrizeConfig(item.type).style">
+                          :style="{
+                            width: (getItemPrizeConfig(item.type).surplusCount / item.count).toFixed(2) * 100 + '%',
+                          }">
                         </div>
                     </div>
                     <div 
@@ -142,8 +144,8 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   //   return;
   // }
 
-  let percent = (count / totalCount).toFixed(2);
-  prizesListConfig.value[type].style.width =(count / totalCount).toFixed(2);
+  // let percent = (count / totalCount).toFixed(2);
+  // prizesListConfig.value[type].style.width =(count / totalCount).toFixed(2);
   // elements.bar && (elements.bar.style.width = percent * 100 + "%");
   prizesListConfig.value[type].surplusCount = count;
   // elements.text && (elements.text.textContent = count + "/" + totalCount);
@@ -177,9 +179,9 @@ const initHandlePrizeData = (toInit = false) => {
         surplusCount: item.count,
         activeClassName: "",
         defaultClassName: "prize-item",
-        style: {
-          width: "100%" 
-        }
+        // style: {
+        //   width: "100%" 
+        // }
       }
       // const elements = {
       //   box: document.querySelector(`#prize-item-${type}`),
@@ -243,7 +245,7 @@ const adjustCurrentPrize = (data) => {
     const adjustPrizeConfig = prizesListConfig.value[modifyType]
     adjustPrizeConfig.activeClassName = 'shine'
     adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - basicData.luckyUsers[modifyType].length;
-    adjustPrizeConfig.style.width = (adjustPrizeConfig.surplusCount / byIndexModifyPrize.count).toFixed(2) * 100 + '%';
+    // adjustPrizeConfig.style.width = (adjustPrizeConfig.surplusCount / byIndexModifyPrize.count).toFixed(2) * 100 + '%';
   }
 }
 bus.on('adjustCurrentPrize', adjustCurrentPrize)
