@@ -34,7 +34,9 @@
         <div class="setting-title">
           <div class="left">卡片设置</div>
         </div>
-        <cardSetting />
+        <cardSetting 
+          ref="cardSettingRef"
+          :key="dialogTableVisible" />
 
       </div>
     </div>
@@ -83,7 +85,10 @@ const configList = [
   "卡片排列"
 ]
 const prizeSettingRef = ref();
-const confirm = async () => {
+const cardSettingRef = ref();
+// 处理奖项相关设置
+const handlePrizesSetting = async () => {
+  let isSuccess = true
   const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
   // 删除不必存的字段
   const excludeFields = ['index', 'isHasLucky'];
@@ -94,10 +99,10 @@ const confirm = async () => {
   })
   const prizesDataStr = JSON.stringify(prizesData);
   if (prizesDataStr === JSON.stringify(basicData.prizes)) {
-    dialogTableVisible.value = false;
-    return
+    // dialogTableVisible.value = false;
+    return true
   }
-  const isPass = await myApi.savePrizesConfig(prizesDataStr);
+  const isPass = await myApi.savePrizesConfig(prizesDataStr, 'prizes');
   if (isPass) {
     const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
     const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;
@@ -106,7 +111,7 @@ const confirm = async () => {
     const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
     // const originLen = basicData.prizes.length;
     basicData.prizes = prizesData;
-    dialogTableVisible.value = false;
+    // dialogTableVisible.value = false;
     // 更正当前的奖项索引
     basicData.currentPrizeIndex = modifyCurrentIndex;
     // 更正上一轮的奖项索引
@@ -140,10 +145,42 @@ const confirm = async () => {
     // 重置添加和删除的记录数量
     cutNum = 0;
     addNum = 0;
+    // ElMessage({
+    //   message: '设置成功',
+    //   type: 'success',
+    // });
+    isSuccess = true
+  } else {
+    isSuccess = false
+  } 
+  return isSuccess
+}
+// 处理卡片排列设置
+const handleCardSetting = async () => {
+  let isPassSetting = true;
+  const cardDataStr =JSON.stringify(cardSettingRef.value.beforeLotteryLayout);
+  const beforeLotteryLayoutStr = JSON.stringify(basicData.beforeLotteryLayout);
+  if (beforeLotteryLayoutStr === cardDataStr) {
+    return true
+  }
+  const isPass = await myApi.savePrizesConfig(cardDataStr, 'beforeLotteryLayout');
+  if (isPass) {
+    basicData.beforeLotteryLayout = JSON.parse(cardDataStr);
+  } else {
+    isPassSetting = false;
+  }
+  bus.emit('setCardSetting')
+  return isPassSetting;
+}
+const confirm = async () => {
+  const isPrizeSettingPass = await handlePrizesSetting();
+  const isCardSettingPass = await handleCardSetting();
+  if (isPrizeSettingPass && isCardSettingPass) {
     ElMessage({
       message: '设置成功',
       type: 'success',
     });
+    dialogTableVisible.value = false;
   } else {
     ElMessage.error('设置失败')
   }
@@ -203,7 +240,7 @@ const confirm = async () => {
 .item-setting .setting-title {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 16px;
     padding: 10px;
     font-weight: 700;
     margin-top: 20px;

@@ -22,8 +22,8 @@ let targets = {
 let isAnimating = false;
 let rotateObj;
 
-
-
+let ROW_COUNT;
+let COLUMN_COUNT;
 
 let member = basicData.users.slice();
 let paramsFields = {
@@ -34,8 +34,6 @@ let paramsFields = {
   isBold:  false,
   showTable: basicData.leftUsers.length === basicData.users.length,
   totalMember: member.length,
-  ROW_COUNT: basicData.rowCount,
-  COLUMN_COUNT: basicData.columnCount,
   HIGHLIGHT_CELL: [],
   // isLotting: false
 }
@@ -149,9 +147,9 @@ const enterAnimate = () => {
 
   paramsFields.threeDCards = [];
   let index = 0;
-  for (let i = 0; i < paramsFields.ROW_COUNT; i++) {
+  for (let i = 0; i < ROW_COUNT; i++) {
     if (index > paramsFields.totalMember - 1) break;
-    for (let j = 0; j < paramsFields.COLUMN_COUNT; j++) {
+    for (let j = 0; j < COLUMN_COUNT; j++) {
       if (index > paramsFields.totalMember - 1) break;
       let isBold = paramsFields.HIGHLIGHT_CELL.includes(i + "-" + j);
       let user = paramsFields.member[index % paramsFields.totalMember];
@@ -227,6 +225,22 @@ const cleanUp = () => {
   }
 };
 
+const setRenderDomStyle = () => {
+  let containerDom = document.getElementById("container");
+  const { rowCount, columnCount, rowGap, columnGap, scale, top, left } = basicData.beforeLotteryLayout;
+  renderDomStyle = `
+    grid-template-columns: repeat(${columnCount}, 1fr);
+    grid-template-rows: repeat(${rowCount}, 1fr);  
+    grid-row-gap: ${rowGap};
+    grid-column-gap: ${columnGap};
+    transform: scale(${scale});
+    top: ${top};
+    left: ${left};
+    position: fixed;
+    display: grid;
+  `
+  containerDom.style = renderDomStyle
+}
 // 初始化卡片
 const initCards = (isInit = true) => {
   let containerHtml = '';
@@ -234,9 +248,9 @@ const initCards = (isInit = true) => {
   let containerDom = document.getElementById("container");
   containerDom.innerHTML = '';
   containerDom.classList.add('slide-in-fwd-center')
-  for (let i = 0; i < paramsFields.ROW_COUNT; i++) {
+  for (let i = 0; i < ROW_COUNT; i++) {
     if (index > paramsFields.totalMember - 1) break;
-    for (let j = 0; j < paramsFields.COLUMN_COUNT; j++) {
+    for (let j = 0; j < COLUMN_COUNT; j++) {
       if (index > paramsFields.totalMember - 1) break;
       let isBold = paramsFields.HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
       let user = paramsFields.member[index % paramsFields.totalMember];
@@ -251,24 +265,8 @@ const initCards = (isInit = true) => {
       index++;
     }
   }
-  let containerConfigStyle = basicData.containerConfigStyle;
-  // renderer = new THREE.CSS3DRenderer();
-  // renderer.setSize(window.innerWidth, window.innerHeight);
-  // document.getElementById("container").appendChild(renderer.domElement);
-  // containerDom = renderer.domElement;
   containerDom.innerHTML = containerHtml;
-  renderDomStyle = `
-    grid-template-columns: repeat(${basicData.columnCount}, 1fr);
-    grid-template-rows: repeat(${basicData.rowCount}, 1fr);  
-    grid-row-gap: 20px;
-    grid-column-gap: 20px;
-    transform: scale(${containerConfigStyle.scale});
-    top: ${containerConfigStyle.top};
-    left: ${containerConfigStyle.left};
-    position: fixed;
-    display: grid;
-  `
-  containerDom.style = renderDomStyle
+  setRenderDomStyle(); 
   document.querySelectorAll('.element').forEach(element => {
     paramsFields.threeDCards.push(element);
   })
@@ -286,11 +284,12 @@ const initHandleData = () => {
     isBold:  false,
     showTable: basicData.leftUsers.length === basicData.users.length,
     totalMember: member.length,
-    ROW_COUNT: basicData.rowCount,
-    COLUMN_COUNT: basicData.columnCount,
     HIGHLIGHT_CELL: [],
     // isLotting: false
   }
+  
+  ROW_COUNT = basicData.beforeLotteryLayout.rowCount;
+  COLUMN_COUNT = basicData.beforeLotteryLayout.columnCount;
   cancelAnimationFrame(animationId);
   initCards();
   // animate();
@@ -669,6 +668,7 @@ bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
+bus.on('setCardSetting', setRenderDomStyle)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
@@ -676,6 +676,7 @@ onBeforeUnmount(() => {
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
   bus.off('exportData', exportData)
+  bus.off('setCardSetting', setRenderDomStyle)
 })
 onMounted(() => {
   nextTick(() => {

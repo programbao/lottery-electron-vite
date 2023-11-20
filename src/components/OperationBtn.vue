@@ -66,6 +66,7 @@ const noBeginLottery = ref(true);
 const isFullScreen = ref(false)
 const enterLottery = () => {
   bus.emit('enterLottery')
+  basicData.isEnterLottery = true
 }
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
@@ -94,6 +95,7 @@ const exportData = () => {
 const resetBtnClick = () => {
   bus.emit('resetBtnClick')
   noBeginLottery.value = true;
+  basicData.isEnterLottery = true
 }
 const toggleConfig = () => {
   bus.emit('toggleConfig')

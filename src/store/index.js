@@ -8,8 +8,15 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       users: [], //所有人员
       luckyUsers: {}, //已中奖人员
       leftUsers: [], //未中奖人员
-      columnCount: 17, // 列数
-      rowCount: 10, // 行数
+      beforeLotteryLayout: {
+        columnCount: 17, // 列数
+        rowCount: 10, // 行数
+        rowGap: '10px', // 行间距
+        columnGap: '10px', // 列间距
+        scale: 0.5, // 容器卡片缩放比例
+        top: '-23vh',
+        left: '-8vw',
+      },
       company: '',
       totalCards: 0, // 总牌数
       eachCount: [18, 10, 1, 1, 5, 3, 2, 10], // 每次抽取的奖品个数
@@ -27,6 +34,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       isContinueLottery: false, // 是否继续抽奖
       isReLottery: false, // 是否重新抽奖
       isShowPrizeMark: false, // 是否显示奖品
+      isEnterLottery: false, // 是否进入抽奖
       dialogStyle: {
         top: '4vh',
         left: '15%'
@@ -39,11 +47,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
 
       }, // 中奖行列对象
-      containerConfigStyle: {
-        scale: 0.5, // 容器卡片缩放比例
-        top: '-23vh',
-        left: '-8vw',
-      },
       luckyCardConfigStyle: {
         cardWidth: "16vw", // 抽奖牌宽度
         cardHeight: "23vh", // 抽奖牌高度
@@ -83,11 +86,12 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         // lotteryData.setPrizeConfig(config.prizeConfig);
         this.prizeConfig = config.prizeConfig
         this.prizes = config.prizeConfig.prizes;
+        Object.assign(this, config.prizeConfig);
       }
       // 抽奖用户
       Object.assign(this, usersData);
       // 总牌数
-      this.totalCards = this.columnCount * this.rowCount;
+      this.totalCards = this.beforeLotteryLayout.columnCount * this.beforeLotteryLayout.rowCount;
 
       // 每次抽取的奖品个数
       this.eachCount = this.prizes.map(prize => prize.eachCount);

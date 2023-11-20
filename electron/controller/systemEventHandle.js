@@ -24,7 +24,8 @@ const savePrizesConfig = () => {
     let isPass = true
     try {
       const data = JSON.parse(args[0]);
-      global.sharedObject.cfg['prizes'] = data;
+      const saveField = args[1]
+      global.sharedObject.cfg[saveField] = data;
       await saveDataFile(global.sharedObject.cfg, "prizesConfig.json");
     } catch (error) {
       isPass = false
@@ -33,7 +34,6 @@ const savePrizesConfig = () => {
     return isPass;
   })
 }
-
 module.exports = {
   toggleFullScreen,
   savePrizesConfig
