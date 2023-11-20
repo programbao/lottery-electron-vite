@@ -79,7 +79,7 @@ const beforeLotteryLayout = ref({
   rowCount: 3,
   rowGap: '10px', // 行间距
   columnGap: '10px', // 列间距
-  scale: 0.5, 
+  scale: 1, 
   left: 10,
   top: 10
 })

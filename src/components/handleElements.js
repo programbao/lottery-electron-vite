@@ -64,8 +64,8 @@ export const  getCardHTML = (user, basicData, isLucky) => {
       <div class="image-text-container">
         <img 
           src="http://172.90.0.10/_nuxt/img/logo.acb8f74.png" 
-          style="width: 100%;
-          height: 20px;
+          style="${cardConfigStyle.imgWidth};
+          height: ${cardConfigStyle.imgHeight};
           object-fit: contain;">
       </div>
     </div>`;
@@ -84,6 +84,7 @@ export const  getCardHTML = (user, basicData, isLucky) => {
       style="
         top: ${cardConfigStyle.nameTop};
         font-size: ${cardConfigStyle.nameFontSize}px; 
+        line-height: ${cardConfigStyle.nameFontSize}px;
       "
       class="name">${user[2]}</div>`;
   
@@ -92,11 +93,13 @@ export const  getCardHTML = (user, basicData, isLucky) => {
         style="
           bottom: ${cardConfigStyle.detailsBottom};
           font-size: ${cardConfigStyle.detailsFontsize}px;
+          line-height: ${cardConfigStyle.detailsFontsize}px;
         "
         class="details">
-          <span style="display: none" class="cardIdTxt" id="card-${user[0]}">${user[0]}</span>
-          <br/>
-          <span id="user-dept">${user[1]}</span>
+          <span class="cardIdTxt" id="card-${user[0]}">${user[0]}</span>
+          <div style="height: ${cardConfigStyle.detailsFontsize - 4}px"></div>
+          <span 
+            id="user-dept">${user[1]}</span>
       </div>`;
 
   var cardHTML = `

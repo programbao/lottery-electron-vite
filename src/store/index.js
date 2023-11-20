@@ -14,8 +14,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         rowGap: '10px', // 行间距
         columnGap: '10px', // 列间距
         scale: 0.5, // 容器卡片缩放比例
-        top: '-23vh',
-        left: '-8vw',
+        top: '17vh',
+        left: '27vw',
       },
       company: '',
       totalCards: 0, // 总牌数
@@ -58,14 +58,16 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         detailsFontsize: 18, // 详情字体大小
       },
       cardConfigStyle: {
-        cardWidth: "7vw", // 抽奖牌宽度
-        cardHeight: "13vh", // 抽奖牌高度
-        companyTop: 19, // 公司logo距离顶部的距离
-        companyFontSize: 16, // 公司logo字体大小
-        nameTop: '4vh', // 名称距离顶部的距离
-        nameFontSize: 16, // 名称字体大小
-        detailsBottom: '1vh', // 详情距离底部的距离
-        detailsFontsize: 16, // 详情字体大小
+        cardWidth: "3vw", // 抽奖牌宽度
+        cardHeight: "6vh", // 抽奖牌高度
+        companyTop: '0.05vh', // 公司logo距离顶部的距离
+        companyFontSize: 8, // 公司logo字体大小
+        nameTop: '1.5vh', // 名称距离顶部的距离
+        nameFontSize: 8, // 名称字体大小
+        detailsBottom: '0.1vh', // 详情距离底部的距离
+        detailsFontsize: 8, // 详情字体大小
+        imgWidth: '100%',
+        imgHeight: '10px'
       }
     }
   },

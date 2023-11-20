@@ -65,5 +65,14 @@
       "img": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/img/idCardRecharge.png"
     }
   ],
-  "company": "IWIP"
+  "company": "IWIP",
+  "beforeLotteryLayout": {
+    "columnCount": 17,
+    "rowCount": 10,
+    "rowGap": "10px",
+    "columnGap": "20px",
+    "scale": 1,
+    "top": "17vh",
+    "left": "27vw"
+  }
 }

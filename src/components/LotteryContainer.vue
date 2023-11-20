@@ -226,6 +226,7 @@ const cleanUp = () => {
 };
 
 const setRenderDomStyle = () => {
+  if (basicData.isEnterLottery) return;
   let containerDom = document.getElementById("container");
   const { rowCount, columnCount, rowGap, columnGap, scale, top, left } = basicData.beforeLotteryLayout;
   renderDomStyle = `
@@ -233,12 +234,19 @@ const setRenderDomStyle = () => {
     grid-template-rows: repeat(${rowCount}, 1fr);  
     grid-row-gap: ${rowGap};
     grid-column-gap: ${columnGap};
-    transform: scale(${scale});
     top: ${top};
     left: ${left};
     position: fixed;
     display: grid;
   `
+  
+  anime({
+    targets: "#container",
+    scale: [0, scale],
+    easing: 'cubicBezier(0.250, 0.460, 0.450, 0.940)',
+    duration: 400
+  })
+    
   containerDom.style = renderDomStyle
 }
 // 初始化卡片
@@ -266,7 +274,9 @@ const initCards = (isInit = true) => {
     }
   }
   containerDom.innerHTML = containerHtml;
-  setRenderDomStyle(); 
+  nextTick(() => {
+    setRenderDomStyle();
+  })
   document.querySelectorAll('.element').forEach(element => {
     paramsFields.threeDCards.push(element);
   })
@@ -294,7 +304,7 @@ const initHandleData = () => {
   initCards();
   // animate();
   // 随机切换背景和人员信息
-  shineCard(basicData, paramsFields);
+  // shineCard(basicData, paramsFields);
 }
 // 球体旋转
 const rotateBall = () => {
@@ -720,10 +730,8 @@ onMounted(() => {
 
 .element .company {
   position: absolute;
-  top: 0.5vh;
   right: 0;
   width: 100%;
-  font-size: 2vh;
   color: rgba(127, 255, 255, 0.75);
 }
 
@@ -757,7 +765,7 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.85);
 }
 
-
+/*
 .slide-in-fwd-center {
 	-webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	        animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
@@ -786,4 +794,5 @@ onMounted(() => {
     opacity: 1;
   }
 }
+*/
 </style>
