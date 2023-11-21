@@ -52,7 +52,7 @@ import { lotteryDataStore } from '../../store'
 import prizeSetting from './prizeSetting/index.vue'
 import cardSetting from './cardSetting/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(true);
+const dialogTableVisible = ref(false);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });

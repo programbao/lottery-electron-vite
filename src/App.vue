@@ -8,6 +8,7 @@ import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
 import LuckyUser from "./components/LuckyUser.vue"
 import ConfigDialog from "./components/configWidget/index.vue"
+import ScreenCard from "./components/ScreenCard.vue"
 // 引入store
 import { lotteryDataStore } from './store'
 const lotteryData = lotteryDataStore();
@@ -39,6 +40,7 @@ onMounted(async () => {
     <PrizeMark />
     <LuckyUser />
     <ConfigDialog />
+    <ScreenCard />
     <!-- <button @click="importFile">导入</button> -->
   </div>
 </template>

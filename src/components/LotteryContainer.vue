@@ -166,6 +166,7 @@ const enterAnimate = () => {
       object.position.y = Math.random() * 4000 - 2000;
       object.position.z = Math.random() * 4000 - 2000;
       scene.add(object);
+      object.scale.set(1.5, 1.5, 1.5)
       paramsFields.threeDCards.push(object);
       index++;
     }
@@ -225,58 +226,8 @@ const cleanUp = () => {
   }
 };
 
-const setRenderDomStyle = () => {
-  if (basicData.isEnterLottery) return;
-  let containerDom = document.getElementById("container");
-  const { rowCount, columnCount, rowGap, columnGap, scale, top, left } = basicData.beforeLotteryLayout;
-  renderDomStyle = `
-    grid-template-columns: repeat(${columnCount}, 1fr);
-    grid-template-rows: repeat(${rowCount}, 1fr);  
-    grid-row-gap: ${rowGap};
-    grid-column-gap: ${columnGap};
-    top: ${top};
-    left: ${left};
-    position: fixed;
-    display: grid;
-  `
-  
-  anime({
-    targets: "#container",
-    scale: [0, scale],
-    easing: 'cubicBezier(0.250, 0.460, 0.450, 0.940)',
-    duration: 400
-  })
-    
-  containerDom.style = renderDomStyle
-}
 // 初始化卡片
 const initCards = (isInit = true) => {
-  let containerHtml = '';
-  let index = 0;
-  let containerDom = document.getElementById("container");
-  containerDom.innerHTML = '';
-  containerDom.classList.add('slide-in-fwd-center')
-  for (let i = 0; i < ROW_COUNT; i++) {
-    if (index > paramsFields.totalMember - 1) break;
-    for (let j = 0; j < COLUMN_COUNT; j++) {
-      if (index > paramsFields.totalMember - 1) break;
-      let isBold = paramsFields.HIGHLIGHT_CELL.includes(i + "-" + j) && isInit;
-      let user = paramsFields.member[index % paramsFields.totalMember];
-      containerHtml += getCardWithParentHtml(
-        user,
-        isBold,
-        index,
-        paramsFields.showTable,
-        `${i} - ${j}`,
-        basicData
-      );
-      index++;
-    }
-  }
-  containerDom.innerHTML = containerHtml;
-  nextTick(() => {
-    setRenderDomStyle();
-  })
   document.querySelectorAll('.element').forEach(element => {
     paramsFields.threeDCards.push(element);
   })
@@ -678,7 +629,7 @@ bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
-bus.on('setCardSetting', setRenderDomStyle)
+// bus.on('setCardSetting', setRenderDomStyle)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
@@ -686,7 +637,7 @@ onBeforeUnmount(() => {
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
   bus.off('exportData', exportData)
-  bus.off('setCardSetting', setRenderDomStyle)
+  // bus.off('setCardSetting', setRenderDomStyle)
 })
 onMounted(() => {
   nextTick(() => {
@@ -737,10 +688,11 @@ onMounted(() => {
 
 .element .name {
   position: absolute;
-  top: 5.0vh;
+  /*top: 5.0vh;
   left: 0;
   right: 0;
   font-size: 3vh;
+  */
   font-weight: bold;
   color: rgba(255, 255, 255, 0.75);
   text-shadow: 0 0 0vh rgba(0, 255, 255, 0.95);
@@ -748,10 +700,11 @@ onMounted(() => {
 
 .element .details {
   position: absolute;
-  bottom: 1.2vh;
+ /* bottom: 1.2vh;
   left: 0;
   right: 0;
   font-size: 2.0vh;
+ */
   color: rgba(127, 255, 255, 0.75);
 }
 .highlight {
