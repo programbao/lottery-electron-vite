@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, nextTick } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import bus from '../libs/bus'
@@ -114,7 +114,12 @@ const getUser = (index) => {
   return user
 }
 bus.on('setCardSetting', toAnimate)
-
+bus.on('resetBtnClick', toAnimate)
+onMounted(() => {
+  nextTick(() => {
+    toAnimate()
+  })
+})
 </script>
 
 <style lang="scss" scoped>

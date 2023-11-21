@@ -128,14 +128,12 @@ const onWindowResize = () => {
   render();
 }
 
-// 球父盒子样式
-let renderDomStyle = '';
 
 const enterAnimate = () => {
   let containerDom = document.getElementById("container");
+  document.querySelector('.screen-card').style.display = 'none'
   containerDom.innerHTML = '';
   containerDom.style = '';
-  containerDom.classList.remove('slide-in-fwd-center');
   camera = new THREE.PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
@@ -583,7 +581,8 @@ const resetBtnClick = async () => {
   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
   basicData.isShowLuckyUser = false;
   basicData.isContinueLottery = false
-  document.getElementById("container").classList.remove('slide-in-fwd-center');
+  // document.getElementById("container").classList.remove('slide-in-fwd-center');
+  document.querySelector('.screen-card').style.display = 'grid'
   bus.emit('hidePrizeMark');
   // 移除闪烁定时器
   removeShineCard();
