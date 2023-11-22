@@ -74,5 +74,18 @@
     "scale": 1,
     "top": "17vh",
     "left": "27vw"
+  },
+  "cardConfigStyle": {
+    "cardWidth": "3vw",
+    "cardHeight": "6vh",
+    "logo": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/img/logo.png",
+    "companyTop": "0.05vh",
+    "companyFontSize": "8px",
+    "nameTop": "1.5vh",
+    "nameFontSize": "8px",
+    "detailsBottom": "0.1vh",
+    "detailsFontSize": "8px",
+    "imgWidth": "100%",
+    "imgHeight": "10px"
   }
 }

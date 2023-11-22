@@ -15,13 +15,14 @@
       }">
       <div 
         class="company"
+        v-if="cardConfigStyle.logo"
         :style="{
-          top: cardConfigStyle.companyTop + 'px',
-          'font-size': cardConfigStyle.companyFontSize + 'px'
+          top: cardConfigStyle.companyTop,
+          'font-size': cardConfigStyle.companyFontSize
         }">
         <div class="image-text-container">
           <img 
-            src="http://172.90.0.10/_nuxt/img/logo.acb8f74.png" 
+            :src="cardConfigStyle.logo" 
             :style="{
               width: cardConfigStyle.imgWidth,
               height: cardConfigStyle.imgHeight,
@@ -43,20 +44,20 @@
       :style="{
         'width': '100%',
         'top': cardConfigStyle.nameTop,
-        'font-size': cardConfigStyle.nameFontSize + 'px',
-        'line-height': cardConfigStyle.nameFontSize + 'px'
+        'font-size': cardConfigStyle.nameFontSize,
+        'line-height': cardConfigStyle.nameFontSize
       }" class="name">
       {{getUser(index)[2]}}
     </div>
     <div 
       :style="{
         bottom: cardConfigStyle.detailsBottom,
-        fontSize: cardConfigStyle.detailsFontsize + 'px',
-        lineHeight: cardConfigStyle.detailsFontsize + 'px'
+        fontSize: cardConfigStyle.detailsFontSize,
+        lineHeight: cardConfigStyle.detailsFontSize
       }"
       class="details">
         <span class="cardIdTxt" :id="'card-' + getUser(index)[0]">{{getUser(index)[0]}}</span>
-        <div :style="{height: cardConfigStyle.detailsFontsize - 4 + 'px'}"></div>
+        <div :style="{height: 'calc(' + cardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
         <span id="user-dept">{{getUser(index)[1]}}</span>
     </div>
     </div>
@@ -128,5 +129,8 @@ onMounted(() => {
   position: fixed;
   top: 0;
   left: 0;
+  .details {
+    width: 100%;
+  }
 }
 </style>

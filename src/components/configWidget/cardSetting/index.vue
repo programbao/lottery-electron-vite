@@ -30,7 +30,41 @@
       </div>
     </div>
     <div class="before-lottery-layout">
-      <div class="header-txt">卡片样式设置</div>
+      <div class="header-txt">基础卡片样式设置</div>
+      <div class="layout-form">
+        <el-form
+          ref="form"
+          :model="cardConfigStyle"
+          label-width="auto"
+          label-position="top"
+          size="large"
+        >
+          <el-form-item v-for="item in cardStyleLabelArr" :key="item.field" :label="item.label" :prop="item.field">
+            <el-input-number
+              v-if="item.type === 'number'"
+              v-model="cardConfigStyle[item.field]"
+              :step="item.step ? item.step : 1"
+              controls-position="right"
+              size="large"
+            />
+            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile">
+              <el-image
+                v-if="cardConfigStyle.logo"
+                :src="cardConfigStyle.logo"
+                :zoom-rate="1.2"
+                :max-scale="7"
+                :min-scale="0.2"
+                :initial-index="0"
+                fit="contain"
+              /> 
+              <span v-else class="symbol">+</span>
+            </div>
+            <el-input 
+              v-else 
+              v-model="cardConfigStyle[item.field]"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +108,49 @@ const layoutFormArr = ref([
     step: '0.1'
   }
 ])
+const cardStyleLabelArr = ref([
+  {
+    label: '卡片宽度',
+    field: 'cardWidth',
+  },
+  {
+    label: '卡片高度',
+    field: 'cardHeight',
+  },
+  {
+    label: '卡牌图片logo',
+    field: 'logo',
+    type: 'img',
+  },
+  {
+    label: '图片logo宽度',
+    field: 'imgWidth',
+  },
+  {
+    label: '图片logo高度',
+    field: 'imgHeight',
+  },
+  {
+    label: 'logo距离顶部位置',
+    field: 'companyTop',
+  },
+  {
+    label: '名称距离顶部位置',
+    field: 'nameTop',
+  },
+  {
+    label: '名称字体大小',
+    field: 'nameFontSize',
+  },
+  {
+    label: '其他信息距离底部位置',
+    field: 'detailsBottom',
+  },
+  {
+    label: '其他信息字体大小',
+    field: 'detailsFontSize',
+  }
+])
 const beforeLotteryLayout = ref({
   rowCount: 3,
   rowCount: 3,
@@ -83,15 +160,36 @@ const beforeLotteryLayout = ref({
   left: 10,
   top: 10
 })
+const cardConfigStyle = ref({
+  cardWidth: "3vw", // 抽奖牌宽度
+  cardHeight: "6vh", // 抽奖牌高度
+  logo: "",
+  companyTop: '0.05vh', // 公司logo距离顶部的距离
+  companyFontSize: 8, // 公司logo字体大小
+  nameTop: '1.5vh', // 名称距离顶部的距离
+  nameFontSize: 8, // 名称字体大小
+  detailsBottom: '0.1vh', // 详情距离底部的距离
+  detailsFontSize: 8, // 详情字体大小
+  imgWidth: '100%',
+  imgHeight: '10px'
+})
+const importFile = async () => {
+  let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  if (fileUrl) {
+    cardConfigStyle.value.logo = fileUrl
+  }
+}
 const isEnterLottery = computed(() => {
   return basicData.isEnterLottery
 })
 onMounted(() => {
   beforeLotteryLayout.value = JSON.parse(JSON.stringify(basicData.beforeLotteryLayout))
+  cardConfigStyle.value = JSON.parse(JSON.stringify(basicData.cardConfigStyle))
 })
 // 暴露属性
 defineExpose({
-  beforeLotteryLayout
+  beforeLotteryLayout,
+  cardConfigStyle
 })
 </script>
 
@@ -125,6 +223,35 @@ defineExpose({
       .header-txt {
         margin-top: 0;
       }
+    }
+    .upload {
+      // margin: 0.90%;
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      position: relative;
+      line-height: 28px;
+      height: 28px;
+      .el-image {
+        width: 100%;
+        height: 100%;
+      }
+      &:hover {
+        border-color: #409eff;
+        .mark-operation {
+          opacity: 1;
+        }
+      }
+    }
+    .add {
+      border: 1px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: lighter;
+      cursor: pointer;
     }
   }
   .layout-form {

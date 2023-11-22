@@ -52,7 +52,7 @@ import { lotteryDataStore } from '../../store'
 import prizeSetting from './prizeSetting/index.vue'
 import cardSetting from './cardSetting/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(false);
+const dialogTableVisible = ref(true);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
@@ -156,7 +156,7 @@ const handlePrizesSetting = async () => {
   return isSuccess
 }
 // 处理卡片排列设置
-const handleCardSetting = async () => {
+const handleBeforeLotteryLayout = async () => {
   let isPassSetting = true;
   const cardDataStr =JSON.stringify(cardSettingRef.value.beforeLotteryLayout);
   const beforeLotteryLayoutStr = JSON.stringify(basicData.beforeLotteryLayout);
@@ -172,10 +172,32 @@ const handleCardSetting = async () => {
   bus.emit('setCardSetting')
   return isPassSetting;
 }
+const handleCardConfigStyle = async () => {
+  let isPassSetting = true;
+  const cardConfigStyleStr =JSON.stringify(cardSettingRef.value.cardConfigStyle);
+  const prevCardConfigStyleStr = JSON.stringify(basicData.cardConfigStyle);
+  if (prevCardConfigStyleStr === cardConfigStyleStr) {
+    return true
+  }
+  const isPass = await myApi.savePrizesConfig(cardConfigStyleStr, 'cardConfigStyle');
+  if (isPass) {
+    basicData.cardConfigStyle = JSON.parse(cardConfigStyleStr);
+  } else {
+    isPassSetting = false;
+  }
+  return isPassSetting; 
+}
+const passTxt = {
+  'prizesSetting': '奖项设置',
+  'beforeLotteryLayout': '抽奖前卡片排列及位置',
+  'cardConfigStyle': '卡片样式设置',
+}
 const confirm = async () => {
   const isPrizeSettingPass = await handlePrizesSetting();
-  const isCardSettingPass = await handleCardSetting();
-  if (isPrizeSettingPass && isCardSettingPass) {
+  const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
+  const isCardConfigStylePass = await handleCardConfigStyle();
+  
+  if (isPrizeSettingPass && isBeforeLotteryLayoutPass && isCardConfigStylePass) {
     ElMessage({
       message: '设置成功',
       type: 'success',
