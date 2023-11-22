@@ -620,7 +620,13 @@ const exportData = () => {
     console.log(result)
   })
 }
-
+const adjustCardConfigStyleSetting = () => {
+  if (!basicData.isEnterLottery) return
+  // 移除闪烁定时器
+  removeShineCard();
+  cleanUp();
+  enterAnimate();
+}
 // 监听数据
 // bus.on('initConfigDataEnd', initHandleData)
 bus.on('enterLottery', enterAnimate)
@@ -628,7 +634,7 @@ bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
-// bus.on('setCardSetting', setRenderDomStyle)
+bus.on('handleCardConfigStyleSetting', adjustCardConfigStyleSetting)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
@@ -636,7 +642,7 @@ onBeforeUnmount(() => {
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
   bus.off('exportData', exportData)
-  // bus.off('setCardSetting', setRenderDomStyle)
+  bus.off('handleCardConfigStyleSetting', adjustCardConfigStyleSetting)
 })
 onMounted(() => {
   nextTick(() => {
@@ -698,6 +704,7 @@ onMounted(() => {
 }
 
 .element .details {
+  width: 100%;
   position: absolute;
  /* bottom: 1.2vh;
   left: 0;

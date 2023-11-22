@@ -114,7 +114,7 @@ const getUser = (index) => {
   if (memberVal) user = memberVal[index % member.value.length] || {}
   return user
 }
-bus.on('setCardSetting', toAnimate)
+bus.on('handleBeforeLotteryLayoutSetting', toAnimate)
 bus.on('resetBtnClick', toAnimate)
 onMounted(() => {
   nextTick(() => {

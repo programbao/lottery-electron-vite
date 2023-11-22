@@ -58,8 +58,8 @@ export const  getCardHTML = (user, basicData, isLucky) => {
     <div 
       class="company"
       style="
-        top: ${cardConfigStyle.companyTop}px;
-        font-size: ${cardConfigStyle.companyFontSize}px;
+        top: ${cardConfigStyle.companyTop};
+        font-size: ${cardConfigStyle.companyFontSize};
       ">
       <div class="image-text-container">
         <img 
@@ -82,22 +82,24 @@ export const  getCardHTML = (user, basicData, isLucky) => {
   var nameElementHTML = `
     <div 
       style="
+        width: 100%;
         top: ${cardConfigStyle.nameTop};
-        font-size: ${cardConfigStyle.nameFontSize}px; 
-        line-height: ${cardConfigStyle.nameFontSize}px;
+        font-size: ${cardConfigStyle.nameFontSize}; 
+        line-height: ${cardConfigStyle.nameFontSize};
       "
       class="name">${user[2]}</div>`;
   
   var detailsElementHTML = `
       <div 
         style="
+          width: 100%;
           bottom: ${cardConfigStyle.detailsBottom};
-          font-size: ${cardConfigStyle.detailsFontsize}px;
-          line-height: ${cardConfigStyle.detailsFontsize}px;
+          font-size: ${cardConfigStyle.detailsFontSize};
+          line-height: ${cardConfigStyle.detailsFontSize};
         "
         class="details">
           <span class="cardIdTxt" id="card-${user[0]}">${user[0]}</span>
-          <div style="height: ${cardConfigStyle.detailsFontsize - 4}px"></div>
+          <div style="height: ${'calc(' + cardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
           <span 
             id="user-dept">${user[1]}</span>
       </div>`;

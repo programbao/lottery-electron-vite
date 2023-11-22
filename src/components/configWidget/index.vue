@@ -169,7 +169,7 @@ const handleBeforeLotteryLayout = async () => {
   } else {
     isPassSetting = false;
   }
-  bus.emit('setCardSetting')
+  bus.emit('handleBeforeLotteryLayoutSetting')
   return isPassSetting;
 }
 const handleCardConfigStyle = async () => {
@@ -185,6 +185,7 @@ const handleCardConfigStyle = async () => {
   } else {
     isPassSetting = false;
   }
+  bus.emit('handleCardConfigStyleSetting')
   return isPassSetting; 
 }
 const passTxt = {
