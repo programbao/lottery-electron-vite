@@ -50,12 +50,15 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       luckyCardConfigStyle: {
         cardWidth: "16vw", // 抽奖牌宽度
         cardHeight: "23vh", // 抽奖牌高度
-        companyTop: 19, // 公司logo距离顶部的距离
-        companyFontSize: 16, // 公司logo字体大小
+        logo: "",
+        companyTop: '19px', // 公司logo距离顶部的距离
+        companyFontSize: '16px', // 公司logo字体大小
         nameTop: '7vh', // 名称距离顶部的距离
-        nameFontSize: 18, // 名称字体大小
+        nameFontSize: '18px', // 名称字体大小
         detailsBottom: '1vh', // 详情距离底部的距离
-        detailsFontsize: 18, // 详情字体大小
+        detailsFontSize: '18px', // 详情字体大小
+        imgWidth: '100%',
+        imgHeight: '10px'
       },
       cardConfigStyle: {
         cardWidth: "3vw", // 抽奖牌宽度

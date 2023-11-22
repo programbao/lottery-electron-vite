@@ -634,7 +634,7 @@ bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
-bus.on('handleCardConfigStyleSetting', adjustCardConfigStyleSetting)
+bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
@@ -642,7 +642,7 @@ onBeforeUnmount(() => {
   bus.off('resetBtnClick', resetBtnClick)
   bus.off('reLottery', reLottery)
   bus.off('exportData', exportData)
-  bus.off('handleCardConfigStyleSetting', adjustCardConfigStyleSetting)
+  bus.off('cardConfigStyleSetting', adjustCardConfigStyleSetting)
 })
 onMounted(() => {
   nextTick(() => {

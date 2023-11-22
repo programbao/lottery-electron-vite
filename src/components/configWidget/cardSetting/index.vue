@@ -1,7 +1,7 @@
 <template>
   <div class="card-setting">
     <!-- <div class="title">排列设置</div> -->
-    <div class="before-lottery-layout">
+    <div class="lottery-layout">
       <div class="header-txt">抽奖前卡片排列及位置</div>
       <div class="tips" v-if="isEnterLottery">已进入抽奖，不能修改</div> 
       <div class="layout-form">
@@ -29,8 +29,8 @@
         </el-form>
       </div>
     </div>
-    <div class="before-lottery-layout">
-      <div class="header-txt">基础卡片样式设置</div>
+    <div class="lottery-layout">
+      <div class="header-txt">基础-卡片样式设置</div>
       <div class="layout-form">
         <el-form
           ref="form"
@@ -62,6 +62,43 @@
             <el-input 
               v-else 
               v-model="cardConfigStyle[item.field]"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <div class="lottery-layout">
+      <div class="header-txt">中奖-卡片样式设置</div>
+      <div class="layout-form">
+        <el-form
+          ref="form"
+          :model="luckyCardConfigStyle"
+          label-width="auto"
+          label-position="top"
+          size="large"
+        >
+          <el-form-item v-for="item in cardStyleLabelArr" :key="item.field" :label="item.label" :prop="item.field">
+            <el-input-number
+              v-if="item.type === 'number'"
+              v-model="luckyCardConfigStyle[item.field]"
+              :step="item.step ? item.step : 1"
+              controls-position="right"
+              size="large"
+            />
+            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile">
+              <el-image
+                v-if="luckyCardConfigStyle.logo"
+                :src="luckyCardConfigStyle.logo"
+                :zoom-rate="1.2"
+                :max-scale="7"
+                :min-scale="0.2"
+                :initial-index="0"
+                fit="contain"
+              /> 
+              <span v-else class="symbol">+</span>
+            </div>
+            <el-input 
+              v-else 
+              v-model="luckyCardConfigStyle[item.field]"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -173,6 +210,19 @@ const cardConfigStyle = ref({
   imgWidth: '100%',
   imgHeight: '10px'
 })
+const luckyCardConfigStyle = ref({
+  cardWidth: "16vw", // 抽奖牌宽度
+  cardHeight: "23vh", // 抽奖牌高度
+  logo: "",
+  companyTop: '19px', // 公司logo距离顶部的距离
+  companyFontSize: '16px', // 公司logo字体大小
+  nameTop: '7vh', // 名称距离顶部的距离
+  nameFontSize: '18px', // 名称字体大小
+  detailsBottom: '1vh', // 详情距离底部的距离
+  detailsFontSize: '18px', // 详情字体大小
+  imgWidth: '100%',
+  imgHeight: '10px'
+})
 const importFile = async () => {
   let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
@@ -185,11 +235,13 @@ const isEnterLottery = computed(() => {
 onMounted(() => {
   beforeLotteryLayout.value = JSON.parse(JSON.stringify(basicData.beforeLotteryLayout))
   cardConfigStyle.value = JSON.parse(JSON.stringify(basicData.cardConfigStyle))
+  luckyCardConfigStyle.value = JSON.parse(JSON.stringify(basicData.luckyCardConfigStyle))
 })
 // 暴露属性
 defineExpose({
   beforeLotteryLayout,
-  cardConfigStyle
+  cardConfigStyle,
+  luckyCardConfigStyle
 })
 </script>
 
@@ -209,7 +261,7 @@ defineExpose({
     text-align: left;
     padding-bottom: 10px;
   }
-  .before-lottery-layout {
+  .lottery-layout {
     .header-txt {
       text-indent: 10px;
       color: #fff;

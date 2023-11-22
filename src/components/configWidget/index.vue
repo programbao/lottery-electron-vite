@@ -172,22 +172,23 @@ const handleBeforeLotteryLayout = async () => {
   bus.emit('handleBeforeLotteryLayoutSetting')
   return isPassSetting;
 }
-const handleCardConfigStyle = async () => {
+const handleCardConfigStyle = async (handleStr) => {
   let isPassSetting = true;
-  const cardConfigStyleStr =JSON.stringify(cardSettingRef.value.cardConfigStyle);
-  const prevCardConfigStyleStr = JSON.stringify(basicData.cardConfigStyle);
+  const cardConfigStyleStr =JSON.stringify(cardSettingRef.value[handleStr]);
+  const prevCardConfigStyleStr = JSON.stringify(basicData[handleStr]);
   if (prevCardConfigStyleStr === cardConfigStyleStr) {
     return true
   }
-  const isPass = await myApi.savePrizesConfig(cardConfigStyleStr, 'cardConfigStyle');
+  const isPass = await myApi.savePrizesConfig(cardConfigStyleStr, handleStr);
   if (isPass) {
-    basicData.cardConfigStyle = JSON.parse(cardConfigStyleStr);
+    basicData[handleStr] = JSON.parse(cardConfigStyleStr);
   } else {
     isPassSetting = false;
   }
-  bus.emit('handleCardConfigStyleSetting')
+  bus.emit(handleStr + 'Setting')
   return isPassSetting; 
 }
+
 const passTxt = {
   'prizesSetting': '奖项设置',
   'beforeLotteryLayout': '抽奖前卡片排列及位置',
@@ -196,9 +197,10 @@ const passTxt = {
 const confirm = async () => {
   const isPrizeSettingPass = await handlePrizesSetting();
   const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
-  const isCardConfigStylePass = await handleCardConfigStyle();
+  const isCardConfigStylePass = await handleCardConfigStyle('cardConfigStyle');
+  const isLuckyCardConfigStylePass = await handleCardConfigStyle('luckyCardConfigStyle');
   
-  if (isPrizeSettingPass && isBeforeLotteryLayoutPass && isCardConfigStylePass) {
+  if (isPrizeSettingPass && isBeforeLotteryLayoutPass && isCardConfigStylePass && isLuckyCardConfigStylePass) {
     ElMessage({
       message: '设置成功',
       type: 'success',
