@@ -40,26 +40,26 @@
           z-index: -1">
         <div style="width: 100%;height: 100%;background-color: rgba(0,0,0,0.1);position: absolute;top: 0;left:0;"></div>
       </div>
-    <div 
-      :style="{
-        'width': '100%',
-        'top': cardConfigStyle.nameTop,
-        'font-size': cardConfigStyle.nameFontSize,
-        'line-height': cardConfigStyle.nameFontSize
-      }" class="name">
-      {{getUser(index)[2]}}
-    </div>
-    <div 
-      :style="{
-        bottom: cardConfigStyle.detailsBottom,
-        fontSize: cardConfigStyle.detailsFontSize,
-        lineHeight: cardConfigStyle.detailsFontSize
-      }"
-      class="details">
-        <span class="cardIdTxt" :id="'card-' + getUser(index)[0]">{{getUser(index)[0]}}</span>
-        <div :style="{height: 'calc(' + cardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
-        <span id="user-dept">{{getUser(index)[1]}}</span>
-    </div>
+      <div 
+        :style="{
+          'width': '100%',
+          'top': cardConfigStyle.nameTop,
+          'font-size': cardConfigStyle.nameFontSize,
+          'line-height': cardConfigStyle.nameFontSize
+        }" class="name">
+        {{getUser(index)[2]}}
+      </div>
+      <div 
+        :style="{
+          bottom: cardConfigStyle.detailsBottom,
+          fontSize: cardConfigStyle.detailsFontSize,
+          lineHeight: cardConfigStyle.detailsFontSize
+        }"
+        class="details">
+          <span class="cardIdTxt" :id="'card-' + getUser(index)[0]">{{getUser(index)[0]}}</span>
+          <div :style="{height: 'calc(' + cardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
+          <span id="user-dept">{{getUser(index)[1]}}</span>
+      </div>
     </div>
   </div>
 </template>

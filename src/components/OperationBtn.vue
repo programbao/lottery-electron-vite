@@ -1,5 +1,6 @@
 <template>
   <div id="menu">
+    <span v-show="!basicData.isShowLuckyUser">
       <div class="begin-lottery">
         <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
@@ -24,7 +25,7 @@
           && !isFirstPrize">
           {{ (isNextPrize || isShowPrizeMark) ? '重新抽取上一轮' : '重新抽奖' }}<br />
           {{ (isNextPrize || isShowPrizeMark) ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
-        </button>
+      </button>
       <button id="showAllLucks" class="btn" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
@@ -35,8 +36,10 @@
         </div>
       </div>
       <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
-      <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button>
-   </div>
+    </span>
+
+    <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button>
+  </div>
 </template>
 
 <script setup>
@@ -111,7 +114,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 #menu {
-  z-index: 400;
+  z-index: 401;
   position: fixed;
   top: 0;
   text-align: center;

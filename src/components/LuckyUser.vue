@@ -12,10 +12,60 @@
       :style="lucksContentStyle">
       <div class="split-box"></div>
       <div 
-        class="lucky-item" 
         v-for="(lucky, index) in currentLuckys" 
-        v-html="getCardWithParentHtml(lucky, false, index, true, '', basicData, true)"
+        class="lucky-item element" 
+        :style="{
+          width: luckyCardConfigStyle.cardWidth,
+          height: luckyCardConfigStyle.cardHeight,
+        }"
         :key="index">
+        <div 
+          class="company"
+          v-if="luckyCardConfigStyle.logo"
+          :style="{
+            top: luckyCardConfigStyle.companyTop,
+            'font-size': luckyCardConfigStyle.companyFontSize
+          }">
+          <div class="image-text-container">
+            <img 
+              :src="luckyCardConfigStyle.logo" 
+              :style="{
+                width: luckyCardConfigStyle.imgWidth,
+                height: luckyCardConfigStyle.imgHeight,
+                objectFit: 'contain'
+              }">
+          </div>
+        </div>
+        <div 
+          class="avatar"
+          style="height: 100%;
+            display: flex;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            z-index: -1">
+          <div style="width: 100%;height: 100%;background-color: rgba(0,0,0,0.1);position: absolute;top: 0;left:0;"></div>
+        </div>
+        <div 
+          :style="{
+            'width': '100%',
+            'top': luckyCardConfigStyle.nameTop,
+            'font-size': luckyCardConfigStyle.nameFontSize,
+            'line-height': luckyCardConfigStyle.nameFontSize
+          }" class="name">
+          {{lucky[2]}}
+        </div>
+        <div 
+          :style="{
+            bottom: luckyCardConfigStyle.detailsBottom,
+            fontSize: luckyCardConfigStyle.detailsFontSize,
+            lineHeight: luckyCardConfigStyle.detailsFontSize
+          }"
+          class="details">
+            <span class="cardIdTxt" :id="'card-' + lucky[0]">{{lucky[0]}}</span>
+            <div :style="{height: 'calc(' + luckyCardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
+            <span id="user-dept">{{lucky[1]}}</span>
+        </div>
       </div>
       <div class="split-box"></div>
     </div>
@@ -29,7 +79,10 @@
 import { computed, ref, watch } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-import { getCardWithParentHtml } from './handleElements'
+
+const luckyCardConfigStyle = computed(() => {
+  return basicData.luckyCardConfigStyle;
+})
 
 const luckysRowColObj = computed(() => {
   return basicData.luckysRowColObj;
@@ -118,12 +171,12 @@ const closeBtn = () => {
 .lucky-item {
   margin: 10px;
 }
-.lucky-item .element {
+.lucky-item {
   box-shadow: 0 0 12px rgba(253, 105, 0, 0.95) !important;
   border: 1px solid rgba(253, 105, 0, 0.5) !important;
   background-color: rgba(0,127,127,0.5077637237470506) !important;
 }
-.lucky-item .element:hover {
+.lucky-item:hover {
   border: 1px solid rgba(253, 105, 0, 0.95) !important;
 }
 .closeBtn {

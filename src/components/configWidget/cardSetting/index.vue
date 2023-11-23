@@ -47,7 +47,7 @@
               controls-position="right"
               size="large"
             />
-            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile">
+            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile('cardConfigStyle')">
               <el-image
                 v-if="cardConfigStyle.logo"
                 :src="cardConfigStyle.logo"
@@ -84,7 +84,7 @@
               controls-position="right"
               size="large"
             />
-            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile">
+            <div v-else-if="item.type === 'img'" class="upload add" @click="importFile('luckyCardConfigStyle')">
               <el-image
                 v-if="luckyCardConfigStyle.logo"
                 :src="luckyCardConfigStyle.logo"
@@ -223,10 +223,14 @@ const luckyCardConfigStyle = ref({
   imgWidth: '100%',
   imgHeight: '10px'
 })
-const importFile = async () => {
+const importFile = async (key) => {
   let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
-    cardConfigStyle.value.logo = fileUrl
+    if (key === 'luckyCardConfigStyle') {
+      luckyCardConfigStyle.value.logo = fileUrl
+    } else {
+      cardConfigStyle.value.logo = fileUrl
+    }
   }
 }
 const isEnterLottery = computed(() => {
