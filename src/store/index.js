@@ -42,8 +42,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       luckysRowColObj: {
         rowCount: 5,
         columnCount: 2,
-        tileSize: 112,
-        titleHeight: 32,
+        rowGap: '10px',
+        columnGap: '10px', // 列间距
         type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
       }, // 中奖行列对象
       luckyCardConfigStyle: {

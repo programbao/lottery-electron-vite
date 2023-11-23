@@ -113,6 +113,8 @@ const lucksContentStyle = computed(() => {
     justify-content: center;
     margin-bottom: 8px;
     opacity: ${basicData.isShowLuckyUser ? '0': '1'};
+    grid-row-gap: ${luckysRowColObj.value.rowGap};
+    grid-column-gap: ${luckysRowColObj.value.columnGap};
     overflow: auto;
     padding: 2px;
     transition: opacity .3s ease-in-out;
@@ -125,7 +127,8 @@ const lucksContentStyle = computed(() => {
   switch (type) {
     case 2:
       // rowCount = Math.ceil(currentLuckys.value.length / columnCount);
-      handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);`
+      columnCount = Math.ceil(currentLuckys.value.length / rowCount);
+      handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
     case 1:
       // columnCount = Math.ceil(currentLuckys.value.length / rowCount);

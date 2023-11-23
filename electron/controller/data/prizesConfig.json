@@ -87,5 +87,12 @@
     "detailsFontSize": "8px",
     "imgWidth": "100%",
     "imgHeight": "10px"
+  },
+  "luckysRowColObj": {
+    "rowCount": 5,
+    "columnCount": 5,
+    "rowGap": "10px",
+    "columnGap": "10px",
+    "type": 1
   }
 }

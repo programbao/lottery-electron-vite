@@ -55,6 +55,26 @@
               />
           </el-form-item>
         </div>
+
+        <div class="lucky-row-col">
+          <el-form-item label="行间距">
+            <el-input
+                v-model="luckysRowColObj.rowGap"
+                :min="1"
+                controls-position="right"
+                size="large"
+              />
+          </el-form-item>
+          <el-form-item label="行间距">
+            <el-input
+                v-model="luckysRowColObj.columnGap"
+                :min="1"
+                controls-position="right"
+                size="large"
+              />
+          </el-form-item>
+        </div>
+
       </div>
     </div>
     <div class="lottery-layout">
@@ -254,6 +274,8 @@ const luckyCardConfigStyle = ref({
 const luckysRowColObj = ref({
   rowCount: 5,
   columnCount: 2,
+  rowGap: '10px',
+  columnGap: '10px',
   type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
 })
 const importFile = async (key) => {
