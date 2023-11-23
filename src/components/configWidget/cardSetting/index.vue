@@ -30,6 +30,34 @@
       </div>
     </div>
     <div class="lottery-layout">
+      <div class="header-txt">中奖-卡片排列</div>
+      <div class="layout-form">
+        <el-radio-group v-model="luckysRowColObj.type">
+          <el-radio :label="1">以"列"为基准排列</el-radio>
+          <el-radio :label="2">以"行"为基准排列</el-radio>
+          <el-radio :label="3">固定行列</el-radio>
+        </el-radio-group>
+        <div class="lucky-row-col">
+          <el-form-item label="列数" v-if="luckysRowColObj.type !== 2">
+            <el-input-number
+                v-model="luckysRowColObj.columnCount"
+                :min="1"
+                controls-position="right"
+                size="large"
+              />
+          </el-form-item>
+          <el-form-item label="行数" v-if="luckysRowColObj.type !== 1">
+            <el-input-number
+                v-model="luckysRowColObj.rowCount"
+                :min="1"
+                controls-position="right"
+                size="large"
+              />
+          </el-form-item>
+        </div>
+      </div>
+    </div>
+    <div class="lottery-layout">
       <div class="header-txt">基础-卡片样式设置</div>
       <div class="layout-form">
         <el-form
@@ -223,6 +251,11 @@ const luckyCardConfigStyle = ref({
   imgWidth: '100%',
   imgHeight: '10px'
 })
+const luckysRowColObj = ref({
+  rowCount: 5,
+  columnCount: 2,
+  type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
+})
 const importFile = async (key) => {
   let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
@@ -240,12 +273,14 @@ onMounted(() => {
   beforeLotteryLayout.value = JSON.parse(JSON.stringify(basicData.beforeLotteryLayout))
   cardConfigStyle.value = JSON.parse(JSON.stringify(basicData.cardConfigStyle))
   luckyCardConfigStyle.value = JSON.parse(JSON.stringify(basicData.luckyCardConfigStyle))
+  luckysRowColObj.value = JSON.parse(JSON.stringify(basicData.luckysRowColObj))
 })
 // 暴露属性
 defineExpose({
   beforeLotteryLayout,
   cardConfigStyle,
-  luckyCardConfigStyle
+  luckyCardConfigStyle,
+  luckysRowColObj
 })
 </script>
 
@@ -308,6 +343,15 @@ defineExpose({
       font-size: 20px;
       font-weight: lighter;
       cursor: pointer;
+    }
+    .lucky-row-col {
+      display: flex;
+      justify-content: center;
+      margin-top: 17px;
+      .el-form-item {
+        margin-bottom: 0;
+        margin: 0 20px;
+      }
     }
   }
   .layout-form {

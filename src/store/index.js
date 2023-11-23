@@ -45,7 +45,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         tileSize: 112,
         titleHeight: 32,
         type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
-
       }, // 中奖行列对象
       luckyCardConfigStyle: {
         cardWidth: "16vw", // 抽奖牌宽度

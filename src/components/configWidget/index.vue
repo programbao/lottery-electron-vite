@@ -189,6 +189,7 @@ const handleCardConfigStyle = async (handleStr) => {
   return isPassSetting; 
 }
 
+
 const passTxt = {
   'prizesSetting': '奖项设置',
   'beforeLotteryLayout': '抽奖前卡片排列及位置',
@@ -199,8 +200,15 @@ const confirm = async () => {
   const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
   const isCardConfigStylePass = await handleCardConfigStyle('cardConfigStyle');
   const isLuckyCardConfigStylePass = await handleCardConfigStyle('luckyCardConfigStyle');
+  const isLuckysRowColObjPass = await handleCardConfigStyle('luckysRowColObj');
   
-  if (isPrizeSettingPass && isBeforeLotteryLayoutPass && isCardConfigStylePass && isLuckyCardConfigStylePass) {
+  if (
+    isPrizeSettingPass && 
+    isBeforeLotteryLayoutPass && 
+    isCardConfigStylePass && 
+    isLuckyCardConfigStylePass && 
+    isLuckysRowColObjPass
+  ) {
     ElMessage({
       message: '设置成功',
       type: 'success',

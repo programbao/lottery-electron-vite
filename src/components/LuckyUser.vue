@@ -10,7 +10,7 @@
       }"
       class="lucky-content" 
       :style="lucksContentStyle">
-      <div class="split-box"></div>
+      <!-- <div class="split-box"></div> -->
       <div 
         v-for="(lucky, index) in currentLuckys" 
         class="lucky-item element" 
@@ -67,7 +67,7 @@
             <span id="user-dept">{{lucky[1]}}</span>
         </div>
       </div>
-      <div class="split-box"></div>
+      <!-- <div class="split-box"></div> -->
     </div>
     <button class="btn closeBtn" @click="closeBtn">
       Close
@@ -108,36 +108,48 @@ watch(
   }
 )
 const lucksContentStyle = computed(() => {
-  const type = luckysRowColObj.type;
-  let rowCount = luckysRowColObj.rowCount;
-  let columnCount = luckysRowColObj.columnCount;
-  if (type == 1) {
-    rowCount = Math.ceil(currentLuckys.length / columnCount)
-  }
+  let handleStyle = `
+    display: grid;
+    justify-content: center;
+    margin-bottom: 8px;
+    opacity: ${basicData.isShowLuckyUser ? '0': '1'};
+    overflow: auto;
+    padding: 2px;
+    transition: opacity .3s ease-in-out;
+    max-height: 100vh;
+    max-width: 100vw;
+  `;
+  const type = luckysRowColObj.value.type;
+  let rowCount = luckysRowColObj.value.rowCount;
+  let columnCount = luckysRowColObj.value.columnCount;
   switch (type) {
-    case 1:
-      rowCount = Math.ceil(currentLuckys.length / columnCount)
-      break;
     case 2:
-      columnCount = Math.ceil(currentLuckys.length / rowCount)
+      // rowCount = Math.ceil(currentLuckys.value.length / columnCount);
+      handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);`
+      break;
+    case 1:
+      // columnCount = Math.ceil(currentLuckys.value.length / rowCount);
+      handleStyle += `grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
     default:
+      handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
   }
-  return {
-    'display': 'flex',
-    'flex-wrap': 'wrap',
-    'height': `calc(${rowCount * luckysRowColObj.tileSize}px)`,
-    'justify-content': 'center',
-    'margin-bottom': '8px',
-    'opacity': basicData.isShowLuckyUser ? '0' : '1',
-    'overflow': 'auto',
-    'padding': '2px',
-    'transition': 'opacity .3s ease-in-out',
-    'width': `calc(calc(${columnCount * luckysRowColObj.tileSize}px  + '1px') + '12px')`,
-    'max-height': '100vh',
-    'max-width': '100vw'
-  }
+  // console.log( {
+  //   'display': 'flex',
+  //   'flex-wrap': 'wrap',
+  //   'justify-content': 'center',
+  //   'margin-bottom': '8px',
+  //   'opacity': basicData.isShowLuckyUser ? '0' : '1',
+  //   'overflow': 'auto',
+  //   'padding': '2px',
+  //   'transition': 'opacity .3s ease-in-out',
+  //   'max-height': '100vh',
+  //   'max-width': '100vw',
+  //   'width': `${columnCount * luckysRowColObj.value.tileSize + 13}px`,
+  //   'height': `${rowCount * luckysRowColObj.value.tileSize}px`,
+  // })
+  return handleStyle
 });
 const currentLuckys = computed(() => {
   return basicData.currentLuckys;
