@@ -22,22 +22,34 @@
     </template>
     <div class="config-setting-list">
       <div class="item-setting" >
+        <div class="item-setting">
+          <div class="setting-title">
+            <div class="left">名单设置</div>
+          </div>
+          <div class="setting-content">
+
+          </div>
+        </div>
         <div class="setting-title">
           <div class="left">奖项设置</div>
-          <!-- <div class="right">设置</div> -->
         </div>
-        <prizeSetting 
-          :key="dialogTableVisible"
-          @cutPrize="cutPrize"
-          @addPrize="addPrize"
-          ref="prizeSettingRef" />
+        <div class="setting-content">
+          <prizeSetting 
+            :key="dialogTableVisible"
+            @cutPrize="cutPrize"
+            @addPrize="addPrize"
+            ref="prizeSettingRef" />
+        </div>
+      </div>
+      <div class="item-setting">
         <div class="setting-title">
           <div class="left">卡片设置</div>
         </div>
-        <cardSetting 
-          ref="cardSettingRef"
-          :key="dialogTableVisible" />
-
+        <div class="setting-content">
+          <cardSetting 
+            ref="cardSettingRef"
+            :key="dialogTableVisible" />
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -270,7 +282,8 @@ const confirm = async () => {
     }
   }
 }
-.item-setting .setting-title {
+.item-setting {
+  .setting-title {
     display: flex;
     justify-content: space-between;
     font-size: 16px;
@@ -278,10 +291,16 @@ const confirm = async () => {
     font-weight: 700;
     margin-top: 20px;
    .right {
-    cursor: pointer;
-    color: #409eff;
-    font-size: 14px;
-   }
+      cursor: pointer;
+      color: #409eff;
+      font-size: 14px;
+    }
+  }
+  .setting-content {
+    background-color: #f2fafe;
+    border-radius: 10px;
+    padding: 20px;
+  }
 }
 .el-dialog__header {
   .title-text {

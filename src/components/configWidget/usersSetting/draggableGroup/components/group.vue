@@ -1,0 +1,229 @@
+<template>
+  <div class="qd-optiongroup" :class="classname">
+    <!--  选项组  -->
+    <div
+      ref="qdGroupItem"
+      class="qd-optiongroup-item common"
+      :data-groupindex="groupInfo.index"
+    >
+      <div class="content">
+        <!-- 四列模式只显示标题 -->
+        <template v-if="groupInfo.groupShowType === 4">
+          <div v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
+        </template>
+
+        <!-- 小于四列 -->
+        <template v-else>
+          <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
+          <div class="content-tags">
+            <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">拖拽选项到此</div>
+            <template v-else>
+              <div
+                class="group-option-container"
+                :style="{
+                  flexDirection: [2, 3].includes(showType) ? 'column' : 'row',
+                  flexWrap: [2, 3].includes(showType) ? 'nowrap' : 'wrap'
+                }"
+                ref="groupOptionContainer"
+              >
+              </div>
+            </template>
+          </div>
+          <div class="dragover-tips">松开放入此分组</div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  text: {
+    type: String,
+    default: '',
+  },
+  groupInfo: {
+      type: Object,
+      default: () => {
+        return { groupNums: 1 }
+      }
+    },
+    showType: {
+      default: 0,
+      type: Number
+    },
+    length: {
+      default: 0,
+      type: Number
+    }
+});
+const classname = `column2 isputarea`
+</script>
+
+<style lang="scss" scoped>
+.qd-optiongroup {
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+.column1 {
+  width: 100%;
+  height: 116px;
+}
+.column2 {
+  width: calc((100% - 9px) / 2);
+  height: 116px;
+  margin-right: 9px;
+  &:nth-child(2n) {
+    margin-right: 0;
+  }
+}
+.column3 {
+  width: calc((100% - 16px) / 3);
+  height: 116px;
+  margin-right: 8px;
+  &:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+.column4 {
+  width: calc((100% - 24px) / 4);
+  height: 78px;
+  margin-right: 8px;
+  &:nth-child(4n) {
+    margin-right: 0;
+  }
+}
+.qd-optiongroup-item {
+  border-radius: 8px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.isputarea + .qd-optiongroup {
+  margin-right: 0 !important;
+}
+
+.common {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  color: #3a414a;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #dadbde;
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    &-title {
+      text-align: center;
+      padding: 4px;
+      border-bottom: 1px #f0f0f0 solid;
+      width: 100%;
+      font-size: 14px;
+    }
+    &-tags {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      .tags-drag-tips {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #abb5c1;
+      }
+      .group-option-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        margin: 8px;
+        overflow: auto;
+      }
+      .group-option-item {
+        font-size: 10px;
+        color: #717981;
+        padding: 0 4px;
+        background: #f5f6f6;
+        border-radius: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 4px 4px 0;
+        height: fit-content;
+        /deep/ p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      .image-item-container {
+        display: flex;
+        .group-option-image-item {
+          width: 24px;
+          height: 24px;
+          margin: 0 4px 4px 0;
+          &:last-child {
+            margin: 0 0 4px 0;
+          }
+          img {
+            object-fit: scale-down;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+  .information {
+    background: #7291ff;
+    color: #fff;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+  }
+  .info-empty {
+    background: #a7c8ff;
+    i {
+      display: none;
+    }
+  }
+  .info-nobg {
+    background: transparent;
+    color: #abb5c1;
+  }
+}
+
+.put-area {
+  color: #717981;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #9da4ad;
+  opacity: 0.7;
+  i {
+    color: #b4bbc2;
+    font-size: 34px;
+  }
+}
+
+.dragover-tips {
+  display: none;
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 11px;
+  color: #abb5c1;
+  padding-top: 4px;
+}
+</style>

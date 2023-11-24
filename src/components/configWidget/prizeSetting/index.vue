@@ -157,9 +157,6 @@ onMounted(() => {
   row-gap: 20px;
   // display: flex;
   flex-wrap: wrap;
-  padding: 20px;
-  background-color: #f2fafe;
-  border-radius: 10px;
 }
 .item-prize {
   // margin: 8px;

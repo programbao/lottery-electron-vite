@@ -308,9 +308,6 @@ defineExpose({
 
 <style lang="scss" scoped>
 .card-setting {
-  background-color: #f2fafe;
-  border-radius: 10px;
-  padding: 20px;
   .tips {
     color: orange;
     font-weight: 700;
