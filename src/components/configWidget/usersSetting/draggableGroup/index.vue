@@ -15,326 +15,169 @@
         :showType="1"
         :length="groupList.length"
         :key="group.group_identity"
-        :class="{ dragging: draggingOptionIdentity, 'drag-over': dragover === index, 'no-transition': isEnterMode }"
+        :optionsMap="optionsMap"
+        :class="{ dragging: isSelectMode, 'drag-over': group.isSelected }"
         @click.native="onGroupClick({ group, index })"
+        @optionCancel="optionCancel"
       ></Group>
     </transition-group>
-
+    <div class="relate-box" v-if="isSelectMode">
+      <el-button type="primary" plain @click="confirmRelated">确认关联</el-button>
+      <el-button plain @click="cancelSelect">取消</el-button>
+    </div>
     <!--  选项  -->
     <div class="option-container">
       <transition-group
         class="option-container-inner"
         tag="div"
         name="flip-list"
-        @after-enter="onOptionTransitionend"
-        @after-leave="onOptionTransitionend"
       >
         <Option
           v-for="(option, index) of optionList"
           :option="option"
           :key="index"
+          :class="option.isSelected ? 'dragging-style' : ''"
+          @click="optionClick(option)"
         ></Option>
       </transition-group>
     </div>
-
-
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import Option from './components/option.vue'
 import Group from './components/group.vue'
-// import dragAndDrop from './dragAndDrop.js'
-import uniqueId from 'lodash/uniqueId.js'
-  // mixins: [dragAndDrop]
-const props = defineProps({
-  groupList: {
-    type: Array,
-    default: () => []
+import { ElMessage } from 'element-plus'
+const optionList = ref([
+  {
+    option_value: '选项1',
+    option_value_html: '<p>选项1</p>',
+    option_identity: '98c22b7114274a0feda29034be2722f5',
   },
-  optionList: {
-    type: Array,
-    default: () => []
+  {
+    option_value: '选项2',
+    option_value_html: '<p>选项2</p>',
+    option_identity: '47479416e284803a9753a4bff1d5f9eb',
   },
+  {
+    option_value: '选项3',
+    option_value_html: '<p>选项3</p>',
+    option_identity: '131073a63a3cafd206d339e3e4573240',
+  },
+  {
+    option_value: '选项4',
+    option_value_html: '<p>选项4</p>',
+    option_identity: 'ca2cc861f2584feef0538a361fbb65fc',
+  },
+  {
+    option_value: '选项5',
+    option_value_html: '<p>选项5</p>',
+    option_identity: '132bf0f60ecf1efb4eb510b038ea9269',
+  },
+  {
+    option_value: '选项6',
+    option_value_html: '<p>选项6</p>',
+    option_identity: '81c4530cc599311f04f7479276c5e5df',
+  },
+  {
+    option_value: '选项7',
+    option_value_html: '<p>选项7</p>',
+    option_identity: '64368d3fd71b3989e22c74a03d22735a',
+  }
+])
+const groupList = ref([
+  {
+    group_name: '分组一',
+    group_name_html: '<p>分组一</p>',
+    group_identity: 'a86cbf7122c55a54dbebd6c1acf919db',
+    options: [],
+    index: 0
+  },
+  {
+    group_name: '分组二',
+    group_name_html: '<p>分组二</p>',
+    group_identity: 'fc4cb4b138c16157d71f26f990ab1410',
+    options: [],
+    index: 1
+  }
+])
+const optionsMap = computed(() => {
+  const map = {}
+  optionList.value.forEach(item => {
+    map[item.option_identity] = item
+  })
+  return map;
 })
-const isEnterMode = ref(false)
-let uniId = '';
-uniId = uniqueId('uniClass_')
-const groupContentDialog = ref()
-const onGroupClick = (param) => {
-  groupContentDialog.value.showDialog(param)
-}
-const onDeleteClick = (callback) => {
-  // this.$refs.actionSheet.showActionsheet(callback)
-}
-const onChange = ({ groupIndex, option, callback, options, group, mode }) => {
-  if (mode === 'addGroup') {
-  
-  } else if (mode === 'add' && groupIndex > -1) {
-  } else if (['editGroup', 'deleteGroup'].includes(mode)) {
+const optionClick = (option) => {
+  if (option.related_group) return
+  option.isSelected = !option.isSelected
+  const group = groupList.value.find(item => item.isSelected)
+  if (group) {
+    group.options = group.options.filter(identity => optionsMap.value[identity].related_group)
+    group.options = group.options.concat(optionList.value.filter(item => item.isSelected).map(item => item.option_identity));
   }
 }
-
-
-
-
-// ####### 拖拽分组功能
-
-const position = { elx: 0, ely: 0, touchx: 0, touchy: 0 }
-const excludesClasses = ['zoom-img']
-let DRAG = ''
-let DROP = ''
-let expireTimer = ''
-let copyEl = ''
-let draggingOptionIdentity = null
-let dragover = -1
-onMounted(() => {
-  initDragAndDrop({
-      drag: `.${uniId} .option-container-inner .qd-option-item`,
-      drop: `.${uniId} .qd-optiongroup-item`
+const isSelectMode = computed(() => {
+  return optionList.value.some(item => item.isSelected)
+})
+const onGroupClick = ({ group, index }) => {
+  if (!group) return
+  groupList.value.forEach(item => {
+    if (item.group_identity !== group.group_identity) {
+      item.isSelected = false
+    }
+    item.options = item.options.filter(identity => optionsMap.value[identity].related_group)
+  })
+  group.isSelected = !group.isSelected
+  if (group.isSelected) {
+    group.options = group.options.concat(optionList.value.filter(item => item.isSelected).map(item => item.option_identity));
+  }
+}
+const cancelSelect = () => {
+  optionList.value.forEach(item => {
+    item.isSelected = false
+  })
+  groupList.value.forEach(item => {
+    item.isSelected = false
+    item.options = item.options.filter(identity => optionsMap.value[identity].related_group)
+  })
+}
+const confirmRelated = () => {
+  const group = groupList.value.find(item => item.isSelected)
+  if (group) {
+    optionList.value.forEach(item => {
+      if (item.isSelected) {
+        item.related_group = group.group_identity
+        item.isSelected = false
+      }
     })
-})
+    group.isSelected = false
+  } else {
+    ElMessage({
+      message: '请选择关联分组和选项',
+      type: 'warning',
+    })
+  }
+}
+// 取消选择/关联
+const optionCancel = (emitObj) => {
+  const { option, groupIdentity } = emitObj
+  const handleOption = optionList.value.find(item => item.option_identity === option.option_identity)
+  handleOption.related_group = ""
+  handleOption.isSelected = false
 
-onBeforeUnmount(() => {
-  onBeforeDestory()
-})
-// option动画完成再initDragAndDrop
-const onOptionTransitionend = () => {
-  initDragAndDrop({
-    drag: `.${uniId} .option-container-inner .qd-option-item`,
-    drop: `.${uniId} .qd-optiongroup-item`
-  })
-}
-// 初始化监听dom的事件
-const initDragAndDrop = ({ drag, drop }) => {
-  DRAG = drag
-  DROP = drop
-  const els = document.querySelectorAll(drag)
-  for (let [index, el] of els.entries()) {
-    if (el.startFn) continue
-    el.option = props.optionList[index]
-    // 这样写是为了能传参的前提下还能正确remove掉event
-    el.startFn = evt => onTouchStart(el, evt)
-    el.addEventListener('mousedown', el.startFn)
-  }
-}
-// 销毁前清除监听
-const onBeforeDestory = () => {
-  if (!DRAG) return
-  const els = document.querySelectorAll(DRAG)
-  for (let el of els) {
-    el.removeEventListener('mousedown', el.startFn)
-  }
-}
-const onTouchStart = (el, evt) => {
-  // 防止还没归位就创建了新的，导致旧的无法清除
-  // 某些class排除在外，不触发
-  const hasExcludeEl = (evt.path || evt.composedPath()).some(s => excludesClasses.some(className => {
-    return className.includes(s.className) && s.className
-  }))
-  if (copyEl || hasExcludeEl) {
-    return
-  }
-  evt.preventDefault()
-  el.endFn = evt => onTouchEnd(el, evt)
-  el.moveFn = evt => onTouchMove(el, evt)
-  document.addEventListener('mousemove', el.moveFn)
-  document.addEventListener('mouseup', el.endFn)
-  // 按住有50ms了，才认为用户希望拖拽该元素
-  expireTimer = setTimeout(() => {
-    // 拖拽中的option
-    draggingOptionIdentity = el.option.option_identity
-    // 创建跟随手指的选项dom
-    createdDragingEl(el)
-    // 更新位置
-    setPosition(evt, el)
-  }, 50)
-}
-const onTouchEnd = (el, evt) => {
-  // 按住有50ms了，才认为用户希望拖拽该元素
-  clearTimeout(expireTimer)
-  // 清除绑定在元素上的事件
-  document.removeEventListener('mouseup', el.endFn)
-  document.removeEventListener('mousemove', el.moveFn)
-  // 判断是否在group内并进行进一步动作
-  judge(el, evt, 'end').then(res => {
-    const { clear } = res || {}
-    if (clear) {
-      // 清除copy出来拖拽的dom
-      clearCopyDom()
-    }
-  })
-}
-const onTouchMove = (el, evt) => {
-  if (copyEl) {
-
-    // 主要用于设置拖拽中的样式、拖拽中经过drop group区域的样式
-    judge(el, evt, 'move')
-  } else {
-    
-    // 如果没有cpoyEl代表还没超过50ms就移动了，就手动touchEnd结束这次拖拽事件
-    onTouchEnd(el, evt)
-  }
-}
-// 设置copyEl位置
-const setPosition = (evt, el) => {
-  const { clientX, clientY } = evt
-  if (copyEl) {
-    // 有el代表是一次setPosition
-    if (el) {
-      const { x, y } = el.getBoundingClientRect()
-      // 记录初始的el位置
-      position.elx = x
-      position.ely = y
-      // 记录初始的手指touch位置
-      position.touchx = clientX
-      position.touchy = clientY
-      // 一开始直接创建在原位
-      copyEl.style.transform = `translate(${x + 'px'}, ${y + 'px'})`
-    } else {
-      const { touchx, touchy, elx, ely } = position
-      // 初始el位置 + 这次touchmove到的位置 - 初始的touch位置 = 这次应该移动到的位置
-      copyEl.style.transform = `translate(${elx + clientX - touchx + 'px'}, ${ely + clientY - touchy + 'px'})`
-    }
-  }
-  return {
-    x: clientX,
-    y: clientY
-  }
-}
-// 重置位置，使其取消拖动时回到选项原位
-const restPosition = (el) => {
-  return new Promise(resolve => {
-    // 添加动画样式
-    copyEl.classList.add('transition')
-    // 去除拖拽中的样式
-    copyEl.classList.remove('dragging-style')
-    const { x, y, width, height } = el.getBoundingClientRect()
-    const { x: copyX, y: copyY } = copyEl.getBoundingClientRect()
-    copyEl.transitionendFn = () => {
-      copyEl.removeEventListener('transitionend', copyEl.transitionendFn)
-      // 找准动画帧resolve，防止卡顿
-      requestAnimationFrame(resolve)
-    }
-    copyEl.addEventListener('transitionend', copyEl.transitionendFn)
-    // 回到初始位置
-    copyEl.style.transform = `translate(${x + 'px'}, ${y + 'px'})`
-    // 重置回原来的宽高，防止抖动
-    copyEl.style.width = `${width}px`
-    copyEl.style.height = `${height}px`
-    // 如果在原地没动的话，不会触发transitionend，所以直接resolve了
-    if (copyX === x && copyY === y) {
-      resolve()
-    }
-  })
-}
-// 拖拽进不预设选项的putarea的抛入动画的额外处理，其它通用抛入动画走putInAnimate
-const putAreaAnimate = async (el, cancel) => {
-  if (cancel) {
-    // 如果设置组名时取消了，就让选项回到原位
-    await restPosition(el)
-  } else {
-    // 如果创建了分组，就把当前选项丢入创建后的分组
-    await putInAnimate()
-  }
-  // put的动画完成或者restPosition的动画完成后，就清除掉clone出来的dom
-  clearCopyDom()
-}
-// 清除copy出来拖拽的dom
-const clearCopyDom = () => {
-  copyEl?.remove()
-  copyEl = null
-  draggingOptionIdentity = null
-}
-// 通用的选项抛入group的动画
-const putInAnimate = (el) => {
-  if (!el) {
-    const identity = groupList[groupList.length - 1].group_identity
-    el = $refs['group' + identity] && $refs['group' + identity][0]?.$el
-  }
-  const { x, y, width, height } = el.getBoundingClientRect()
-  // 找准putarea的中心点
-  const position = {
-    x: x + width / 2,
-    y: y + height / 2
-  }
-  return new Promise(resolve => {
-    // transition css
-    copyEl.classList.add('transition')
-    // 选项拖拽中样式
-    copyEl.classList.remove('dragging-style')
-    // translate到中心点并形成动画transition
-    copyEl.style.transform = `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px)) scale(0.5)`
-    setTimeout(() => {
-      // todo，动画完成后回调，懒得用transitionend事件了，直接用settimeout，以后发现时机不对的话可以改成事件监听再resolve
-      resolve()
-    }, 300)
-  })
-}
-// 创建拖拽跟随手指的dom
-const createdDragingEl = (el) => {
-  copyEl = el.cloneNode(true)
-  copyEl.classList.add('dragging-position', 'dragging-style', 'dragging-flag')
-  document.body.appendChild(copyEl)
-}
-// 判断是否位于group的putarea
-const judge = async (el, evt, type) => {
-  if (!copyEl) {
-    return
-  }
-  const { x, y } = setPosition(evt)
-  // 查看当前position有哪些el
-  const els = document.elementsFromPoint(x, y)
-  const dropEls = document.querySelectorAll(DROP)
-  // 当前将要put进入的group area
-  let dropEl
-  for (let dEl of dropEls) {
-    for (let el of els) {
-      if (el === dEl) {
-        dropEl = dEl
-        break
-      }
-    }
-  }
-  // 判断是否在putarea内
-  if (dropEl) {
-    const groupIndex = Number(dropEl.dataset.groupindex)
-    // 设置当前移动到了哪个group上
-    dragover = groupIndex
-    if (type === 'end') {
-      // 如果投入到了非模板提示分组中，就直接执行抛入动画
-      if (groupIndex !== -1) {
-        await putInAnimate(dropEl)
-      }
-      // 数据处理
-      onChange({
-        groupIndex,
-        option: el.option,
-        // 如果投入到了模板提示分组中，需要弹框后，根据选择的取消或者确定，来决定是投进建好的分组还是reset回原位
-        // 直接把当前的el bind进去，相当于一个偏函数，具体调用流程可以看addGroupDialog
-        callback: putAreaAnimate.bind(this, el),
-        mode: groupIndex === -1 ? 'addGroup' : 'add'
-      })
-      // 清空dragover状态
-      dragover = -1
-    }
-    // 如果投入到了模板提示分组中，需要把选项暂时固定住不清空，等上面传的callback来执行清空逻辑
-    return { clear: groupIndex !== -1 }
-  } else {
-    // 清空dragover状态
-    dragover = -1
-    if (type === 'end') {
-      // 回到原位
-      await restPosition(el)
-      // 清空clone出来的dom
-      return { clear: true }
-    }
+  const group = groupList.value.find(item => item.group_identity === groupIdentity)
+  if (group) {
+    group.options = group.options.filter(identity => identity !== option.option_identity)
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.relate-box {
+  margin: 10px 0 10px;
+}
 .flip-list-move {
   transition: transform 0.3s ease;
 }
@@ -376,33 +219,38 @@ const judge = async (el, evt, type) => {
   }
 }
 .dragging {
-  .qd-optiongroup-item {
-    border: 1px solid #3e6fff;
+  ::v-deep(.qd-optiongroup-item) {
+    border: 1px solid #409eff;
   }
+}
+.dragging.isSelected {
+  ::v-deep(.qd-optiongroup-item) {
+    // border: 1px solid orange;
+  } 
 }
 
 .drag-over {
   transform: scale(1.05);
-  .qd-optiongroup-item {
-    border: 2px solid #3e6fff;
+  ::v-deep(.qd-optiongroup-item) {
+    border: 2px solid #409eff;
     box-shadow: 0 4px 8px 0 rgba(50, 152, 255, 0.5);
-    .information {
-      display: none;
-    }
-    .content-title {
-      border-bottom: none;
-    }
-    .content-tags {
-      display: none;
-    }
-    .dragover-tips {
-      display: flex;
-    }
+    // .information {
+    //   display: none;
+    // }
+    // .content-title {
+    //   border-bottom: none;
+    // }
+    // .content-tags {
+    //   display: none;
+    // }
+    // .dragover-tips {
+    //   display: flex;
+    // }
   }
 }
 
 .column4.drag-over {
-  .qd-optiongroup-item {
+  ::v-deep(.qd-optiongroup-item) {
     .information {
       display: flex;
     }

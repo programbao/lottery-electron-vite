@@ -2,13 +2,15 @@
   <div
     class="qd-option-item"
     :class="{
-      removeable: removeAble
+      removeable: removeAble,
+      'is-related': option.related_group
     }"
   >
     <!--  文字样式  -->
     <i v-if="!removeAble" class="survey-iconfont icon-tuozhuai"></i>
     <div class="text" v-html="display.text"></div>
     <i v-if="removeAble" @click="$emit('remove')" class="survey-iconfont icon-xuanxiangfenzubiaoqian-guanbi"></i>
+    <div class="related-txt" v-if="option.related_group">已关联</div>
   </div>
 </template>
 
@@ -44,7 +46,7 @@ const display = computed(() => {
   padding: 10px 12px 10px 8px;
   margin-right: 8px;
   margin-bottom: 12px;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
   user-select: none;
   touch-callout: none;
@@ -78,6 +80,17 @@ const display = computed(() => {
   }
 }
 
+.is-related {
+  background-color: #fff;
+  border: 1px solid green;
+  .related-txt {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    color: green;
+    font-size: 10px;
+  }
+}
 .images-container {
   width: calc((100% - 16px) / 3);
   padding: 4px;
@@ -139,12 +152,12 @@ const display = computed(() => {
 
 .dragging-style {
   background: #ffffff;
-  border: 2px solid #3e6fff;
+  border: 2px solid #409eff;
   color: #101216;
   font-weight: 500;
   font-size: 16px;
   i {
-    color: #3e6fff;
+    color: #409eff;
   }
 }
 

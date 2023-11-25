@@ -16,7 +16,7 @@
         <template v-else>
           <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
           <div class="content-tags">
-            <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">拖拽选项到此</div>
+            <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联选项到此</div>
             <template v-else>
               <div
                 class="group-option-container"
@@ -26,10 +26,22 @@
                 }"
                 ref="groupOptionContainer"
               >
+              <div
+                class="group-option-item"
+                :class="{
+                  'is-related': optionsMap[identity].related_group,
+                }"
+                v-for="identity of groupInfo.options"
+                :key="identity">
+                <div
+                  v-html="optionsMap[identity].option_value_html || optionsMap[identity].option_value"
+                />
+                <el-icon @click.stop="closeBtn({option: optionsMap[identity], groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
+              </div>
               </div>
             </template>
           </div>
-          <div class="dragover-tips">松开放入此分组</div>
+          <!-- <div class="dragover-tips">松开放入此分组</div> -->
         </template>
       </div>
     </div>
@@ -43,21 +55,31 @@ const props = defineProps({
     default: '',
   },
   groupInfo: {
-      type: Object,
-      default: () => {
-        return { groupNums: 1 }
-      }
-    },
-    showType: {
-      default: 0,
-      type: Number
-    },
-    length: {
-      default: 0,
-      type: Number
+    type: Object,
+    default: () => {
+      return { groupNums: 1 }
     }
+  },
+  showType: {
+    default: 0,
+    type: Number
+  },
+  length: {
+    default: 0,
+    type: Number
+  },
+  optionsMap: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  }
 });
 const classname = `column2 isputarea`
+const emit = defineEmits(['optionCancel'])
+const closeBtn = (emitObj) => {
+  emit('optionCancel', emitObj)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -68,11 +90,11 @@ const classname = `column2 isputarea`
 }
 .column1 {
   width: 100%;
-  height: 116px;
+  min-height: 116px;
 }
 .column2 {
   width: calc((100% - 9px) / 2);
-  height: 116px;
+  min-height: 116px;
   margin-right: 9px;
   &:nth-child(2n) {
     margin-right: 0;
@@ -80,7 +102,7 @@ const classname = `column2 isputarea`
 }
 .column3 {
   width: calc((100% - 16px) / 3);
-  height: 116px;
+  min-height: 116px;
   margin-right: 8px;
   &:nth-child(3n) {
     margin-right: 0;
@@ -88,7 +110,7 @@ const classname = `column2 isputarea`
 }
 .column4 {
   width: calc((100% - 24px) / 4);
-  height: 78px;
+  min-height: 78px;
   margin-right: 8px;
   &:nth-child(4n) {
     margin-right: 0;
@@ -131,7 +153,7 @@ const classname = `column2 isputarea`
       width: 100%;
       display: flex;
       justify-content: center;
-      overflow: hidden;
+      // overflow: hidden;
       .tags-drag-tips {
         display: flex;
         align-items: center;
@@ -143,7 +165,7 @@ const classname = `column2 isputarea`
         flex-wrap: wrap;
         width: 100%;
         margin: 8px;
-        overflow: auto;
+        // overflow: auto;
       }
       .group-option-item {
         font-size: 10px;
@@ -152,15 +174,28 @@ const classname = `column2 isputarea`
         background: #f5f6f6;
         border-radius: 2px;
         white-space: nowrap;
-        overflow: hidden;
+        // overflow: hidden;
         text-overflow: ellipsis;
-        margin: 0 4px 4px 0;
+        margin: 0 8px 4px 0;
         height: fit-content;
-        p {
+        position: relative;
+        ::v-deep(p) {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
+      }
+      .is-related {
+        background-color: #fff;
+        border: 1px solid green;
+      }
+      .close-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translate(50%, -50%);
+        font-size: 16px;
+        cursor: pointer;
       }
       .image-item-container {
         display: flex;
