@@ -3,6 +3,7 @@
     <el-button class="upload-users-btn" @click="uploadUsers">上传人员名单</el-button>
     <!--  分组  -->
     <transition-group
+      v-if="groupList.length"
       class="group-container"
       tag="div"
       name="opacity-list"
@@ -22,6 +23,9 @@
         @optionCancel="optionCancel"
       ></Group>
     </transition-group>
+    <div class="no-data-tips" v-else>
+      请上传人员名单
+    </div>
     <div class="relate-box" v-if="isSelectMode">
       <el-button type="primary" plain @click="confirmRelated">确认关联</el-button>
       <el-button plain @click="cancelSelect">取消</el-button>
@@ -90,20 +94,7 @@ const optionList = ref([
   }
 ])
 const groupList = ref([
-  {
-    group_name: '分组一',
-    group_name_html: '<p>分组一</p>',
-    group_identity: 'a86cbf7122c55a54dbebd6c1acf919db',
-    options: [],
-    index: 0
-  },
-  {
-    group_name: '分组二',
-    group_name_html: '<p>分组二</p>',
-    group_identity: 'fc4cb4b138c16157d71f26f990ab1410',
-    options: [],
-    index: 1
-  }
+ 
 ])
 const optionsMap = computed(() => {
   const map = {}
@@ -177,20 +168,39 @@ const optionCancel = (emitObj) => {
 }
 // 上传人员名单
 const uploadUsers = async () => {
-  const { fileUrl, savePath, fileName } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]));
-  console.log(fileUrl, savePath, fileName)
-  const addGroup = {
-    group_name: fileName,
-    group_identity: nanoid(),
-    options: [],
-    index: 0
+  try {
+    const { fileUrl, savePath, fileName } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]));
+    const isHasGroup = groupList.value.some(item => item.group_name === fileName);
+    if (isHasGroup) {
+      ElMessage({
+        type: 'warning',
+        message: '该分组名称，已存在在分组中'
+      })
+      return
+    }
+    const addGroup = {
+      group_name: fileName,
+      group_identity: nanoid(),
+      options: [],
+      index: 0
+    }
+    groupList.value.push(addGroup)
+    addGroup.index = groupList.value.length - 1
+  } catch (error) {
+    ElMessage({
+      type: 'error',
+      message: '上传失败',
+    })
   }
-  groupList.value.push(addGroup)
-  addGroup.index = groupList.value.length - 1
 }
 </script>
 
 <style lang="scss" scoped>
+.no-data-tips {
+  margin-bottom: 20px;
+  color: orange;
+  font-weight: 700;
+}
 .upload-users-btn {
   margin: 10px 16px;
 }
@@ -225,6 +235,7 @@ const uploadUsers = async () => {
     display: flex;
     flex-wrap: wrap;
   }
+
   .option-container {
     padding: 20px 16px;
     flex: 1;

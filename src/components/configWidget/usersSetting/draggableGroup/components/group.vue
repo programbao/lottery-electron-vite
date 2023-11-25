@@ -7,48 +7,42 @@
       :data-groupindex="groupInfo.index"
     >
       <div class="content">
-        <!-- 四列模式只显示标题 -->
-        <template v-if="groupInfo.groupShowType === 4">
-          <div v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
-        </template>
-
         <!-- 小于四列 -->
-        <template v-else>
-          <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
-          <div class="content-tags">
-            <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联选项到此</div>
-            <template v-else>
+        <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
+        <div class="content-tags">
+          <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联选项到此</div>
+          <template v-else>
+            <div
+              class="group-option-container"
+              :style="{
+                flexDirection: [2, 3].includes(showType) ? 'column' : 'row',
+                flexWrap: [2, 3].includes(showType) ? 'nowrap' : 'wrap'
+              }"
+              ref="groupOptionContainer"
+            >
+            <div
+              class="group-option-item"
+              :class="{
+                'is-related': optionsMap[identity].related_group,
+              }"
+              v-for="identity of groupInfo.options"
+              :key="identity">
               <div
-                class="group-option-container"
-                :style="{
-                  flexDirection: [2, 3].includes(showType) ? 'column' : 'row',
-                  flexWrap: [2, 3].includes(showType) ? 'nowrap' : 'wrap'
-                }"
-                ref="groupOptionContainer"
-              >
-              <div
-                class="group-option-item"
-                :class="{
-                  'is-related': optionsMap[identity].related_group,
-                }"
-                v-for="identity of groupInfo.options"
-                :key="identity">
-                <div
-                  v-html="optionsMap[identity].option_value_html || optionsMap[identity].option_value"
-                />
-                <el-icon @click.stop="closeBtn({option: optionsMap[identity], groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
-              </div>
-              </div>
-            </template>
-          </div>
-          <!-- <div class="dragover-tips">松开放入此分组</div> -->
-        </template>
+                v-html="optionsMap[identity].option_value_html || optionsMap[identity].option_value"
+              />
+              <el-icon @click.stop="closeBtn({option: optionsMap[identity], groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
+            </div>
+            </div>
+          </template>
+        </div>
+        <!-- <div class="dragover-tips">松开放入此分组</div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 const props = defineProps({
   text: {
     type: String,
@@ -75,7 +69,10 @@ const props = defineProps({
     }
   }
 });
-const classname = `column${length < 4 ? length : 4} isputarea`
+const classname = computed(() => {
+  console.log(props.length, 23472903)
+  return `column${props.length < 4 ? props.length : 4} isputarea`
+})
 const emit = defineEmits(['optionCancel'])
 const closeBtn = (emitObj) => {
   emit('optionCancel', emitObj)
@@ -123,7 +120,7 @@ const closeBtn = (emitObj) => {
 }
 
 .isputarea + .qd-optiongroup {
-  margin-right: 0 !important;
+  // margin-right: 0 !important;
 }
 
 .common {
@@ -145,8 +142,9 @@ const closeBtn = (emitObj) => {
       text-align: center;
       padding: 4px;
       border-bottom: 1px #f0f0f0 solid;
-      width: 100%;
+      width: 98%;
       font-size: 14px;
+      word-wrap: break-word;
     }
     &-tags {
       flex: 1;
