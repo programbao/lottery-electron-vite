@@ -156,7 +156,7 @@ const classname = `column2 isputarea`
         text-overflow: ellipsis;
         margin: 0 4px 4px 0;
         height: fit-content;
-        /deep/ p {
+        p {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;

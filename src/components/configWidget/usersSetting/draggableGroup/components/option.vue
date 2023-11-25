@@ -126,6 +126,7 @@ const display = computed(() => {
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 5000;
 }
 
 .removeable {
