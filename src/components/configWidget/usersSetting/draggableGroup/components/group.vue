@@ -75,7 +75,7 @@ const props = defineProps({
     }
   }
 });
-const classname = `column2 isputarea`
+const classname = `column${length < 4 ? length : 4} isputarea`
 const emit = defineEmits(['optionCancel'])
 const closeBtn = (emitObj) => {
   emit('optionCancel', emitObj)
