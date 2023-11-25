@@ -192,7 +192,7 @@ watch(
 
 const importFile = async (disabled) => {
   if (disabled) return
-  let fileUrl = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  let { fileUrl } = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
     formLabelAlign.value.img = fileUrl
   }

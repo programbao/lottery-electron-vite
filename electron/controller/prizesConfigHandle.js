@@ -37,7 +37,11 @@ const importFile = () => {
     
         fs.copyFileSync(filePath, destPath)
     
-        return url.pathToFileURL(destPath).href
+        return {
+          savePath: destPath,
+          fileUrl: url.pathToFileURL(destPath).href,
+          fileName: fileName
+        }
       }
     } catch (err) {
       dialog.showErrorBox("导入失败")

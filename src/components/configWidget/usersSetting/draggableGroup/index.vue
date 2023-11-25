@@ -1,5 +1,6 @@
 <template>
-  <div class="qd-optiongroup-question" :class="uniId">
+  <div class="qd-optiongroup-question">
+    <el-button class="upload-users-btn" @click="uploadUsers">上传人员名单</el-button>
     <!--  分组  -->
     <transition-group
       class="group-container"
@@ -49,6 +50,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import Option from './components/option.vue'
 import Group from './components/group.vue'
 import { ElMessage } from 'element-plus'
+import { nanoid } from 'nanoid';
+
 const optionList = ref([
   {
     option_value: '选项1',
@@ -172,9 +175,25 @@ const optionCancel = (emitObj) => {
     group.options = group.options.filter(identity => identity !== option.option_identity)
   }
 }
+// 上传人员名单
+const uploadUsers = async () => {
+  const { fileUrl, savePath, fileName } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]));
+  console.log(fileUrl, savePath, fileName)
+  const addGroup = {
+    group_name: fileName,
+    group_identity: nanoid(),
+    options: [],
+    index: 0
+  }
+  groupList.value.push(addGroup)
+  addGroup.index = groupList.value.length - 1
+}
 </script>
 
 <style lang="scss" scoped>
+.upload-users-btn {
+  margin: 10px 16px;
+}
 .relate-box {
   margin: 10px 0 10px;
 }

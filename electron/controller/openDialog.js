@@ -52,7 +52,7 @@ const openDialog = (data) => {
   ipcMain.handle('open-dialog', async (e, ...args) => {
     try {
       const res = await dialog.showOpenDialog({
-        defaultPath: 'D:/Users/Desktop',
+        // defaultPath: 'D:/Users/Desktop',
         filters: [
           {"name": "excel文件", extensions: ["xlsx", "xls"]},
         ]
