@@ -8,15 +8,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       users: [], //所有人员
       luckyUsers: {}, //已中奖人员
       leftUsers: [], //未中奖人员
-      beforeLotteryLayout: {
-        columnCount: 17, // 列数
-        rowCount: 10, // 行数
-        rowGap: '10px', // 行间距
-        columnGap: '10px', // 列间距
-        scale: 0.5, // 容器卡片缩放比例
-        top: '17vh',
-        left: '27vw',
-      },
       company: '',
       totalCards: 0, // 总牌数
       eachCount: [18, 10, 1, 1, 5, 3, 2, 10], // 每次抽取的奖品个数
@@ -38,6 +29,16 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       dialogStyle: {
         top: '4vh',
         left: '15%'
+      },
+      groupList: [], // 人员名单配置
+      beforeLotteryLayout: {
+        columnCount: 17, // 列数
+        rowCount: 10, // 行数
+        rowGap: '10px', // 行间距
+        columnGap: '10px', // 列间距
+        scale: 0.5, // 容器卡片缩放比例
+        top: '17vh',
+        left: '27vw',
       },
       luckysRowColObj: {
         rowCount: 5,

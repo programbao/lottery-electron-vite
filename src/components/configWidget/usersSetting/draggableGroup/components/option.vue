@@ -32,7 +32,7 @@ const props = defineProps({
 })
 const display = computed(() => {
   return {
-    text: props.option.option_value_html || props.option.option.option_value
+    text: props.option.option_value_html || props.option.option_value
   }
 })
 </script>

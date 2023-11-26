@@ -63,7 +63,7 @@ import { initMoveEvent } from './moveEvent'
 import { lotteryDataStore } from '../../store'
 import prizeSetting from './prizeSetting/index.vue'
 import cardSetting from './cardSetting/index.vue'
-import usersSetting from './usersSetting/index.vue'
+import usersSetting from './usersSetting/draggableGroup/index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(true);
 const dialogStyle = computed(() => {
