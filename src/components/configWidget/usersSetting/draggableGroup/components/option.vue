@@ -3,14 +3,16 @@
     class="qd-option-item"
     :class="{
       removeable: removeAble,
-      'is-related': option.related_group
+      'is-related': option.related_group,
+      'no-can-selected': option.noCanSelected
     }"
   >
     <!--  文字样式  -->
     <i v-if="!removeAble" class="survey-iconfont icon-tuozhuai"></i>
     <div class="text" v-html="display.text"></div>
     <i v-if="removeAble" @click="$emit('remove')" class="survey-iconfont icon-xuanxiangfenzubiaoqian-guanbi"></i>
-    <div class="related-txt" v-if="option.related_group">已关联</div>
+    <div class="related-txt" v-if="option.related_group && !option.noCanSelected">已关联</div>
+    <div class="related-txt" v-if="option.noCanSelected">产生了中奖名单，不可取消关联</div>
   </div>
 </template>
 
@@ -89,6 +91,13 @@ const display = computed(() => {
     right: 4px;
     color: green;
     font-size: 10px;
+  }
+
+}
+.no-can-selected {
+  border: 1px solid orange;
+  .related-txt {
+    color: orange;
   }
 }
 .images-container {

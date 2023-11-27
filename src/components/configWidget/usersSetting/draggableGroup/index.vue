@@ -60,6 +60,7 @@ const basicData = lotteryDataStore();
 const optionList = ref([])
 const groupList = ref([])
 const userRelatedMap = {};
+const luckyUsers = basicData.luckyUsers;
 watch(() => basicData.prizes, () => {
   handleOptionList();
 })
@@ -69,7 +70,8 @@ const handleOptionList = () => {
     const option = optionList.value.find(option => option.option_identity === item.type) || {};
     arr.push(Object.assign(option, {
       option_value: item.name,
-      option_identity: item.type
+      option_identity: item.type,
+      noCanSelected: !!luckyUsers[item.type],
     }))
   })
   optionList.value = arr
@@ -79,6 +81,15 @@ onMounted(() => {
   nextTick(() => {
     groupList.value = JSON.parse(JSON.stringify(basicData.groupList)) 
     handleOptionList();
+    // 初始化处理关联关系
+    groupList.value.forEach(group => {
+      group.options.forEach(identity => {
+        const option = optionList.value.find(item => item.option_identity === identity)
+        if (option) {
+          option.related_group = group.group_identity
+        }
+      })
+    })
   })
 })
 
@@ -91,7 +102,7 @@ const optionsMap = computed(() => {
   return map;
 })
 const optionClick = (option) => {
-  if (option.related_group) return
+  if (option.related_group || option.noCanSelected) return
   option.isSelected = !option.isSelected
   const group = groupList.value.find(item => item.isSelected)
   if (group) {

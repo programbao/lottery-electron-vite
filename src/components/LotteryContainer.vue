@@ -515,7 +515,7 @@ const lotteryActiveFn = async () => {
     // 判断是否要切换抽奖 人员名单
     if (basicData.currentLotteryGroup) {
       const type = basicData.currentPrize.type;
-      const userGroup = groupList.find(group => group.options.includes(currentPrize.type));
+      const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
       if (userGroup.group_identity !== basicData.currentLotteryGroup.group_identity) {
         const loading = ElLoading.service({
           lock: true,

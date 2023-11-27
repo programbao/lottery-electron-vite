@@ -75,7 +75,9 @@ const cardConfigStyle = computed(() => {
   return basicData.cardConfigStyle;
 })
 const member = computed(() => {
-  return basicData.users.slice();
+  const memberListData = basicData.memberListData
+  const currentLotteryGroup = basicData.currentLotteryGroup
+  return memberListData[currentLotteryGroup.group_identity]
 })
 const totalCard = computed(() => {
   const { columnCount, rowCount } = basicData.beforeLotteryLayout

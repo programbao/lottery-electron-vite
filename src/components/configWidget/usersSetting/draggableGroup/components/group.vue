@@ -23,14 +23,17 @@
             <div
               class="group-option-item"
               :class="{
-                'is-related': optionsMap[identity].related_group,
+                'is-related': getCurrentOption(optionsMap[identity]).related_group,
+                'no-can-selected': getCurrentOption(optionsMap[identity]).noCanSelected
               }"
               v-for="identity of groupInfo.options"
               :key="identity">
               <div
-                v-html="optionsMap[identity].option_value_html || optionsMap[identity].option_value"
+                v-html="getCurrentOption(optionsMap[identity]).option_value_html || getCurrentOption(optionsMap[identity]).option_value"
               />
-              <el-icon @click.stop="closeBtn({option: optionsMap[identity], groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
+              <el-icon 
+                v-if="!getCurrentOption(optionsMap[identity]).noCanSelected"
+                @click.stop="closeBtn({option: getCurrentOption(optionsMap[identity]), groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
             </div>
             </div>
           </template>
@@ -42,7 +45,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 const props = defineProps({
   text: {
     type: String,
@@ -70,12 +73,15 @@ const props = defineProps({
   }
 });
 const classname = computed(() => {
-  console.log(props.length, 23472903)
   return `column${props.length < 4 ? props.length : 4} isputarea`
 })
 const emit = defineEmits(['optionCancel'])
 const closeBtn = (emitObj) => {
   emit('optionCancel', emitObj)
+}
+const getCurrentOption = (option) => {
+  const obj = option || {}
+  return obj
 }
 </script>
 
@@ -186,6 +192,9 @@ const closeBtn = (emitObj) => {
       .is-related {
         background-color: #fff;
         border: 1px solid green;
+        &.no-can-selected {
+          border: 1px solid orange;
+        }
       }
       .close-icon {
         position: absolute;

@@ -99,6 +99,7 @@ const configList = [
 ]
 const prizeSettingRef = ref();
 const cardSettingRef = ref();
+const usersSettingRef = ref();
 // 处理奖项相关设置
 const handlePrizesSetting = async () => {
   let isSuccess = true
@@ -185,9 +186,9 @@ const handleBeforeLotteryLayout = async () => {
   bus.emit('handleBeforeLotteryLayoutSetting')
   return isPassSetting;
 }
-const handleVerifyConfig = async (handleStr) => {
+const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = true;
-  const verifyConfigStr =JSON.stringify(cardSettingRef.value[handleStr]);
+  const verifyConfigStr =JSON.stringify(verifyData);
   const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
   if (prevVerifyConfigStr === verifyConfigStr) {
     return true
@@ -211,10 +212,10 @@ const passTxt = {
 const confirm = async () => {
   const isPrizeSettingPass = await handlePrizesSetting();
   const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
-  const isCardConfigStylePass = await handleVerifyConfig('cardConfigStyle');
-  const isLuckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle');
-  const isLuckysRowColObjPass = await handleVerifyConfig('luckysRowColObj');
-  const isUsersSettingPass = await handleVerifyConfig('groupList'); 
+  const isCardConfigStylePass = await handleVerifyConfig('cardConfigStyle', cardSettingRef.value['cardConfigStyle']);
+  const isLuckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle', cardSettingRef.value['luckyCardConfigStyle']);
+  const isLuckysRowColObjPass = await handleVerifyConfig('luckysRowColObj', cardSettingRef.value['luckysRowColObj']);
+  const isUsersSettingPass = await handleVerifyConfig('groupList', usersSettingRef.value['groupList']); 
   if (
     isPrizeSettingPass && 
     isBeforeLotteryLayoutPass && 
@@ -230,9 +231,7 @@ const confirm = async () => {
     dialogTableVisible.value = false;
     // 设置关联名单
     if (isUsersSettingPass) {
-      Object.assign(basicData, {
-        
-      })
+      Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
     }
   } else {
     ElMessage.error('设置失败')
