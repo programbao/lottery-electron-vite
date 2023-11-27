@@ -56,7 +56,10 @@ function loadXML(xmlPath) {
   const headerTemp = ["工号", "部门", "姓名"];
   const isCorrect = excelHeader.length > 0 && excelHeader.every((headerTxt, i) => headerTxt.includes(headerTemp[i]))
   if (!isCorrect) {
-    return false
+    return {
+      type: "error",
+      msg: "人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
+    }
   }
   outData = outData.filter(item => item.length > 0);
   return outData;

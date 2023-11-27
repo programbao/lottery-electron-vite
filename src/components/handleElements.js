@@ -239,7 +239,7 @@ export const shineCard = (basicDataParam, paramsFieldsParam) => {
     if (paramsFields.isLotting || basicData.currentPrizeIndex < 2) {
       return;
     }
-    maxUser = basicData.leftUsers.length;
+    maxUser = paramsFields.totalMember;
     for (let i = 0; i < shineCard; i++) {
       let index = random(maxUser),
         cardIndex = random(basicData.totalCards);
@@ -248,8 +248,7 @@ export const shineCard = (basicDataParam, paramsFieldsParam) => {
         continue;
       }
       shine(cardIndex);
-      // console.log(cardIndex, index, basicData.leftUsers, '22222');
-      changeCard(cardIndex, basicData.leftUsers[index]);
+      changeCard(cardIndex, basicData.member[index]);
     }
   }, 500);
 }

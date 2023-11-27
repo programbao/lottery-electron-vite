@@ -27,7 +27,7 @@
             <div class="left">名单设置</div>
           </div>
           <div class="setting-content">
-            <usersSetting />
+            <usersSetting ref="usersSettingRef" />
           </div>
         </div>
         <div class="setting-title">
@@ -185,16 +185,16 @@ const handleBeforeLotteryLayout = async () => {
   bus.emit('handleBeforeLotteryLayoutSetting')
   return isPassSetting;
 }
-const handleCardConfigStyle = async (handleStr) => {
+const handleVerifyConfig = async (handleStr) => {
   let isPassSetting = true;
-  const cardConfigStyleStr =JSON.stringify(cardSettingRef.value[handleStr]);
-  const prevCardConfigStyleStr = JSON.stringify(basicData[handleStr]);
-  if (prevCardConfigStyleStr === cardConfigStyleStr) {
+  const verifyConfigStr =JSON.stringify(cardSettingRef.value[handleStr]);
+  const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
+  if (prevVerifyConfigStr === verifyConfigStr) {
     return true
   }
-  const isPass = await myApi.savePrizesConfig(cardConfigStyleStr, handleStr);
+  const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
   if (isPass) {
-    basicData[handleStr] = JSON.parse(cardConfigStyleStr);
+    basicData[handleStr] = JSON.parse(verifyConfigStr);
   } else {
     isPassSetting = false;
   }
@@ -211,22 +211,29 @@ const passTxt = {
 const confirm = async () => {
   const isPrizeSettingPass = await handlePrizesSetting();
   const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
-  const isCardConfigStylePass = await handleCardConfigStyle('cardConfigStyle');
-  const isLuckyCardConfigStylePass = await handleCardConfigStyle('luckyCardConfigStyle');
-  const isLuckysRowColObjPass = await handleCardConfigStyle('luckysRowColObj');
-  
+  const isCardConfigStylePass = await handleVerifyConfig('cardConfigStyle');
+  const isLuckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle');
+  const isLuckysRowColObjPass = await handleVerifyConfig('luckysRowColObj');
+  const isUsersSettingPass = await handleVerifyConfig('groupList'); 
   if (
     isPrizeSettingPass && 
     isBeforeLotteryLayoutPass && 
     isCardConfigStylePass && 
     isLuckyCardConfigStylePass && 
-    isLuckysRowColObjPass
+    isLuckysRowColObjPass &&
+    isUsersSettingPass
   ) {
     ElMessage({
       message: '设置成功',
       type: 'success',
     });
     dialogTableVisible.value = false;
+    // 设置关联名单
+    if (isUsersSettingPass) {
+      Object.assign(basicData, {
+        
+      })
+    }
   } else {
     ElMessage.error('设置失败')
   }

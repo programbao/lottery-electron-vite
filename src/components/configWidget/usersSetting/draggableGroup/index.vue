@@ -53,12 +53,13 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import Option from './components/option.vue'
 import Group from './components/group.vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { nanoid } from 'nanoid';
 import { lotteryDataStore } from '../../../../store'
 const basicData = lotteryDataStore();
 const optionList = ref([])
 const groupList = ref([])
+const userRelatedMap = {};
 watch(() => basicData.prizes, () => {
   handleOptionList();
 })
@@ -71,9 +72,7 @@ const handleOptionList = () => {
       option_identity: item.type
     }))
   })
-  console.log(arr, 'arrarrarr')
   optionList.value = arr
-  console.log(optionList, 'optionList.value')
 }
 // 页面初始化
 onMounted(() => {
@@ -156,9 +155,14 @@ const optionCancel = (emitObj) => {
 }
 // 上传人员名单
 const uploadUsers = async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
   try {
     const group_identity = `users_${nanoid()}`;
-    const { fileUrl, savePath, fileName } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]), group_identity);
+    const { fileUrl, savePath, fileName, users } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]), group_identity);
     const isHasGroup = groupList.value.some(item => item.group_name === fileName);
     if (isHasGroup) {
       ElMessage({
@@ -177,13 +181,22 @@ const uploadUsers = async () => {
     }
     groupList.value.push(addGroup)
     addGroup.index = groupList.value.length - 1
+    loading.close()
+    userRelatedMap[group_identity] = users
   } catch (error) {
     ElMessage({
       type: 'error',
       message: '上传失败',
     })
+    loading.close()
   }
 }
+
+// 暴露属性
+defineExpose({
+  groupList,
+  userRelatedMap
+})
 </script>
 
 <style lang="scss" scoped>

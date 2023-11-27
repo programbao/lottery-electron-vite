@@ -7,7 +7,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       prizes: [], //奖品信息
       users: [], //所有人员
       luckyUsers: {}, //已中奖人员
-      leftUsers: [], //未中奖人员
       company: '',
       totalCards: 0, // 总牌数
       eachCount: [18, 10, 1, 1, 5, 3, 2, 10], // 每次抽取的奖品个数
@@ -30,6 +29,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         top: '4vh',
         left: '15%'
       },
+      currentLotteryGroup: {},
+      memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员
       groupList: [], // 人员名单配置
       beforeLotteryLayout: {
         columnCount: 17, // 列数
@@ -95,7 +96,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         Object.assign(this, config.prizeConfig);
       }
       // 抽奖用户
-      Object.assign(this, usersData);
+      // Object.assign(this, usersData);
+      this.memberListData = config.curData
       // 总牌数
       this.totalCards = this.beforeLotteryLayout.columnCount * this.beforeLotteryLayout.rowCount;
 
@@ -104,7 +106,6 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       // 中奖用户
       this.luckyUsers = config.luckyData;
       // 读取当前已设置的抽奖结果
-      this.leftUsers = config.leftUsers;
       // 设置当前抽奖index
       let prizeIndex = this.prizes.length - 1;
       for (; prizeIndex > -1; prizeIndex--) {

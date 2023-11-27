@@ -8,7 +8,7 @@ const {
   saveErrorDataFile
 } = require("./utils/help");
 const path = require('path')
-const dbPath = path.join(__dirname, '../assets/img')
+const dbPath = path.join(__dirname, '../assets')
 const url = require('url');
 const fs = require("fs");
 
@@ -26,6 +26,7 @@ const loadData = (loadPath) => {
 const importFile = () => {
   ipcMain.handle('importFile', async (e, ...args) => {
     let sharedObject =  global.sharedObject;
+    console.log(args, 'argsargs')
     let extensions = args[0]
     let userName = args[1]
     if (!extensions) {
@@ -49,7 +50,7 @@ const importFile = () => {
         const destPath = path.join(dbPath, fileName)
         let users;
         if (userName) {
-          const isHasGroup = sharedObject.cfg.groupList.some(item => item.group_name === fileName);
+          const isHasGroup = sharedObject.cfg.groupList && sharedObject.cfg.groupList.some(item => item.group_name === fileName);
           if (!isHasGroup) {
             users = loadData(filePath)
             if (users) {
@@ -69,7 +70,8 @@ const importFile = () => {
         }
       }
     } catch (err) {
-      dialog.showErrorBox("导入失败")
+      console.log(err, '23480928342')
+      dialog.showErrorBox("导入失败", err)
     }
   })
 }

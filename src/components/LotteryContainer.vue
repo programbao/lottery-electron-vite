@@ -25,18 +25,7 @@ let rotateObj;
 let ROW_COUNT;
 let COLUMN_COUNT;
 
-let member = basicData.users.slice();
-let paramsFields = {
-  threeDCards: [],
-  selectedCardIndex: [],
-  // currentLuckys: [],
-  member,
-  isBold:  false,
-  showTable: basicData.leftUsers.length === basicData.users.length,
-  totalMember: member.length,
-  HIGHLIGHT_CELL: [],
-  // isLotting: false
-}
+let paramsFields = {};
 let animationId;
 const animate = () => {
   // 让场景通过x轴或者y轴旋转
@@ -234,14 +223,26 @@ const initCards = (isInit = true) => {
 
 const initHandleData = () => {
   cleanUp();
-  member = basicData.users.slice();
+  // 找到要展示的member
+  const currentPrize = basicData.currentPrize;
+  const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
+  console.log(userGroup)
+  if (!userGroup) {
+    ElMessage({
+      type: 'error',
+      message: `未找到${currentPrize.name}的抽奖人员名单,请系管理员`
+    })
+    return;
+  }
+  basicData.currentLotteryGroup = userGroup;
+  const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity]));
   paramsFields = {
     threeDCards: [],
     selectedCardIndex: [],
     // currentLuckys: [],
     member,
     isBold:  false,
-    showTable: basicData.leftUsers.length === basicData.users.length,
+    showTable: true,
     totalMember: member.length,
     HIGHLIGHT_CELL: [],
     // isLotting: false
@@ -292,19 +293,17 @@ const rotateBall = () => {
     // 当前同时抽取的数目,当前奖品抽完还可以继续抽，但是不记录数据
     let perCount = basicData.eachCount[basicData.currentPrizeIndex];
     let luckyData = basicData.luckyUsers[basicData.currentPrize.type];
-    let leftCount = basicData.leftUsers.length;
+    let leftCount = paramsFields.totalMember;
     let leftPrizeCount = basicData.currentPrize.count - (luckyData ? luckyData.length : 0);
 
     if (leftCount < perCount) {
       toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！  Jumlah orang yang tersisa untuk berpartisipasi dalam lotere tidak mencukupi. Sekarang setel ulang semua orang untuk membuat lotere kedua!");
-      // basicData.leftUsers = basicData.users.slice();
-      // leftCount = basicData.leftUsers.length;
       perCount = leftCount
       return
     }
     for (let i = 0; i < perCount; i++) {
       let luckyId = random(leftCount);
-      basicData.currentLuckys.push(basicData.leftUsers.splice(luckyId, 1)[0]);
+      basicData.currentLuckys.push(paramsFields.member.splice(luckyId, 1)[0]);
       leftCount--;
       leftPrizeCount--;
       // let cardIndex = random(basicData.totalCards);
@@ -479,7 +478,13 @@ const resetCard = (duration = 500, model) => {
   });
 }
 
-
+const waitHandleEvent = () => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, 2000)
+  }) 
+}
 const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
     resetCard(500).then(res => {
@@ -507,6 +512,23 @@ const lotteryActiveFn = async () => {
     basicData.isShowLuckyUser = false;
     // 每次抽奖前先保存上一次的抽奖数据
     await saveData();
+    // 判断是否要切换抽奖 人员名单
+    if (basicData.currentLotteryGroup) {
+      const type = basicData.currentPrize.type;
+      const userGroup = groupList.find(group => group.options.includes(currentPrize.type));
+      if (userGroup.group_identity !== basicData.currentLotteryGroup.group_identity) {
+        const loading = ElLoading.service({
+          lock: true,
+          text: '人员名单有变动,正在切换抽奖人员',
+          background: 'rgba(0, 0, 0, 0.7)',
+        })
+        basicData.currentLotteryGroup = userGroup;
+        // resetBallCards(basicData.users_hinduism_buddhism_confucianism);
+        await waitHandleEvent();
+        loading.close();
+      }
+    }
+
     // 抽奖
     lottery("lottery");
     toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`, { 
@@ -516,29 +538,13 @@ const lotteryActiveFn = async () => {
   }
   resetCard(500, "lottery").then(async res => {
     if (basicData.isNextPrize) {
-      // 重置选择抽奖名单
-      // if (currentPrizeIndex >= 0 && currentPrizeIndex <= 2) {
-      //   switch (currentPrizeIndex) {
-      //     case 2:
-      //       resetBallCards(basicData.users_hinduism_buddhism_confucianism);
-      //       break;
-      //     case 1:
-      //       resetBallCards(basicData.users_christian_catholic);
-      //       break;
-      //     case 0:
-      //       resetBallCards(basicData.users_islam);
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      // }
       // 入场下一个奖项
       bus.emit('showPrize')
       // 隐藏抽奖名单
       basicData.isShowLuckyUser = false;
       // 每次抽奖前先保存上一次的抽奖数据
       await saveData();
-      basicData.isLotting = false
+      basicData.isLotting = false;
       return
     }
      // 隐藏抽奖名单
@@ -575,7 +581,6 @@ const beginLottery = () => {
 }
 const resetBtnClick = async () => {
   basicData.currentLuckys = [];
-  basicData.leftUsers = Object.assign([], basicData.users);
   basicData.luckyUsers = {};
   basicData.currentPrizeIndex = basicData.prizes.length - 1;
   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];

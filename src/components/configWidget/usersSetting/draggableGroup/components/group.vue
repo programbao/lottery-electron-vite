@@ -171,7 +171,7 @@ const closeBtn = (emitObj) => {
         padding: 0 4px;
         background: #f5f6f6;
         border-radius: 2px;
-        white-space: nowrap;
+        white-space: wrap;
         // overflow: hidden;
         text-overflow: ellipsis;
         margin: 0 8px 4px 0;
