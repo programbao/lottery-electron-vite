@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-box">
     <div class="screen-card"
       :style="renderDomStyle"
       v-show="isShowScreenCard">
@@ -127,6 +127,8 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   document.querySelector('.screen-card').style.display = displayStr
+  document.querySelector('.screen-card .tips').style.display = displayStr
+
 }
 const findCurrentLotteryGroup = () => {
   // 找到要展示的member
@@ -141,7 +143,7 @@ const groupListSetting = () => {
   const userGroup = findCurrentLotteryGroup();
   if (!userGroup) {
     isShowScreenCard.value = false
-  } else {
+  } else if (!basicData.isEnterLottery) {
     isShowScreenCard.value = true
   }
 }

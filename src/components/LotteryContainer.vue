@@ -10,7 +10,7 @@ const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import { shineCard, getCardWithParentHtml, createCardWithParentDom, random, removeShineCard } from './handleElements'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 let camera;
 let scene;
 let renderer;
@@ -493,6 +493,12 @@ const waitHandleEvent = () => {
     }, 2000)
   }) 
 }
+// 重新/切换设置抽奖名单
+const switchLotteryMemberData = (userGroup) => {
+  basicData.currentLotteryGroup = userGroup;
+  initParamsFieldsData(userGroup);
+  adjustCardConfigStyleSetting();
+}
 const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
     resetCard(500).then(res => {
@@ -523,14 +529,15 @@ const lotteryActiveFn = async () => {
     // 判断是否要切换抽奖 人员名单
     if (basicData.currentLotteryGroup) {
       const type = basicData.currentPrize.type;
-      const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
+      const userGroup = basicData.groupList.find(group => group.options.includes(type));
       if (userGroup.group_identity !== basicData.currentLotteryGroup.group_identity) {
         const loading = ElLoading.service({
           lock: true,
           text: '人员名单有变动,正在切换抽奖人员',
           background: 'rgba(0, 0, 0, 0.7)',
         })
-        basicData.currentLotteryGroup = userGroup || {};
+        // basicData.currentLotteryGroup = userGroup || {};
+        switchLotteryMemberData(userGroup);
         // resetBallCards(basicData.users_hinduism_buddhism_confucianism);
         await waitHandleEvent();
         loading.close();
@@ -652,9 +659,10 @@ const groupListSetting = () => {
     bus.emit('adjuctScreenCardDisplay', 'grid')
   } else {
     if (userGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
-      basicData.currentLotteryGroup = userGroup;
-      initParamsFieldsData(userGroup);
-      adjustCardConfigStyleSetting();
+      switchLotteryMemberData(userGroup);
+      // basicData.currentLotteryGroup = userGroup;
+      // initParamsFieldsData(userGroup);
+      // adjustCardConfigStyleSetting();
     }
   }
   basicData.currentLotteryGroup = userGroup || {};

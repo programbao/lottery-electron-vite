@@ -102,8 +102,7 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users.xlsx",
       "group_identity": "users_1",
       "options": [
-        "D6qlvcjFekRCSqVvFe2Eo",
-        "YZL6HBlu2ZSQ6N4PB_RD8"
+        "D6qlvcjFekRCSqVvFe2Eo"
       ]
     },
     {
@@ -113,7 +112,8 @@
       "group_identity": "users_2",
       "options": [
         "cUyTXOIN1415C3EM8pKhY",
-        "-TEDYwm9RWRy7Q9HDmuEf"
+        "-TEDYwm9RWRy7Q9HDmuEf",
+        "YZL6HBlu2ZSQ6N4PB_RD8"
       ]
     },
     {
