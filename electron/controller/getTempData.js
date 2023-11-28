@@ -55,11 +55,13 @@ const getLeftUsers = (notRepeatForAllUser = true) => {
 const getTempData = () => {
   ipcMain.handle('getTempData', async (e, ...args) => {
     let sharedObject =  global.sharedObject;
-    const prizeConfig = await loadTempData("prizesConfig.json");
-    sharedObject.cfg = prizeConfig[0];
+    if (!sharedObject.cfg) {
+      const prizeConfig = await loadTempData("prizesConfig.json");
+      sharedObject.cfg = prizeConfig[0];
+    }
     const { luckyData, errorData, curData, leftUsers } = getLeftUsers();
     return {
-      prizeConfig: prizeConfig[0],
+      prizeConfig: sharedObject.cfg,
       // leftUsers: leftUsers,
       curData,
       luckyData: luckyData

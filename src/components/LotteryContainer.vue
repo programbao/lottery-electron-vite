@@ -81,31 +81,6 @@ const transform = (targets, duration) => {
     .start().onComplete(() => {
     });
 }
-function switchScreen(type) {
-  if (isAnimating) {
-    toast.info("请等待动画加载完成  harap tunggu hingga animasi dimuat", { 
-      timeout: 2000
-    });
-    return
-  }
-  // debugger
-  switch (type) {
-    case "enter":
-      break;
-    default:
-      animate();
-      transform(targets.sphere, 1500);
-      setTimeout(() => {
-        basicData.isNextPrize = true
-        // if (basicData.currentPrizeIndex === basicData.prizes.length - 1) {
-        // } else {
-        //   basicData.currentPrizeIndex--;
-        //   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-        // }
-      }, 2000);
-      break;
-  }
-}
 
 const render = () => {
   renderer.render(scene, camera);
@@ -119,7 +94,7 @@ const onWindowResize = () => {
 }
 
 
-const enterAnimate = () => {
+const enterAnimate = (resetPrizeStatus = true) => {
   let containerDom = document.getElementById("container");
   // document.querySelector('.screen-card').style.display = 'none'
   bus.emit('adjuctScreenCardDisplay', 'none')
@@ -185,10 +160,18 @@ const enterAnimate = () => {
   controls.minDistance = 500;
   controls.maxDistance = 6000;
   controls.addEventListener("change", render);
-  switchScreen("lottery");
-  // 触发通知处理进入抽奖结束时间
-  bus.emit("enterLotteryEnd");
   window.addEventListener("resize", onWindowResize, false);
+
+  // 进入球体动画
+  animate();
+  transform(targets.sphere, 1500);
+  if (resetPrizeStatus) {
+    setTimeout(() => {
+      basicData.isNextPrize = true
+    }, 2000);
+    // 触发通知处理进入抽奖结束时间
+    bus.emit("enterLotteryEnd");
+  }
 }
 // 清除销毁 three.js对象 相关绑定和处理对象
 const cleanUp = () => {
@@ -384,29 +367,6 @@ const saveData = () => {
     return Promise.resolve();
   }
   let type = basicData.prizes[basicData.lastTimePrizeIndex]['type']
-  // let type = basicData.currentPrize.type,
-  //   curLucky = basicData.luckyUsers[type] || [];
-
-  // curLucky = curLucky.concat(paramsFields.currentLuckys);
-
-  // basicData.luckyUsers[type] = curLucky;
-
-  // if (basicData.currentPrize.count <= curLucky.length) {
-  //   basicData.currentPrizeIndex--;
-  //   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
-  //   setTimeout(() => {
-  //     bus.emit('setPrizeData', {
-  //       currentPrizeIndex: basicData.currentPrizeIndex,
-  //       count: 0,
-  //       isInit: true
-  //     })
-  //   }, 200)
-  //   basicData.isNextPrize = true;
-  //   // if (currentPrizeIndex <= -1) {
-  //   //   currentPrizeIndex = 0;
-  //   // }
-  //   // currentPrize = basicData.prizes[currentPrizeIndex];
-  // }
   if (basicData.currentLuckys.length > 0) {
     // todo 添加数据保存机制，以免服务器挂掉数据丢失
     return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
@@ -494,10 +454,10 @@ const waitHandleEvent = () => {
   }) 
 }
 // 重新/切换设置抽奖名单
-const switchLotteryMemberData = (userGroup) => {
+const switchLotteryMemberData = (userGroup, resetPrizeStatus = true) => {
   basicData.currentLotteryGroup = userGroup;
   initParamsFieldsData(userGroup);
-  adjustCardConfigStyleSetting();
+  adjustCardConfigStyleSetting(resetPrizeStatus);
 }
 const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
@@ -537,7 +497,7 @@ const lotteryActiveFn = async () => {
           background: 'rgba(0, 0, 0, 0.7)',
         })
         // basicData.currentLotteryGroup = userGroup || {};
-        switchLotteryMemberData(userGroup);
+        switchLotteryMemberData(userGroup, false);
         // resetBallCards(basicData.users_hinduism_buddhism_confucianism);
         await waitHandleEvent();
         loading.close();
@@ -641,12 +601,12 @@ const exportData = () => {
     console.log(result)
   })
 }
-const adjustCardConfigStyleSetting = () => {
+const adjustCardConfigStyleSetting = (resetPrizeStatus = true) => {
   if (!basicData.isEnterLottery) return
   // 移除闪烁定时器
   removeShineCard();
   cleanUp();
-  enterAnimate();
+  enterAnimate(resetPrizeStatus);
 }
 // bus.on('initConfigDataEnd', initHandleData)
 // 处理人员名单变化处理

@@ -127,8 +127,7 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   document.querySelector('.screen-card').style.display = displayStr
-  document.querySelector('.screen-card .tips').style.display = displayStr
-
+  document.querySelector('.card-box .tips').style.display = displayStr
 }
 const findCurrentLotteryGroup = () => {
   // 找到要展示的member

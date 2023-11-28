@@ -24,8 +24,9 @@ const getStaticUsersData = async () => {
       const group = groupList[i];
       let users = loadXML(group.savePath);
       if (users.type === 'error') {
-        dialog.showErrorBox("初始化失败", group.group_name + users.msg);
-        break;
+        group.errorMsg = group.group_name + users.msg;
+        dialog.showErrorBox("初始化失败", group.errorMsg);
+        continue;
       }
       sharedObject.curData[group.group_identity] = users
       shuffle(users);

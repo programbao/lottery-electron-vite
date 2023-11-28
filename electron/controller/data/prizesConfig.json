@@ -102,7 +102,8 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users.xlsx",
       "group_identity": "users_1",
       "options": [
-        "D6qlvcjFekRCSqVvFe2Eo"
+        "D6qlvcjFekRCSqVvFe2Eo",
+        "YZL6HBlu2ZSQ6N4PB_RD8"
       ]
     },
     {
@@ -111,9 +112,7 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_islam.xlsx",
       "group_identity": "users_2",
       "options": [
-        "cUyTXOIN1415C3EM8pKhY",
-        "-TEDYwm9RWRy7Q9HDmuEf",
-        "YZL6HBlu2ZSQ6N4PB_RD8"
+        "-TEDYwm9RWRy7Q9HDmuEf"
       ]
     },
     {
@@ -123,7 +122,8 @@
       "group_identity": "users_3",
       "options": [
         "VG-taKJkA_6-UHdlh6Wjc",
-        "Qim0zkidsnUedcdACP818"
+        "Qim0zkidsnUedcdACP818",
+        "cUyTXOIN1415C3EM8pKhY"
       ]
     },
     {

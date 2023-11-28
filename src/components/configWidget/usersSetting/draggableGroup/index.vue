@@ -18,9 +18,10 @@
         :length="groupList.length"
         :key="group.group_identity"
         :optionsMap="optionsMap"
-        :class="{ dragging: isSelectMode, 'drag-over': group.isSelected }"
+        :class="{ dragging: isSelectMode, 'drag-over': group.isSelected, 'error-style': group.errorMsg }"
         @click.native="onGroupClick({ group, index })"
         @optionCancel="optionCancel"
+        @groupCancel="groupCancel"
       ></Group>
     </transition-group>
     <div class="no-data-tips" v-else>
@@ -164,6 +165,26 @@ const optionCancel = (emitObj) => {
     group.options = group.options.filter(identity => identity !== option.option_identity)
   }
 }
+
+// 取消人员名单
+const groupCancel = (emitObj) => {
+  const groupIndex = groupList.value.findIndex(item => item.group_identity === emitObj.group_identity)
+  if (groupIndex > -1) {
+    for (let i = 0; i < emitObj.options.length; i++) {
+      const option_identity = emitObj.options[i];
+      const option = optionsMap.value[option_identity]
+      if (option.noCanSelected) {
+        ElMessage({
+          type: 'error',
+          message: `${option.option_value} 已经参数中奖名单，该人员名单不能删除`
+        })
+        return
+      }
+    }
+
+    groupList.value.splice(groupIndex, 1)
+  }
+}
 // 上传人员名单
 const uploadUsers = async () => {
   const loading = ElLoading.service({
@@ -269,9 +290,24 @@ defineExpose({
     }
   }
 }
+
+.error-style {
+  ::v-deep(.common) {
+    border-color: red;
+  }
+}
 .dragging {
   ::v-deep(.qd-optiongroup-item) {
     border: 1px solid #409eff;
+    .close-btn {
+      color: #074d95;
+    }
+  }
+  &.error-style {
+    ::v-deep(.qd-optiongroup-item) {
+      border: 1px solid red;
+    
+    }
   }
 }
 .dragging.isSelected {
@@ -285,18 +321,19 @@ defineExpose({
   ::v-deep(.qd-optiongroup-item) {
     border: 2px solid #409eff;
     box-shadow: 0 4px 8px 0 rgba(50, 152, 255, 0.5);
-    // .information {
-    //   display: none;
-    // }
-    // .content-title {
-    //   border-bottom: none;
-    // }
-    // .content-tags {
-    //   display: none;
-    // }
-    // .dragover-tips {
-    //   display: flex;
-    // }
+    .close-btn {
+      color: #074d95;
+      font-weight: 700;
+    }
+  }
+  &.error-style {
+    ::v-deep(.qd-optiongroup-item) {
+      border: 2px solid red;
+      box-shadow: 0 4px 8px 0 red;
+      .close-btn {
+        color: red;
+      }
+    }
   }
 }
 

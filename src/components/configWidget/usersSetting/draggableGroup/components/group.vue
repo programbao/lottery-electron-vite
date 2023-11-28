@@ -5,6 +5,9 @@
       ref="qdGroupItem"
       class="qd-optiongroup-item common"
       :data-groupindex="groupInfo.index"
+      :class="{
+        'has-error': groupInfo.errorMsg
+      }"
     >
       <div class="content">
         <!-- 小于四列 -->
@@ -33,13 +36,28 @@
               />
               <el-icon 
                 v-if="!getCurrentOption(optionsMap[identity]).noCanSelected"
-                @click.stop="closeBtn({option: getCurrentOption(optionsMap[identity]), groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
+                @click.stop="closeOptionBtn({option: getCurrentOption(optionsMap[identity]), groupIdentity: groupInfo.group_identity})" class="close-icon"><CircleCloseFilled /></el-icon>
             </div>
             </div>
           </template>
         </div>
-        <!-- <div class="dragover-tips">松开放入此分组</div> -->
       </div>
+      <div class="tips error" v-if="groupInfo.errorMsg">
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          :content="groupInfo.errorMsg"
+          placement="top"
+        >
+          <el-icon :size="20"><Warning /></el-icon> 
+        </el-tooltip>
+      </div>
+      <!-- 关闭按钮 -->
+      <el-icon 
+        class="close-btn" 
+        :size="20"
+        @click.stop="closeGroupBtn"
+        ><CircleClose /></el-icon> 
     </div>
   </div>
 </template>
@@ -75,9 +93,12 @@ const props = defineProps({
 const classname = computed(() => {
   return `column${props.length < 4 ? props.length : 4} isputarea`
 })
-const emit = defineEmits(['optionCancel'])
-const closeBtn = (emitObj) => {
+const emit = defineEmits(['optionCancel', 'groupCancel'])
+const closeOptionBtn = (emitObj) => {
   emit('optionCancel', emitObj)
+}
+const closeGroupBtn = () => {
+  emit('groupCancel', props.groupInfo)
 }
 const getCurrentOption = (option) => {
   const obj = option || {}
@@ -122,7 +143,7 @@ const getCurrentOption = (option) => {
 .qd-optiongroup-item {
   border-radius: 8px;
   height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .isputarea + .qd-optiongroup {
@@ -137,13 +158,15 @@ const getCurrentOption = (option) => {
   font-size: 12px;
   font-weight: 500;
   border: 1px solid #dadbde;
+  position: relative;
   .content {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    padding-bottom: 20px;
+    // overflow: hidden;
     &-title {
       text-align: center;
       padding: 4px;
@@ -222,6 +245,27 @@ const getCurrentOption = (option) => {
       }
     }
   }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+    cursor: pointer;
+  }
+  &.has-error {
+    .close-btn {
+      color: red;
+    }
+  }
+  .tips.error {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0%);
+    color: red;
+    cursor: pointer;
+  }
+
   .information {
     background: #7291ff;
     color: #fff;
