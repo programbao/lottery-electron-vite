@@ -10,6 +10,7 @@ const toast = useToast();
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import { shineCard, getCardWithParentHtml, createCardWithParentDom, random, removeShineCard } from './handleElements'
+import { ElMessage } from 'element-plus'
 let camera;
 let scene;
 let renderer;
@@ -22,8 +23,8 @@ let targets = {
 let isAnimating = false;
 let rotateObj;
 
-let ROW_COUNT;
-let COLUMN_COUNT;
+// let ROW_COUNT;
+// let COLUMN_COUNT;
 
 let paramsFields = {};
 let animationId;
@@ -120,7 +121,8 @@ const onWindowResize = () => {
 
 const enterAnimate = () => {
   let containerDom = document.getElementById("container");
-  document.querySelector('.screen-card').style.display = 'none'
+  // document.querySelector('.screen-card').style.display = 'none'
+  bus.emit('adjuctScreenCardDisplay', 'none')
   containerDom.innerHTML = '';
   containerDom.style = '';
   camera = new THREE.PerspectiveCamera(
@@ -131,7 +133,8 @@ const enterAnimate = () => {
   );
   camera.position.z = 3000;
   scene = scene ? scene : new THREE.Scene();
-
+  const ROW_COUNT = basicData.beforeLotteryLayout.rowCount;
+  const COLUMN_COUNT = basicData.beforeLotteryLayout.columnCount;
   paramsFields.threeDCards = [];
   let index = 0;
   for (let i = 0; i < ROW_COUNT; i++) {
@@ -208,6 +211,7 @@ const cleanUp = () => {
     scene = null;
     camera = null;
     controls = null;
+    cancelAnimationFrame(animationId);
     // Clean up any additional variables if necessary
     // otherVar = null;
   }
@@ -220,37 +224,41 @@ const initCards = (isInit = true) => {
   })
 }
 
-
-const initHandleData = () => {
-  cleanUp();
+const findCurrentLotteryGroup = () => {
   // 找到要展示的member
   const currentPrize = basicData.currentPrize;
   const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
   console.log(userGroup)
   if (!userGroup) {
-    ElMessage({
-      type: 'error',
-      message: `未找到${currentPrize.name}的抽奖人员名单,请系管理员`
-    })
     return;
   }
-  basicData.currentLotteryGroup = userGroup;
+  return userGroup;
+}
+const initParamsFieldsData = (userGroup) => {
+  basicData.currentLotteryGroup = userGroup || {};
   const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity]));
   paramsFields = {
     threeDCards: [],
     selectedCardIndex: [],
-    // currentLuckys: [],
     member,
     isBold:  false,
     showTable: true,
     totalMember: member.length,
     HIGHLIGHT_CELL: [],
-    // isLotting: false
   }
-  
-  ROW_COUNT = basicData.beforeLotteryLayout.rowCount;
-  COLUMN_COUNT = basicData.beforeLotteryLayout.columnCount;
-  cancelAnimationFrame(animationId);
+}
+const initHandleData = () => {
+  cleanUp();
+  // 找到要展示的member
+  const userGroup = findCurrentLotteryGroup();
+  if (!userGroup) {
+    ElMessage({
+      type: 'error',
+      message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
+    })
+    return
+  }
+  initParamsFieldsData(userGroup);
   initCards();
   // animate();
   // 随机切换背景和人员信息
@@ -522,7 +530,7 @@ const lotteryActiveFn = async () => {
           text: '人员名单有变动,正在切换抽奖人员',
           background: 'rgba(0, 0, 0, 0.7)',
         })
-        basicData.currentLotteryGroup = userGroup;
+        basicData.currentLotteryGroup = userGroup || {};
         // resetBallCards(basicData.users_hinduism_buddhism_confucianism);
         await waitHandleEvent();
         loading.close();
@@ -587,7 +595,8 @@ const resetBtnClick = async () => {
   basicData.isShowLuckyUser = false;
   basicData.isContinueLottery = false
   // document.getElementById("container").classList.remove('slide-in-fwd-center');
-  document.querySelector('.screen-card').style.display = 'grid'
+  // document.querySelector('.screen-card').style.display = 'grid'
+  bus.emit('adjuctScreenCardDisplay', 'grid')
   bus.emit('hidePrizeMark');
   // 移除闪烁定时器
   removeShineCard();
@@ -632,14 +641,31 @@ const adjustCardConfigStyleSetting = () => {
   cleanUp();
   enterAnimate();
 }
-// 监听数据
 // bus.on('initConfigDataEnd', initHandleData)
+// 处理人员名单变化处理
+const groupListSetting = () => {
+  const userGroup = findCurrentLotteryGroup();
+  if (!userGroup && basicData.isEnterLottery) {
+    // 移除闪烁定时器
+    removeShineCard();
+    cleanUp();
+    bus.emit('adjuctScreenCardDisplay', 'grid')
+  } else {
+    if (userGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
+      basicData.currentLotteryGroup = userGroup;
+      initParamsFieldsData(userGroup);
+      adjustCardConfigStyleSetting();
+    }
+  }
+  basicData.currentLotteryGroup = userGroup || {};
+}
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
 bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)
+bus.on('groupListSetting', groupListSetting)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)

@@ -4,7 +4,7 @@
       "type": "FTNdOJDL46KcELWmB_z7g",
       "count": 18,
       "eachCount": 18,
-      "name": "特等奖 Hadiah Utama PERJALANAN ROHANI - Umrah",
+      "name": "特等奖",
       "otherName": " 特等奖-朝觐",
       "img": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/img/flight.png"
     },
@@ -101,40 +101,48 @@
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users.xlsx",
       "group_identity": "users_1",
-      "options": ["D6qlvcjFekRCSqVvFe2Eo", "YZL6HBlu2ZSQ6N4PB_RD8"],
-      "index": 0
+      "options": [
+        "D6qlvcjFekRCSqVvFe2Eo",
+        "YZL6HBlu2ZSQ6N4PB_RD8"
+      ]
     },
     {
       "group_name": "users_islam.xlsx",
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_islam.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_islam.xlsx",
       "group_identity": "users_2",
-      "options": ["cUyTXOIN1415C3EM8pKhY", "-TEDYwm9RWRy7Q9HDmuEf"],
-      "index": 0
+      "options": [
+        "cUyTXOIN1415C3EM8pKhY",
+        "-TEDYwm9RWRy7Q9HDmuEf"
+      ]
     },
     {
       "group_name": "users_hinduism_buddhism_confucianism.xlsx",
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_hinduism_buddhism_confucianism.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_hinduism_buddhism_confucianism.xlsx",
       "group_identity": "users_3",
-      "options": ["VG-taKJkA_6-UHdlh6Wjc", "Qim0zkidsnUedcdACP818"],
-      "index": 0
+      "options": [
+        "VG-taKJkA_6-UHdlh6Wjc",
+        "Qim0zkidsnUedcdACP818"
+      ]
     },
     {
       "group_name": "users_festival.xlsx",
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "group_identity": "users_4",
-      "options": ["IuWwApzph3wAqIiHTHct_"],
-      "index": 0
+      "options": [
+        "IuWwApzph3wAqIiHTHct_"
+      ]
     },
     {
       "group_name": "users_christian_catholic.xlsx",
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_christian_catholic.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_christian_catholic.xlsx",
       "group_identity": "users_5",
-      "options": ["FTNdOJDL46KcELWmB_z7g"],
-      "index": 0
+      "options": [
+        "FTNdOJDL46KcELWmB_z7g"
+      ]
     }
   ]
 }

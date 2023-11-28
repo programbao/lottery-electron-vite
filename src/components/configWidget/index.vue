@@ -102,7 +102,10 @@ const cardSettingRef = ref();
 const usersSettingRef = ref();
 // 处理奖项相关设置
 const handlePrizesSetting = async () => {
-  let isSuccess = true
+  let isSuccess = {
+      type: 'success',
+      status: 1
+    }
   const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
   // 删除不必存的字段
   const excludeFields = ['index', 'isHasLucky'];
@@ -114,7 +117,10 @@ const handlePrizesSetting = async () => {
   const prizesDataStr = JSON.stringify(prizesData);
   if (prizesDataStr === JSON.stringify(basicData.prizes)) {
     // dialogTableVisible.value = false;
-    return true
+    return {
+      type: 'warning',
+      status: 2
+    }
   }
   const isPass = await myApi.savePrizesConfig(prizesDataStr, 'prizes');
   if (isPass) {
@@ -159,23 +165,31 @@ const handlePrizesSetting = async () => {
     // 重置添加和删除的记录数量
     cutNum = 0;
     addNum = 0;
-    // ElMessage({
-    //   message: '设置成功',
-    //   type: 'success',
-    // });
-    isSuccess = true
+    isSuccess = {
+      type: 'success',
+      status: 1
+    }
   } else {
-    isSuccess = false
+    isSuccess = {
+      type: 'error',
+      status: 0
+    }
   } 
   return isSuccess
 }
 // 处理卡片排列设置
 const handleBeforeLotteryLayout = async () => {
-  let isPassSetting = true;
+  let isPassSetting = {
+    type: 'success',
+    status: 1
+  };
   const cardDataStr =JSON.stringify(cardSettingRef.value.beforeLotteryLayout);
   const beforeLotteryLayoutStr = JSON.stringify(basicData.beforeLotteryLayout);
   if (beforeLotteryLayoutStr === cardDataStr) {
-    return true
+    return {
+      type: 'waring',
+      status: 2
+    }
   }
   const isPass = await myApi.savePrizesConfig(cardDataStr, 'beforeLotteryLayout');
   if (isPass) {
@@ -187,55 +201,124 @@ const handleBeforeLotteryLayout = async () => {
   return isPassSetting;
 }
 const handleVerifyConfig = async (handleStr, verifyData) => {
-  let isPassSetting = true;
+  let isPassSetting = {
+      type: 'success',
+      status: 1
+    };
   const verifyConfigStr =JSON.stringify(verifyData);
   const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
   if (prevVerifyConfigStr === verifyConfigStr) {
-    return true
+    return {
+      type: 'warning',
+      status: 2
+    };
   }
   const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
   if (isPass) {
     basicData[handleStr] = JSON.parse(verifyConfigStr);
   } else {
-    isPassSetting = false;
+    isPassSetting = {
+      type: 'error',
+      status: 0
+    };
   }
   bus.emit(handleStr + 'Setting')
   return isPassSetting; 
 }
 
-
+const findCurrentLotteryGroup = () => {
+  // 找到要展示的member
+  const currentPrize = basicData.currentPrize;
+  const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
+  if (!userGroup) {
+    return;
+  }
+  return userGroup;
+}
 const passTxt = {
   'prizesSetting': '奖项设置',
   'beforeLotteryLayout': '抽奖前卡片排列及位置',
   'cardConfigStyle': '卡片样式设置',
 }
+const settingStatus = {
+  0: '未通过',
+  1: '通过',
+  2: '未修改'
+}
+
+const checkAllPassStatus = (...statuses) => {
+  // 检查所有状态数组
+  if (statuses.some(status => status === 0)) {
+    return 0; // 存在状态为0，设置失败
+  } else if (statuses.some(status => status === 1)) {
+    return 1; // 存在状态为1，设置成功
+  } else if (statuses.every(status => status === 2)) {
+    return 2; // 所有状态为2，未修改过配置
+  }
+};
+
 const confirm = async () => {
-  const isPrizeSettingPass = await handlePrizesSetting();
-  const isBeforeLotteryLayoutPass = await handleBeforeLotteryLayout();
-  const isCardConfigStylePass = await handleVerifyConfig('cardConfigStyle', cardSettingRef.value['cardConfigStyle']);
-  const isLuckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle', cardSettingRef.value['luckyCardConfigStyle']);
-  const isLuckysRowColObjPass = await handleVerifyConfig('luckysRowColObj', cardSettingRef.value['luckysRowColObj']);
-  const isUsersSettingPass = await handleVerifyConfig('groupList', usersSettingRef.value['groupList']); 
-  if (
-    isPrizeSettingPass && 
-    isBeforeLotteryLayoutPass && 
-    isCardConfigStylePass && 
-    isLuckyCardConfigStylePass && 
-    isLuckysRowColObjPass &&
-    isUsersSettingPass
-  ) {
+  const prizeSettingPass = await handlePrizesSetting();
+  const beforeLotteryLayoutPass = await handleBeforeLotteryLayout();
+  const cardConfigStylePass = await handleVerifyConfig('cardConfigStyle', cardSettingRef.value['cardConfigStyle']);
+  const luckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle', cardSettingRef.value['luckyCardConfigStyle']);
+  const luckysRowColObjPass = await handleVerifyConfig('luckysRowColObj', cardSettingRef.value['luckysRowColObj']);
+  // 删除不必存的字段
+  const groupListData = JSON.parse(JSON.stringify(usersSettingRef.value['getGroupList']()));
+  const excludeFields = ['index', 'isSelected'];
+  groupListData.forEach((group) => {
+    excludeFields.forEach((key) => {
+      delete group[key];
+    })
+  })
+  const usersSettingPass = await handleVerifyConfig('groupList', groupListData);
+   // 检查所有状态
+  const status = checkAllPassStatus(
+    prizeSettingPass.status,
+    beforeLotteryLayoutPass.status,
+    cardConfigStylePass.status,
+    luckyCardConfigStylePass.status,
+    luckysRowColObjPass.status,
+    usersSettingPass.status
+  );
+
+  if (status === 1) {
     ElMessage({
       message: '设置成功',
       type: 'success',
     });
-    dialogTableVisible.value = false;
-    // 设置关联名单
-    if (isUsersSettingPass) {
-      Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
-    }
-  } else {
-    ElMessage.error('设置失败')
+    // dialogTableVisible.value = false;
+    // ...其他处理
+  } else if (status === 0) {
+    ElMessage.error('设置失败');
+  } else if (status === 2) {
+    ElMessage.warning('没有修改过配置');
   }
+  dialogTableVisible.value = false;
+  // if (
+  //   isPrizeSettingPass && 
+  //   isBeforeLotteryLayoutPass && 
+  //   isCardConfigStylePass && 
+  //   isLuckyCardConfigStylePass && 
+  //   isLuckysRowColObjPass &&
+  //   isUsersSettingPass
+  // ) {
+  //   ElMessage({
+  //     message: '设置成功',
+  //     type: 'success',
+  //   });
+  //   dialogTableVisible.value = false;
+  //   // 设置关联名单
+  //   if (isUsersSettingPass) {
+  //     Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
+  //     const userGroup = findCurrentLotteryGroup();
+  //     if (userGroup) {
+  //       basicData.currentLotteryGroup = userGroup;
+  //     }
+  //   }
+  // } else {
+  //   ElMessage.error('设置失败')
+  // }
 }
 
 </script>

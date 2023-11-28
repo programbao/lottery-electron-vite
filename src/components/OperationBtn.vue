@@ -1,6 +1,6 @@
 <template>
   <div id="menu">
-    <span v-show="!basicData.isShowLuckyUser">
+    <span v-show="noHideBtn">
       <div class="begin-lottery">
         <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onBeforeUnmount, computed } from 'vue'
+import { ref, onBeforeMount, onBeforeUnmount, computed, watch } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
@@ -63,6 +63,17 @@ const isContinueLottery = computed(() => {
 })
 const isShowPrizeMark = computed(() => {
   return basicData.isShowPrizeMark;
+})
+const isHideCommonBtn = ref(false);
+const noHideBtn = computed(() => {
+  let noHide = true;
+  if (basicData.isShowLuckyUser) {
+    noHide = false;
+  }
+  if (isHideCommonBtn.value) {
+    noHide = false
+  }
+  return noHide;
 })
 const isFirstPrize = ref(true);
 const noBeginLottery = ref(true);
@@ -85,9 +96,20 @@ const reLottery = () => {
   bus.emit('reLottery')
   bus.emit('hidePrizeMark');
 }
+
 // const showPrizeEnd = () => {
 //   isShowPrizeBtn.value = false
 // }
+const findCurrentLotteryGroup = () => {
+  // 找到要展示的member
+  const currentPrize = basicData.currentPrize;
+  const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
+  if (!userGroup) {
+    return;
+  }
+  return userGroup;
+}
+
 const toggleFullScreen = async () => {
   let fullScreenStatus = await myApi.toggleFullScreen();
   isFullScreen.value = fullScreenStatus;
@@ -103,8 +125,19 @@ const resetBtnClick = () => {
 const toggleConfig = () => {
   bus.emit('toggleConfig')
 }
+const handleHideCommonBtn = () => {
+  const userGroup = findCurrentLotteryGroup();
+  if (!userGroup) {
+    isHideCommonBtn.value = true
+  } else {
+    isHideCommonBtn.value = false
+  }
+}
+
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd)
+  handleHideCommonBtn();
+  bus.on('groupListSetting', handleHideCommonBtn)
   // bus.on('showPrizeEnd', showPrizeEnd)
 })
 onBeforeUnmount(() => {

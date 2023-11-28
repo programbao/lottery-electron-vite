@@ -202,10 +202,16 @@ const uploadUsers = async () => {
     loading.close()
   }
 }
-
+const getGroupList = () => {
+  const arr = JSON.parse(JSON.stringify(groupList.value))
+  arr.forEach(item => {
+    item.options = item.options.filter(identity => optionsMap.value[identity].related_group);
+  })
+  return arr
+}
 // 暴露属性
 defineExpose({
-  groupList,
+  getGroupList,
   userRelatedMap
 })
 </script>
