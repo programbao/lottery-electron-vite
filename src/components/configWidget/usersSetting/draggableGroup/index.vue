@@ -181,7 +181,11 @@ const groupCancel = (emitObj) => {
         return
       }
     }
-
+    // 取消选项关联状态
+    const handleGroup = groupList.value[groupIndex]
+    handleGroup.options.forEach(identity => {
+      optionsMap.value[identity].related_group = ""
+    })
     groupList.value.splice(groupIndex, 1)
   }
 }
