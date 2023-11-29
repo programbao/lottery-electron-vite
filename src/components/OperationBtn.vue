@@ -1,6 +1,6 @@
 <template>
   <div id="menu">
-    <span v-show="noHideBtn">
+    <div v-show="noHideBtn" class="lottery-operation-btn">
       <div class="begin-lottery">
         <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
@@ -19,7 +19,6 @@
       <button 
         class="btn" 
         @click="reLottery"
-        id="reLottery" 
         v-show="!noBeginLottery 
           && !isLotting
           && !isFirstPrize">
@@ -29,24 +28,28 @@
       <button id="showAllLucks" class="btn" v-show="!currentPrize">
         展示全部中奖名单<br/>daftar nama pemenang
       </button>
-      <div id="lotteryBar" class="none">
-        <div class="fixed-bar">
-          <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-          <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
-        </div>
-      </div>
-      <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
-    </span>
+    </div>
 
     <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button>
+    <div
+      ref="bottomBar"
+      class="bottom-bar">
+      <button id="save" class="fixed-btn btn">展示中奖名单</button>
+      <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
+      <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
+      <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
+      <MusicBtn />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onBeforeUnmount, computed, watch } from 'vue'
+import { ref, onBeforeMount, onBeforeUnmount, computed, nextTick } from 'vue'
+import MusicBtn from "./MusicBtn.vue";
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
+const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
@@ -138,19 +141,96 @@ const handleHideCommonBtn = () => {
     isHideCommonBtn.value = true
   }
 }
-
+let showBarTimer = null;
+let debounceTimer = null
+let isEnterBar = false
+const mousemoveEvent = (event) => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    const mouseY = event.clientY;
+    const windowHeight = window.innerHeight;
+    const bottomOffset = 10; // 底部操作栏高度
+    // 如果鼠标位置在窗口底部一定范围内，则显示操作栏
+    clearTimeout(showBarTimer);
+    if (mouseY > windowHeight - bottomOffset) {
+      // isHover = true 
+      bottomBar.value.classList.add('active');
+    } else {
+      showBarTimer = setTimeout(() => {
+        if (!isEnterBar) {
+          bottomBar.value.classList.remove('active');
+        }
+      }, 500); 
+    }
+  }, 50)
+}
+const mouseleaveEvent = () => {
+  clearTimeout(showBarTimer);
+  setTimeout(() => {
+    if (!isEnterBar) {
+      bottomBar.value.classList.remove('active');
+    }
+  }, 200)
+}
+const barMouseenter = () => {
+  isEnterBar = true
+}
+const barMouseleave = () => {
+  isEnterBar = false
+  clearTimeout(showBarTimer);
+  showBarTimer = setTimeout(() => {
+    if (!isEnterBar) {
+      bottomBar.value.classList.remove('active');
+    }
+  }, 500);
+}
 onBeforeMount(() => {
-  bus.on('enterLotteryEnd', handleEnterLotteryEnd)
+  bus.on('enterLotteryEnd', handleEnterLotteryEnd);
   handleHideCommonBtn();
-  bus.on('groupListSetting', handleHideCommonBtn)
-  // bus.on('showPrizeEnd', showPrizeEnd)
+  bus.on('groupListSetting', handleHideCommonBtn);
+  // 监听鼠标移动事件
+  document.addEventListener('mousemove', mousemoveEvent);
+  document.addEventListener('mouseleave', mouseleaveEvent);
+  nextTick(() => {
+    bottomBar.value.addEventListener('mouseenter', barMouseenter)
+    bottomBar.value.addEventListener('mouseleave', barMouseleave)
+
+  })
 })
 onBeforeUnmount(() => {
   bus.off('enterLotteryEnd', handleEnterLotteryEnd)
+  document.removeEventListener('mousemove', mousemoveEvent);
+  document.removeEventListener('mouseleave', mouseleaveEvent);
+  bottomBar.value.removeEventListener('mouseenter', barMouseenter)
+  bottomBar.value.removeEventListener('mouseleave', barMouseleave)
 })
 </script>
 
 <style lang="scss">
+// 底部控制bar
+.bottom-bar {
+  position: fixed;
+  bottom: -70px; /* 隐藏操作栏 */
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: rgba(0,0,0,0.9);
+  transition: bottom 0.3s ease-out; /* 过渡动画 */
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.bottom-bar.active {
+  bottom: 0; /* 显示操作栏 */
+}
+.lottery-operation-btn {
+  position: fixed;
+  display: flex;
+  bottom: 20px;
+}
+
 #menu {
   z-index: 401;
   position: fixed;
@@ -162,12 +242,12 @@ onBeforeUnmount(() => {
   box-shadow: 0px 0px 15px rgb(127 255 255 / 75%);
   margin-top: 20px;
 }
-.begin-lottery, #showAllLucks {
-  position: fixed;
-  bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
+// .begin-lottery, #showAllLucks {
+//   position: fixed;
+//   bottom: 20px;
+//   display: flex;
+//   flex-direction: column;
+// }
 #reLottery {
   position: fixed;
   bottom: 20px;
@@ -176,13 +256,13 @@ onBeforeUnmount(() => {
   margin-left: 50px;
   left: 60%;
 }
-#fullScreen {
-  position: fixed;
-  right: 30px;
-  top: 20vh;
-  right: 4vh;
-  z-index: 5;
-}
+// #fullScreen {
+//   position: fixed;
+//   right: 30px;
+//   top: 20vh;
+//   right: 4vh;
+//   z-index: 5;
+// }
 #configBtn {
   position: fixed;
   right: 30px;
@@ -190,7 +270,7 @@ onBeforeUnmount(() => {
   right: 4vh;
   z-index: 5;
   min-width: 90px;
-    min-height: 47px;
+  min-height: 47px;
 }
 .fixed-bar {
   position: fixed;
@@ -208,6 +288,10 @@ onBeforeUnmount(() => {
   font-size: 1.2vh;
   font-weight: bold;
   cursor: pointer;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn:hover {

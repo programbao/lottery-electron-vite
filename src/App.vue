@@ -2,7 +2,6 @@
 import { onMounted, ref } from "vue"
 import BgBox from "./components/BgBox.vue";
 import LotteryContainer from "./components/LotteryContainer.vue";
-import MusicBtn from "./components/MusicBtn.vue";
 import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
@@ -34,7 +33,6 @@ onMounted(async () => {
   <div v-if="isLoadingFinish">
     <BgBox />
     <LotteryContainer />
-    <MusicBtn />
     <OperationBtn />
     <PrizeBar />
     <PrizeMark />

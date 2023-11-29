@@ -64,13 +64,15 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// .music {
+//   position: fixed;
+//   top: 10vh;
+//   right: 4vh;
+//   z-index: 5;
+// }
 .music {
-  position: fixed;
-  top: 10vh;
-  right: 4vh;
-  z-index: 5;
+  margin: 0 10px
 }
-
 .music-item {
   display: block !important;
   opacity: 0;
