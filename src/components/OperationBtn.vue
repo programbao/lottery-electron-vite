@@ -34,12 +34,18 @@
     <div
       ref="bottomBar"
       class="bottom-bar">
-      <button id="save" class="fixed-btn btn">展示中奖名单</button>
+      <button class="btn" @click="toggleUsersSetting">名单设置</button>
+      <button class="btn">奖项设置</button>
+      <button class="btn">卡片设置</button>
+      <button class="btn">展示中奖名单</button>
       <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
       <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
       <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
       <MusicBtn />
     </div>
+
+
+    <usersSettingDialog ref="usersSettingDialogRef" />
   </div>
 </template>
 
@@ -48,6 +54,16 @@ import { ref, onBeforeMount, onBeforeUnmount, computed, nextTick } from 'vue'
 import MusicBtn from "./MusicBtn.vue";
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
+import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
+
+// 打开设置
+const usersSettingDialogRef = ref();
+
+const toggleUsersSetting = () => {
+  usersSettingDialogRef.value.toggleConfig()
+}
+
+
 const basicData = lotteryDataStore();
 const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
@@ -301,5 +317,112 @@ onBeforeUnmount(() => {
 .btn:active {
   color: #000000;
   background-color: rgba(0, 255, 255, 0.75);
+}
+</style>
+
+<style lang="scss">
+.base-modal-dialog.isMoveDialog {
+  height: fit-content;
+  box-shadow: 0px 2px 8px 0px rgba(51, 51, 51, 0.15);
+  right: auto;
+  bottom: auto;
+  margin: 0 !important;
+  .el-dialog__header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 16px;
+    cursor: move;
+    margin: 0;
+    .el-dialog__title {
+      font-weight: 500;
+      font-size: 16px;
+      color: #303133;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .title-text {
+      margin-right: auto;
+      font-weight: 600;
+      color: #000;
+    }
+    .title-btn {
+      font-size: 14px;
+      display: inline-flex;
+      cursor: pointer;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 500;
+      box-shadow: 0px 2px 4px 0px rgba(44,39,56,0.08), 0px 1px 2px 0px rgba(44,39,56,0.00); 
+      background-color: #d7dbe6;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 4px;
+      padding-right: 10px;
+      .label {
+        width: 20px;
+        height: 20px;
+        background: #2e3644;
+        border-radius: 50%;
+        position: relative;
+        margin-right: 8px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        &.label-confirm {
+          &::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border: 2px solid #2FCBB1;
+            border-radius: 50%;
+          }
+        }
+        &.label-cancel {
+          &::before {
+            content: "✕";
+            color: #ff6666;
+            margin: 2px 0px 0px 1px;
+          }
+        }
+      }
+
+      &:hover {
+        background-color: #c0c7d6;
+      }
+      &:active {
+        background-color: #c0c7d6;
+        border-color: #366FFF;
+      }
+      + .title-btn {
+        margin-left: 8px;
+      }
+    }
+  }
+  .el-dialog__body {
+    max-height: 80vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar{
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track{
+      background: rgb(239, 239, 239);
+      border-radius:2px;
+    }
+    &::-webkit-scrollbar-thumb{
+      background: #bfbfbf;
+      border-radius:10px;
+    }
+    &::-webkit-scrollbar-thumb:hover{
+      background: #333;
+    }
+  }
+  .setting-content {
+    background-color: #f2fafe;
+    border-radius: 10px;
+    padding: 20px;
+  }
 }
 </style>

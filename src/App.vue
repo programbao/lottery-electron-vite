@@ -6,7 +6,7 @@ import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
 import LuckyUser from "./components/LuckyUser.vue"
-import ConfigDialog from "./components/configWidget/index.vue"
+// import ConfigDialog from "./components/configWidget/index.vue"
 import ScreenCard from "./components/ScreenCard.vue"
 // 引入store
 import { lotteryDataStore } from './store'
@@ -37,7 +37,7 @@ onMounted(async () => {
     <PrizeBar />
     <PrizeMark />
     <LuckyUser />
-    <ConfigDialog />
+    <!-- <ConfigDialog /> -->
     <ScreenCard />
     <!-- <button @click="importFile">导入</button> -->
   </div>

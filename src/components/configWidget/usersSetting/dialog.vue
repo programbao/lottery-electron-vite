@@ -1,0 +1,130 @@
+<template>
+  <el-dialog
+    class="base-modal-dialog isMoveDialog pointDialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :modal="false"
+    :show-close="false"
+    :style="dialogStyle"
+    v-model="dialogTableVisible"
+    width="70%"
+    title="名单设置">
+    <template #header>
+      <slot name="title"><span class="title-text">名单设置</span></slot>
+      <div class="title-btn confirm-btn" type="confirm" @click="confirm">
+        <div class="label label-confirm"></div>
+        确认
+      </div>
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+        <div class="label label-cancel"></div>
+        取消
+      </div>
+    </template>
+    <div class="setting-content">
+      <usersSetting 
+        :key="dialogTableVisible"
+        ref="usersSettingRef" />
+    </div>
+  </el-dialog>
+</template>
+
+<script setup>
+import { ref, nextTick, computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import bus from '../../../libs/bus'
+import { initMoveEvent } from '../moveEvent'
+import { lotteryDataStore } from '../../../store'
+import usersSetting from './draggableGroup/index.vue'
+const basicData = lotteryDataStore();
+const dialogTableVisible = ref(false);
+const dialogStyle = computed(() => {
+  return basicData.dialogStyle
+});
+const toggleConfig = () => {
+  let isOpen = !dialogTableVisible.value
+  dialogTableVisible.value = isOpen
+  if (isOpen) {
+    
+  }
+  if (!isFirstVisible && isOpen) {
+    nextTick(() => {
+      isFirstVisible = true;
+      initMoveEvent(basicData)
+    })
+  }
+}
+let isFirstVisible = false;
+
+const usersSettingRef = ref();
+const handleVerifyConfig = async (handleStr, verifyData) => {
+  let isPassSetting = {
+      type: 'success',
+      status: 1
+    };
+  const verifyConfigStr =JSON.stringify(verifyData);
+  const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
+  if (prevVerifyConfigStr === verifyConfigStr) {
+    return {
+      type: 'warning',
+      status: 2
+    };
+  }
+  const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
+  if (isPass) {
+    basicData[handleStr] = JSON.parse(verifyConfigStr);
+  } else {
+    isPassSetting = {
+      type: 'error',
+      status: 0
+    };
+  }
+  bus.emit(handleStr + 'Setting')
+  return isPassSetting; 
+}
+
+
+const checkAllPassStatus = (...statuses) => {
+  // 检查所有状态数组
+  if (statuses.some(status => status === 0)) {
+    return 0; // 存在状态为0，设置失败
+  } else if (statuses.some(status => status === 1)) {
+    return 1; // 存在状态为1，设置成功
+  } else if (statuses.every(status => status === 2)) {
+    return 2; // 所有状态为2，未修改过配置
+  }
+};
+
+const confirm = async () => {
+  // 删除不必存的字段
+  const groupListData = JSON.parse(JSON.stringify(usersSettingRef.value['getGroupList']()));
+  const excludeFields = ['index', 'isSelected'];
+  groupListData.forEach((group) => {
+    excludeFields.forEach((key) => {
+      delete group[key];
+    })
+  })
+  const usersSettingPass = await handleVerifyConfig('groupList', groupListData);
+   // 检查所有状态
+  const status = checkAllPassStatus(
+    usersSettingPass.status
+  );
+
+  if (status === 1) {
+    ElMessage({
+      message: '设置成功',
+      type: 'success',
+    });
+    // dialogTableVisible.value = false;
+    // ...其他处理
+  } else if (status === 0) {
+    ElMessage.error('设置失败');
+  } else if (status === 2) {
+    ElMessage.warning('没有修改过配置');
+  }
+  dialogTableVisible.value = false;
+}
+// 暴露属性
+defineExpose({
+  toggleConfig
+})
+</script>

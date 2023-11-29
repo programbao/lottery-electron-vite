@@ -67,7 +67,7 @@ import prizeSetting from './prizeSetting/index.vue'
 import cardSetting from './cardSetting/index.vue'
 import usersSetting from './usersSetting/draggableGroup/index.vue'
 const basicData = lotteryDataStore();
-const dialogTableVisible = ref(true);
+const dialogTableVisible = ref(false);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
