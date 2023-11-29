@@ -127,6 +127,13 @@ const toggleConfig = () => {
 }
 const handleHideCommonBtn = () => {
   const userGroup = findCurrentLotteryGroup();
+  if (userGroup) {
+    const member = basicData.memberListData[userGroup.group_identity]
+    if (!member || member.length <= 0) {
+      isHideCommonBtn.value = true
+    }
+    return
+  }
   if (!userGroup) {
     isHideCommonBtn.value = true
   } else {

@@ -65,7 +65,7 @@
       </div>
     </div>
     <div v-show="!isShowScreenCard" class="tips">
-      {{ basicData.currentPrize.name }} 奖项没有绑定 抽奖人员名单，请前往系统配置设置
+      {{ basicData.currentPrize.name }} 奖项没有 抽奖人员名单，请前往系统配置设置
     </div>
   </div>
 </template>
@@ -140,6 +140,13 @@ const findCurrentLotteryGroup = () => {
 }
 const groupListSetting = () => {
   const userGroup = findCurrentLotteryGroup();
+  if (userGroup) {
+    const member = basicData.memberListData[userGroup.group_identity]
+    if (!member || member.length <= 0) {
+      isShowScreenCard.value = false
+    }
+    return
+  }
   if (!userGroup) {
     isShowScreenCard.value = false
   } else if (!basicData.isEnterLottery) {

@@ -219,7 +219,13 @@ const findCurrentLotteryGroup = () => {
 }
 const initParamsFieldsData = (userGroup) => {
   basicData.currentLotteryGroup = userGroup || {};
-  const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity]));
+  const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity] || []));
+  if (member.length <= 0) {
+    ElMessage({
+      type: 'error',
+      message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
+    })
+  }
   paramsFields = {
     threeDCards: [],
     selectedCardIndex: [],

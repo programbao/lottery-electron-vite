@@ -176,7 +176,7 @@ const groupCancel = (emitObj) => {
       if (option.noCanSelected) {
         ElMessage({
           type: 'error',
-          message: `${option.option_value} 已经参数中奖名单，该人员名单不能删除`
+          message: `${option.option_value} 已经产生数中奖名单，该人员名单不能删除`
         })
         return
       }

@@ -74,6 +74,7 @@ const confirm = () => {
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
     padding-top: 20px;
+    height: auto;
   }
 }
 </style>

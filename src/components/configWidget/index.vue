@@ -21,13 +21,15 @@
       </div>
     </template>
     <div class="config-setting-list">
-      <div class="item-setting" >
+      <div class="item-setting">
         <div class="item-setting">
           <div class="setting-title">
             <div class="left">名单设置</div>
           </div>
           <div class="setting-content">
-            <usersSetting ref="usersSettingRef" />
+            <usersSetting 
+              :key="dialogTableVisible"
+              ref="usersSettingRef" />
           </div>
         </div>
         <div class="setting-title">

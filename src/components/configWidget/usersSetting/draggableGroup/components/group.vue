@@ -13,7 +13,7 @@
         <!-- 小于四列 -->
         <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
         <div class="content-tags">
-          <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联选项到此</div>
+          <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联奖项到此</div>
           <template v-else>
             <div
               class="group-option-container"
