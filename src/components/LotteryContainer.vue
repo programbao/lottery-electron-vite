@@ -111,6 +111,10 @@ const enterAnimate = (resetPrizeStatus = true) => {
   const ROW_COUNT = basicData.beforeLotteryLayout.rowCount;
   const COLUMN_COUNT = basicData.beforeLotteryLayout.columnCount;
   paramsFields.threeDCards = [];
+  targets = {
+    table: [],
+    sphere: []
+  };
   let index = 0;
   for (let i = 0; i < ROW_COUNT; i++) {
     if (index > paramsFields.totalMember - 1) break;
@@ -218,6 +222,7 @@ const findCurrentLotteryGroup = () => {
   return userGroup;
 }
 const initParamsFieldsData = (userGroup) => {
+  let isPass = true
   basicData.currentLotteryGroup = userGroup || {};
   const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity] || []));
   if (member.length <= 0) {
@@ -225,6 +230,8 @@ const initParamsFieldsData = (userGroup) => {
       type: 'error',
       message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
     })
+    bus.emit('groupListSetting')
+    isPass = false
   }
   paramsFields = {
     threeDCards: [],
@@ -235,6 +242,7 @@ const initParamsFieldsData = (userGroup) => {
     totalMember: member.length,
     HIGHLIGHT_CELL: [],
   }
+  return isPass
 }
 const initHandleData = () => {
   cleanUp();
@@ -462,8 +470,9 @@ const waitHandleEvent = () => {
 // 重新/切换设置抽奖名单
 const switchLotteryMemberData = (userGroup, resetPrizeStatus = true) => {
   basicData.currentLotteryGroup = userGroup;
-  initParamsFieldsData(userGroup);
+  const isPass = initParamsFieldsData(userGroup);
   adjustCardConfigStyleSetting(resetPrizeStatus);
+  return isPass
 }
 const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
@@ -503,10 +512,13 @@ const lotteryActiveFn = async () => {
           background: 'rgba(0, 0, 0, 0.7)',
         })
         // basicData.currentLotteryGroup = userGroup || {};
-        switchLotteryMemberData(userGroup, false);
+        const isPass = switchLotteryMemberData(userGroup, false);
         // resetBallCards(basicData.users_hinduism_buddhism_confucianism);
         await waitHandleEvent();
         loading.close();
+        if (!isPass) {
+          return
+        }
       }
     }
 
