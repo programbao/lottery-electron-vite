@@ -2,7 +2,7 @@
   <div class="card-box">
     <div class="screen-card"
       :style="renderDomStyle"
-      v-show="isShowScreenCard">
+     >
       <div 
         v-for="index in totalCard"
         :id="'card-' + index" 
@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <div v-show="!isShowScreenCard" class="tips">
+    <div class="tips">
       {{ basicData.currentPrize.name }} 奖项没有 抽奖人员名单，请前往系统配置设置
     </div>
   </div>
@@ -127,7 +127,6 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   document.querySelector('.screen-card').style.display = displayStr
-  document.querySelector('.card-box .tips').style.display = displayStr
 }
 const findCurrentLotteryGroup = () => {
   // 找到要展示的member
@@ -143,20 +142,24 @@ const groupListSetting = () => {
   if (userGroup) {
     const member = basicData.memberListData[userGroup.group_identity]
     if (!member || member.length <= 0) {
-      isShowScreenCard.value = false
+      document.querySelector('.card-box .tips').style.display = 'grid'
+      adjuctScreenCardDisplay('none')
+    } else if (basicData.isEnterLottery) {
+      document.querySelector('.card-box .tips').style.display = 'none'
+      adjuctScreenCardDisplay('none')
+    } else if (!basicData.isEnterLottery) {
+      document.querySelector('.card-box .tips').style.display = 'none'
+      adjuctScreenCardDisplay('grid')
     }
-    return
-  }
-  if (!userGroup) {
-    isShowScreenCard.value = false
-  } else if (!basicData.isEnterLottery) {
-    isShowScreenCard.value = true
+  } else {
+    document.querySelector('.card-box .tips').style.display = 'grid'
   }
 }
 bus.on('handleBeforeLotteryLayoutSetting', toAnimate)
 bus.on('resetBtnClick', toAnimate)
 bus.on('groupListSetting', groupListSetting)
 bus.on('adjuctScreenCardDisplay', adjuctScreenCardDisplay)
+bus.on('adjuctUsersDataTips', groupListSetting)
 onMounted(() => {
   nextTick(() => {
     toAnimate();
@@ -184,5 +187,6 @@ onMounted(() => {
   font-size: 25px;
   color: orange;
   width: 40%;
+  display: none;
 }
 </style>

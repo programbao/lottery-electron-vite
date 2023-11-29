@@ -524,7 +524,7 @@ const lotteryActiveFn = async () => {
 
     // 抽奖
     lottery("lottery");
-    toast.info(`正在抽取[${basicData.currentPrize.title}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`, { 
+    toast.info(`正在抽取[${basicData.currentPrize.name}],调整好姿势  penghargaan sedang diundi,silahkan persiapkan diri`, { 
       timeout: 2000
     });
     return
@@ -579,10 +579,12 @@ const resetBtnClick = async () => {
   basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
   basicData.isShowLuckyUser = false;
   basicData.isContinueLottery = false
+  basicData.isEnterLottery = false
   // document.getElementById("container").classList.remove('slide-in-fwd-center');
   // document.querySelector('.screen-card').style.display = 'grid'
   bus.emit('adjuctScreenCardDisplay', 'grid')
   bus.emit('hidePrizeMark');
+  bus.emit('adjuctUsersDataTips')
   // 移除闪烁定时器
   removeShineCard();
   initHandleData();
@@ -634,13 +636,10 @@ const groupListSetting = () => {
     // 移除闪烁定时器
     removeShineCard();
     cleanUp();
-    bus.emit('adjuctScreenCardDisplay', 'grid')
+    bus.emit('adjuctUsersDataTips')
   } else {
     if (userGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
       switchLotteryMemberData(userGroup);
-      // basicData.currentLotteryGroup = userGroup;
-      // initParamsFieldsData(userGroup);
-      // adjustCardConfigStyleSetting();
     }
   }
   basicData.currentLotteryGroup = userGroup || {};

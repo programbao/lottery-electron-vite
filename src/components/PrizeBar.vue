@@ -59,6 +59,7 @@ const currentPrize = computed(() => {
 });
 const getItemPrizeConfig = (type) => {
   let itemPrizeConfig = prizesListConfig.value[type];
+  
   if (!itemPrizeConfig) {
     itemPrizeConfig = {};
   }
@@ -91,34 +92,7 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     img: ""
   },
     type = currentPrize.type,
-    // elements = prizeElement[type],
     totalCount = currentPrize.count;
-
-  // if (!elements) {
-  //   elements = {
-  //     box: document.querySelector(`#prize-item-${type}`),
-  //     bar: document.querySelector(`#prize-bar-${type}`),
-  //     text: document.querySelector(`#prize-count-${type}`)
-  //   };
-  //   prizeElement[type] = elements;
-  // }
-
-  // if (!prizeElement.prizeType) {
-  //   prizeElement.prizeType = document.querySelector("#prizeType");
-  //   prizeElement.prizeLeft = document.querySelector("#prizeLeft");
-  //   prizeElement.prizeText = document.querySelector("#prizeText");
-  // }
-
-  // if (isInit) {
-  //   for (let i = prizes.length - 1; i > currentPrizeIndex; i--) {
-  //     let type = prizes[i]["type"];
-  //     document.querySelector(`#prize-item-${type}`).className =
-  //       "prize-item done";
-  //     document.querySelector(`#prize-bar-${type}`).style.width = "0";
-  //     document.querySelector(`#prize-count-${type}`).textContent =
-  //       "0" + "/" + prizes[i]["count"];
-  //   }
-  // }
 
   count = totalCount - count;
   count = count < 0 ? 0 : count;
@@ -126,30 +100,14 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     const isCpThenLP = currentPrizeIndex > basicData.lasetPrizeIndex;
     let handleIndex = isCpThenLP ? currentPrizeIndex : basicData.lasetPrizeIndex;
     let lastPrize = basicData.prizes[handleIndex];
-      // lastBox = document.querySelector(`#prize-item-${lastPrize.type}`);
     const needHandlePrize = prizesListConfig.value[lastPrize.type]
     needHandlePrize.activeClassName = "done"
-    // lastBox.classList.remove("shine");
-    // lastBox.classList.add("done");
     prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "shine");
-    //  elements.box && elements.box.classList.add("shine");
 
     basicData.lasetPrizeIndex = currentPrizeIndex;
   }
 
-  // if (currentPrizeIndex < 0) {
-  //   prizeElement.prizeType.textContent = "抽奖结束了，谢谢参与  undian telah selesai,terima kasih telah bergabung";
-  //   prizeElement.prizeText.textContent = " ";
-  //   prizeElement.prizeLeft.textContent = "";
-  //   return;
-  // }
-
-  // let percent = (count / totalCount).toFixed(2);
-  // prizesListConfig.value[type].style.width =(count / totalCount).toFixed(2);
-  // elements.bar && (elements.bar.style.width = percent * 100 + "%");
   prizesListConfig.value[type].surplusCount = count;
-  // elements.text && (elements.text.textContent = count + "/" + totalCount);
-  // prizeElement.prizeLeft.textContent = count;
   if (count !== totalCount && count !== 0) {
     basicData.isContinueLottery = true
   } else {
@@ -179,18 +137,7 @@ const initHandlePrizeData = (toInit = false) => {
         surplusCount: item.count,
         activeClassName: "",
         defaultClassName: "prize-item",
-        // style: {
-        //   width: "100%" 
-        // }
       }
-      // const elements = {
-      //   box: document.querySelector(`#prize-item-${type}`),
-      //   bar: document.querySelector(`#prize-bar-${type}`),
-      //   text: document.querySelector(`#prize-count-${type}`)
-      // };
-      // elements.box && (elements.box.className = "prize-item");
-      // elements.bar && (elements.bar.style.width = "0");
-      // elements.text && (elements.text.textContent = "0" + "/" + item.count);
     })
     // 滚动位置
     !toInit && scrollTop();
@@ -219,10 +166,15 @@ const resetPrizes = () => {
     if (i === totalPrizeLen -1) {
       elements.box.classList.add("shine");
     }
-
-    const count = prize.count;
-    elements.bar && (elements.bar.style.width = 100 + "%");
-    elements.text && (elements.text.textContent = count + "/" + count);
+    // 重置相关字段
+    prizesListConfig.value[prize.type] = {
+      totalCount: prize.count,
+      surplusCount: prize.count,
+      activeClassName: "",
+      defaultClassName: "prize-item",
+    }
+    // elements.bar && (elements.bar.style.width = 100 + "%");
+    // elements.text && (elements.text.textContent = count + "/" + count);
   }
   basicData.lasetPrizeIndex = basicData.prizes.length - 1;
 }
@@ -245,7 +197,6 @@ const adjustCurrentPrize = (data) => {
     const adjustPrizeConfig = prizesListConfig.value[modifyType]
     adjustPrizeConfig.activeClassName = 'shine'
     adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - basicData.luckyUsers[modifyType].length;
-    // adjustPrizeConfig.style.width = (adjustPrizeConfig.surplusCount / byIndexModifyPrize.count).toFixed(2) * 100 + '%';
   }
 }
 bus.on('adjustCurrentPrize', adjustCurrentPrize)

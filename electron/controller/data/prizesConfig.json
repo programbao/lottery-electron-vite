@@ -102,8 +102,7 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users.xlsx",
       "group_identity": "users_1",
       "options": [
-        "D6qlvcjFekRCSqVvFe2Eo",
-        "YZL6HBlu2ZSQ6N4PB_RD8"
+        "D6qlvcjFekRCSqVvFe2Eo"
       ]
     },
     {
@@ -112,7 +111,8 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_islam.xlsx",
       "group_identity": "users_2",
       "options": [
-        "-TEDYwm9RWRy7Q9HDmuEf"
+        "-TEDYwm9RWRy7Q9HDmuEf",
+        "YZL6HBlu2ZSQ6N4PB_RD8"
       ]
     },
     {
@@ -122,8 +122,7 @@
       "group_identity": "users_3",
       "options": [
         "VG-taKJkA_6-UHdlh6Wjc",
-        "Qim0zkidsnUedcdACP818",
-        "cUyTXOIN1415C3EM8pKhY"
+        "Qim0zkidsnUedcdACP818"
       ]
     },
     {
@@ -132,8 +131,10 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "group_identity": "users_4",
       "options": [
-        "IuWwApzph3wAqIiHTHct_"
-      ]
+        "IuWwApzph3wAqIiHTHct_",
+        "cUyTXOIN1415C3EM8pKhY"
+      ],
+      "errorMsg": "users_festival.xlsx人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
     },
     {
       "group_name": "users_christian_catholic.xlsx",

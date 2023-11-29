@@ -131,13 +131,11 @@ const handleHideCommonBtn = () => {
     const member = basicData.memberListData[userGroup.group_identity]
     if (!member || member.length <= 0) {
       isHideCommonBtn.value = true
+    } else {
+      isHideCommonBtn.value = false
     }
-    return
-  }
-  if (!userGroup) {
-    isHideCommonBtn.value = true
   } else {
-    isHideCommonBtn.value = false
+    isHideCommonBtn.value = true
   }
 }
 
