@@ -34,8 +34,8 @@
     <div
       ref="bottomBar"
       class="bottom-bar">
-      <button class="btn" @click="toggleUsersSetting">名单设置</button>
-      <button class="btn">奖项设置</button>
+      <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
+      <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
       <button class="btn">卡片设置</button>
       <button class="btn">展示中奖名单</button>
       <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
@@ -46,6 +46,7 @@
 
 
     <usersSettingDialog ref="usersSettingDialogRef" />
+    <prizeSettingDialog ref="prizeSettingDialogRef" />
   </div>
 </template>
 
@@ -55,12 +56,23 @@ import MusicBtn from "./MusicBtn.vue";
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
+import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.vue"
 
 // 打开设置
 const usersSettingDialogRef = ref();
+const prizeSettingDialogRef = ref();
 
-const toggleUsersSetting = () => {
-  usersSettingDialogRef.value.toggleConfig()
+const toggleSetting = (settingStr) => {
+  switch (settingStr) {
+    case 'usersSetting':
+      usersSettingDialogRef.value.toggleConfig()
+      break;
+    case 'prizeSetting':
+      prizeSettingDialogRef.value.toggleConfig()
+      break;
+    default:
+      break;
+  }
 }
 
 

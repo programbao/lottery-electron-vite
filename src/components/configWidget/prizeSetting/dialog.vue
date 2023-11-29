@@ -1,0 +1,186 @@
+<template>
+  <el-dialog
+    class="base-modal-dialog isMoveDialog pointDialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :modal="false"
+    :show-close="false"
+    :style="dialogStyle"
+    v-model="dialogTableVisible"
+    width="70%"
+    title="系统配置">
+    <template #header>
+      <slot name="title"><span class="title-text">系统配置</span></slot>
+      <div class="title-btn confirm-btn" type="confirm" @click="confirm">
+        <div class="label label-confirm"></div>
+        确认
+      </div>
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+        <div class="label label-cancel"></div>
+        取消
+      </div>
+    </template>
+    <div class="setting-content">
+      <prizeSetting 
+        :key="dialogTableVisible"
+        @cutPrize="cutPrize"
+        @addPrize="addPrize"
+        ref="prizeSettingRef" />
+    </div>
+  </el-dialog>
+</template>
+
+<script setup>
+import { ref, nextTick, computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import bus from '../../../libs/bus'
+import { initMoveEvent } from '../moveEvent'
+import { lotteryDataStore } from '../../../store'
+import prizeSetting from './index.vue'
+const basicData = lotteryDataStore();
+const dialogTableVisible = ref(false);
+const dialogStyle = computed(() => {
+  return basicData.dialogStyle
+});
+let cutNum = 0;
+let addNum = 0;
+const toggleConfig = () => {
+  let isOpen = !dialogTableVisible.value
+  dialogTableVisible.value = isOpen
+  if (isOpen) {
+    
+  }
+  if (!isFirstVisible && isOpen) {
+    nextTick(() => {
+      isFirstVisible = true;
+      initMoveEvent(basicData)
+    })
+  }
+}
+let isFirstVisible = false;
+bus.on('toggleConfig', toggleConfig)
+// 删除奖项
+const cutPrize = () => {
+  cutNum++
+}
+const addPrize = () => {
+  addNum++
+}
+
+const prizeSettingRef = ref();
+// 处理奖项相关设置
+const handlePrizesSetting = async () => {
+  let isSuccess = {
+      type: 'success',
+      status: 1
+    }
+  const prizesData = JSON.parse(JSON.stringify(prizeSettingRef.value.prizes));
+  // 删除不必存的字段
+  const excludeFields = ['index', 'isHasLucky'];
+  prizesData.forEach((prize) => {
+    excludeFields.forEach((key) => {
+      delete prize[key];
+    })
+  })
+  const prizesDataStr = JSON.stringify(prizesData);
+  if (prizesDataStr === JSON.stringify(basicData.prizes)) {
+    // dialogTableVisible.value = false;
+    return {
+      type: 'warning',
+      status: 2
+    }
+  }
+  const isPass = await myApi.savePrizesConfig(prizesDataStr, 'prizes');
+  if (isPass) {
+    const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
+    const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;
+    const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
+    const byIndexModifyPrize = prizesData[modifyLastTimeIndex];
+    const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
+    // const originLen = basicData.prizes.length;
+    basicData.prizes = prizesData;
+    // dialogTableVisible.value = false;
+    // 更正当前的奖项索引
+    basicData.currentPrizeIndex = modifyCurrentIndex;
+    // 更正上一轮的奖项索引
+    basicData.lastTimePrizeIndex = modifyLastTimeIndex;
+
+    // 根据状态回显抽完奖的 奖项
+    const byIndexCurrentType = byIndexCurrentPrize.type;
+    const byIndexModifyType = byIndexModifyPrize.type
+    if (
+      byIndexModifyType ===  byIndexCurrentType && 
+        byIndexModifyPrize.count > byIndexCurrentPrize.count &&
+        basicData.luckyUsers[byIndexCurrentType] &&
+        basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
+      ) {
+        basicData.currentPrizeIndex = modifyCurrentIndex + 1;
+        // 纠正是否暂时下一个奖项状态 和 当前奖项是否继续
+        basicData.isNextPrize = false;
+        basicData.isContinueLottery = true;
+        bus.emit('adjustCurrentPrize', {
+          beforeModifyPrize: beforeModifyPrize,
+          byIndexModifyPrize: byIndexModifyPrize
+        })
+    }
+    // 纠正当前的奖项
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+    basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
+
+    if (addNum) {
+      bus.emit('adjustCurrentPrize', { isReGet: true })
+    }
+    // 重置添加和删除的记录数量
+    cutNum = 0;
+    addNum = 0;
+    isSuccess = {
+      type: 'success',
+      status: 1
+    }
+  } else {
+    isSuccess = {
+      type: 'error',
+      status: 0
+    }
+  } 
+  return isSuccess
+}
+
+
+
+const checkAllPassStatus = (...statuses) => {
+  // 检查所有状态数组
+  if (statuses.some(status => status === 0)) {
+    return 0; // 存在状态为0，设置失败
+  } else if (statuses.some(status => status === 1)) {
+    return 1; // 存在状态为1，设置成功
+  } else if (statuses.every(status => status === 2)) {
+    return 2; // 所有状态为2，未修改过配置
+  }
+};
+
+const confirm = async () => {
+  const prizeSettingPass = await handlePrizesSetting();
+   // 检查所有状态
+  const status = checkAllPassStatus(
+    prizeSettingPass.status,
+  );
+  if (status === 1) {
+    ElMessage({
+      message: '设置成功',
+      type: 'success',
+    });
+    // dialogTableVisible.value = false;
+    // ...其他处理
+  } else if (status === 0) {
+    ElMessage.error('设置失败');
+  } else if (status === 2) {
+    ElMessage.warning('没有修改过配置');
+  }
+  dialogTableVisible.value = false;
+}
+// 暴露属性
+defineExpose({
+  toggleConfig
+})
+</script>
