@@ -145,5 +145,19 @@
         "FTNdOJDL46KcELWmB_z7g"
       ]
     }
-  ]
+  ],
+  "otherResource": {
+    "screenImg": {
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/bg2.jpg",
+      "fileName": "bg2.jpg"
+    },
+    "bgImg": {
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/bg1.jpg",
+      "fileName": "bg1.jpg"
+    },
+    "musicFile": {
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/music.mp3",
+      "fileName": "music.mp3"
+    }
+  }
 }

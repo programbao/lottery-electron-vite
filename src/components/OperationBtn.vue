@@ -37,12 +37,23 @@
     </div>
 
     <!-- <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button> -->
+    <!-- 屏幕墙 -->
+    <img
+      class="screen-img"
+      :style="{
+        'z-index': isShowScreenImg ? 0 : -1
+      }"
+      :src="screenImg.fileUrl"
+      :class="{
+        'slit-in-diagonal-1': isShowScreenImg,
+        'swing-out-top-bck': !isShowScreenImg
+      }"/>
     <div
       ref="bottomBar"
       class="bottom-bar">
       <div class="quick-operation">
         <button class="btn" @click="bgWallClick">背景墙</button>
-        <button class="btn">屏幕墙</button>
+        <button class="btn" @click="toggleScreenImg">屏幕墙</button>
         <button class="btn" @click="showLotteryClick">展示抽奖</button>
       </div>
       <div class="setting">
@@ -64,6 +75,7 @@
     <prizeSettingDialog ref="prizeSettingDialogRef" />
     <cardSettingDialog ref="cardSettingDialogRef" />
     <otherResourceSettingDialog ref="otherResourceSettingDialogRef" />
+
   </div>
 </template>
 
@@ -102,13 +114,21 @@ const toggleSetting = (settingStr) => {
 }
 
 // 图片相关设置
+const isShowScreenImg = ref(false)
 const bgWallClick = () => {
   basicData.isEnterBgWall = true
+  isShowScreenImg.value = false
 }
 const showLotteryClick = () => {
   basicData.isEnterBgWall = false
+  isShowScreenImg.value = false
 }
-
+const screenImg = computed(() => {
+  return basicData.otherResource.screenImg
+})
+const toggleScreenImg = (bool) => {
+  isShowScreenImg.value = true
+}
 
 const basicData = lotteryDataStore();
 const bottomBar = ref();
@@ -299,7 +319,14 @@ onBeforeUnmount(() => {
   display: flex;
   bottom: 20px;
 }
-
+.screen-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
 #menu {
   z-index: 401;
   position: fixed;

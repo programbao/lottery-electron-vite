@@ -31,7 +31,6 @@ onMounted(async () => {
 
 <template>
   <div v-if="isLoadingFinish">
-    <BgBox />
     <LotteryContainer />
     <OperationBtn />
     <PrizeBar />
@@ -39,6 +38,7 @@ onMounted(async () => {
     <LuckyUser />
     <!-- <ConfigDialog /> -->
     <ScreenCard />
+    <BgBox />
     <!-- <button @click="importFile">导入</button> -->
   </div>
 </template>
@@ -193,4 +193,54 @@ html,body {
     opacity: 1;
   }
 }
+
+
+.slit-in-diagonal-1 {
+	-webkit-animation: slit-in-diagonal-1 0.45s ease-out both;
+	        animation: slit-in-diagonal-1 0.45s ease-out both;
+}
+@keyframes slit-in-diagonal-1 {
+  0% {
+    -webkit-transform: translateZ(-800px) rotate3d(1, 1, 0, 90deg);
+            transform: translateZ(-800px) rotate3d(1, 1, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  54% {
+    -webkit-transform: translateZ(-160px) rotate3d(1, 1, 0, 87deg);
+            transform: translateZ(-160px) rotate3d(1, 1, 0, 87deg);
+    -webkit-animation-timing-function: ease-in-out;
+            animation-timing-function: ease-in-out;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateZ(0) rotate3d(1, 1, 0, 0);
+            transform: translateZ(0) rotate3d(1, 1, 0, 0);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+}
+.swing-out-top-bck {
+	-webkit-animation: swing-out-top-bck 0.45s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
+	        animation: swing-out-top-bck 0.45s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
+}
+@keyframes swing-out-top-bck {
+  0% {
+    -webkit-transform: rotateX(0deg);
+            transform: rotateX(0deg);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotateX(-100deg);
+            transform: rotateX(-100deg);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+    opacity: 0;
+  }
+}
+
+
 </style>

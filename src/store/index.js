@@ -30,10 +30,19 @@ export const lotteryDataStore = defineStore('LOTTERY', {
         top: '4vh',
         left: '15%'
       },
-      otherResource: {
-        screenImg: '',
-        bgImg: '',
-        musicFile: ''
+      otherResource:{
+        screenImg: {
+          fileUrl: '',
+          fileName: ''
+        },
+        bgImg: {
+          fileUrl: '',
+          fileName: ''
+        },
+        musicFile: {
+          fileUrl: '',
+          fileName: ''
+        }
       },
       currentLotteryGroup: {},
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员

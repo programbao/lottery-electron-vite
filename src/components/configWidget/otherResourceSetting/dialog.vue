@@ -16,7 +16,7 @@
         <div class="label label-confirm"></div>
         确认
       </div>
-      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
         <div class="label label-cancel"></div>
         取消
       </div>
@@ -92,6 +92,10 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  const isPass = await otherResourceSettingRef.value.validateForm();
+  if (!isPass) {
+    return
+  }
   // 删除不必存的字段
   const otherResourceData = JSON.parse(JSON.stringify(otherResourceSettingRef.value['formLabelAlign']));
   const otherResourceDataPass = await handleVerifyConfig('otherResource', otherResourceData);

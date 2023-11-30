@@ -5,7 +5,7 @@
     <audio
       ref="music"
       id="music"
-      src="./data/music.mp3"
+      :src="musicFile.fileUrl"
       class="music-item"
       loop
     ></audio>
@@ -22,8 +22,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useToast } from "vue-toastification";
+import { lotteryDataStore } from '../store'
+const basicData = lotteryDataStore();
+const musicFile = computed(() => {
+  return basicData.otherResource.musicFile
+})
 const toast = useToast();
 const musicBox = ref(null)
 const music = ref(null)

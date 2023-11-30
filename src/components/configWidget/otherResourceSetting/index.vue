@@ -9,11 +9,11 @@
     >
       <el-row :gutter="24">
         <el-col :span="12">
-          <el-form-item label="背景墙图片" prop="bgImg">
+          <el-form-item label="背景墙图片" prop="bgImg.fileUrl">
             <div class="upload add" @click="importFile('bgImg')">
               <el-image
-                v-if="formLabelAlign.bgImg"
-                :src="formLabelAlign.bgImg"
+                v-if="formLabelAlign.bgImg.fileUrl"
+                :src="formLabelAlign.bgImg.fileUrl"
                 :zoom-rate="1.2"
                 :max-scale="7"
                 :min-scale="0.2"
@@ -25,11 +25,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="屏幕墙图片" prop="screenImg">
+          <el-form-item label="屏幕墙图片" prop="screenImg.fileUrl">
             <div class="upload add" @click="importFile('screenImg')">
               <el-image
-                v-if="formLabelAlign.screenImg"
-                :src="formLabelAlign.screenImg"
+                v-if="formLabelAlign.screenImg.fileUrl"
+                :src="formLabelAlign.screenImg.fileUrl"
                 :zoom-rate="1.2"
                 :max-scale="7"
                 :min-scale="0.2"
@@ -43,13 +43,27 @@
       </el-row>
       <el-row :gutter="24">
         <el-col :span="12">
-          <el-form-item label="音乐文件" prop="musicFile">
+          <el-form-item label="音乐文件" prop="musicFile.fileUrl" class="music-form-item">
             <div
-              v-if="formLabelAlign.musicFile"
-              :src="formLabelAlign.musicFile">
-              请上传音频 
+              class="music-desc"
+              v-if="formLabelAlign.musicFile.fileUrl"
+              :src="formLabelAlign.musicFile.fileUrl">
+               <span>{{ formLabelAlign.musicFile.fileName }}</span>
+               <el-icon :size="20" color="#409eff" @click="playClick" v-show="!isPlay"><VideoPlay /></el-icon>
+               <el-icon :size="20" color="#409eff" @click="playClick" v-show="isPlay"><VideoPause /></el-icon>
+               <audio
+                ref="music"
+                :src="formLabelAlign.musicFile.fileUrl"
+                ></audio>
             </div>
-            <el-button type="primary">请上传音频</el-button>
+            <el-button 
+              v-if="!formLabelAlign.musicFile.fileUrl"
+              @click="importFile('musicFile')"
+              type="primary">请上传音乐</el-button>
+            <el-button 
+              v-if="formLabelAlign.musicFile.fileUrl"
+              @click="importFile('musicFile')"
+              type="primary">更换音乐</el-button> 
           </el-form-item>
         </el-col>
       </el-row>
@@ -62,22 +76,24 @@ const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
+const isPlay = ref(false);
+const music = ref();
 const rules = {
-  bgImg: [
+  'bgImg.fileUrl': [
     {
       required: true,
       message: '请上传图片',
       trigger: 'blur',
     },
   ],
-  screenImg: [
+  'screenImg.fileUrl': [
     {
       required: true,
       message: '请上传图片',
       trigger: 'blur',
     },
   ],
-  musicFile: [
+  'musicFile.fileUrl': [
   {
       required: true,
       message: '请上传音频',
@@ -89,21 +105,78 @@ onMounted(() => {
   formLabelAlign.value = JSON.parse(JSON.stringify(basicData.otherResource))
 })
 const formLabelAlign = ref({
-  screenImg: '',
-  bgImg: '',
+  screenImg: {
+    fileUrl: '',
+    fileName: ''
+  },
+  bgImg: {
+    fileUrl: '',
+    fileName: ''
+  },
+  musicFile: {
+    fileUrl: '',
+    fileName: ''
+  }
 })
 const importFile = async (key) => {
-  let { fileUrl } = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  // 图片文件
+  let extensions = JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']);
+  // 音频文件
+  if (key === 'musicFile') {
+    extensions = JSON.stringify(['mp3', 'm4a'])
+  }
+  let { fileUrl, fileName } = await myApi.importFile(extensions);
   if (fileUrl) {
-    formLabelAlign.value[key] = fileUrl
+    formLabelAlign.value[key] = {
+      fileUrl,
+      fileName
+    }
   }
 }
+const playClick  = (e) => {
+  if (music.value.paused) {
+    music.value.play()
+    isPlay.value = true
+  } else {
+    music.value.pause()
+    isPlay.value = false
+  }
+}
+const validateForm = async () => {
+  if (!ruleFormRef.value) return
+  const isPass = await ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      return true
+    } else {
+      return false
+    }
+  })
+  return isPass
+}
 defineExpose({
-  formLabelAlign
+  formLabelAlign,
+  validateForm
 })
 </script>
 
 <style lang="scss" scoped>
+.music-desc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > audio {
+    display: none;
+  }
+  .el-icon {
+    margin: 0 10px;
+    cursor: pointer;
+  }
+}
+.music-form-item {
+  .el-button {
+    margin-left: 5px;
+  }
+}
 .tips {
   color: orange;
   font-weight: 700;
