@@ -30,13 +30,13 @@
       </button>
     </div>
 
-    <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button>
+    <!-- <button class="btn" id="configBtn" @click="toggleConfig">系统配置</button> -->
     <div
       ref="bottomBar"
       class="bottom-bar">
       <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
       <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
-      <button class="btn">卡片设置</button>
+      <button class="btn"  @click="toggleSetting('cardSetting')">卡片设置</button>
       <button class="btn">展示中奖名单</button>
       <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
       <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
@@ -47,6 +47,7 @@
 
     <usersSettingDialog ref="usersSettingDialogRef" />
     <prizeSettingDialog ref="prizeSettingDialogRef" />
+    <cardSettingDialog ref="cardSettingDialogRef" />
   </div>
 </template>
 
@@ -57,11 +58,12 @@ import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
 import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.vue"
+import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue"
 
 // 打开设置
 const usersSettingDialogRef = ref();
 const prizeSettingDialogRef = ref();
-
+const cardSettingDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -69,6 +71,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'prizeSetting':
       prizeSettingDialogRef.value.toggleConfig()
+      break;
+    case 'cardSetting':
+      cardSettingDialogRef.value.toggleConfig()
       break;
     default:
       break;
@@ -153,9 +158,9 @@ const resetBtnClick = () => {
   noBeginLottery.value = true;
   basicData.isEnterLottery = true
 }
-const toggleConfig = () => {
-  bus.emit('toggleConfig')
-}
+// const toggleConfig = () => {
+//   bus.emit('toggleConfig')
+// }
 const handleHideCommonBtn = () => {
   const userGroup = findCurrentLotteryGroup();
   if (userGroup) {
@@ -177,7 +182,7 @@ const mousemoveEvent = (event) => {
   debounceTimer = setTimeout(() => {
     const mouseY = event.clientY;
     const windowHeight = window.innerHeight;
-    const bottomOffset = 10; // 底部操作栏高度
+    const bottomOffset = 15; // 底部操作栏高度
     // 如果鼠标位置在窗口底部一定范围内，则显示操作栏
     clearTimeout(showBarTimer);
     if (mouseY > windowHeight - bottomOffset) {
