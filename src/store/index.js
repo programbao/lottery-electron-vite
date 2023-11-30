@@ -25,9 +25,15 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       isReLottery: false, // 是否重新抽奖
       isShowPrizeMark: false, // 是否显示奖品
       isEnterLottery: false, // 是否进入抽奖
+      isEnterBgWall: false, // 是否进入背景墙
       dialogStyle: {
         top: '4vh',
         left: '15%'
+      },
+      otherResource: {
+        screenImg: '',
+        bgImg: '',
+        musicFile: ''
       },
       currentLotteryGroup: {},
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员

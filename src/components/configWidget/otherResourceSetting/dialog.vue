@@ -11,7 +11,7 @@
     width="70%"
     title="名单设置">
     <template #header>
-      <slot name="title"><span class="title-text">名单设置</span></slot>
+      <slot name="title"><span class="title-text">其他资源设置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
@@ -22,9 +22,7 @@
       </div>
     </template>
     <div class="setting-content">
-      <usersSetting 
-        :key="dialogTableVisible"
-        ref="usersSettingRef" />
+      <otherResourceSetting ref="otherResourceSettingRef" />
     </div>
   </el-dialog>
 </template>
@@ -35,13 +33,14 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import usersSetting from './draggableGroup/index.vue'
+import otherResourceSetting from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
-const dialogKeyStr = 'usersSetting';
+const dialogKeyStr = 'otherResourceSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
@@ -52,9 +51,8 @@ const toggleConfig = () => {
     })
   }
 }
-let isFirstVisible = false;
 
-const usersSettingRef = ref();
+const otherResourceSettingRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {
       type: 'success',
@@ -95,17 +93,11 @@ const checkAllPassStatus = (...statuses) => {
 
 const confirm = async () => {
   // 删除不必存的字段
-  const groupListData = JSON.parse(JSON.stringify(usersSettingRef.value['getGroupList']()));
-  const excludeFields = ['index', 'isSelected'];
-  groupListData.forEach((group) => {
-    excludeFields.forEach((key) => {
-      delete group[key];
-    })
-  })
-  const usersSettingPass = await handleVerifyConfig('groupList', groupListData);
+  const otherResourceData = JSON.parse(JSON.stringify(otherResourceSettingRef.value['formLabelAlign']));
+  const otherResourceDataPass = await handleVerifyConfig('otherResource', otherResourceData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    usersSettingPass.status
+    otherResourceDataPass.status
   );
 
   if (status === 1) {

@@ -8,14 +8,16 @@ let downPositionLeft = 0
 let downPositionTop = 0
 let el = null
 let basicData = {};
+let dialogKeyStr = '';
 // 以下事件是拖动element-ui dialog功能
-export const initMoveEvent = (storeObj) => {
+export const initMoveEvent = (storeObj, dialogKey) => {
   if (el) return
-  el = document.querySelector(`.base-modal-dialog.isMoveDialog .el-dialog__header`)
+  el = document.querySelector(`.${dialogKey}.base-modal-dialog.isMoveDialog .el-dialog__header`)
   if (!el) return
   basicData = storeObj
+  dialogKeyStr = dialogKey;
   el.addEventListener('mousedown', onMouseDown)
-  targetEl = document.querySelector(`.base-modal-dialog.isMoveDialog`)
+  targetEl = document.querySelector(`.${dialogKey}.base-modal-dialog.isMoveDialog`)
   targetEl.addEventListener('click', dialogClickEvent)
 }
 const dialogClickEvent = (e) => {
@@ -28,11 +30,11 @@ const moveFun = (event) => {
   let top = `${downPositionTop + Y}px`;
   targetEl.style.left = left
   targetEl.style.top = top
-  basicData.dialogStyle = {
+  if (moveLimit()) return
+  basicData['dialogStyle_' + dialogKeyStr] = {
     left,
     top
   }
-  if (moveLimit()) return
 }
 // 拖动超出边界值 回到可视区域
 const moveLimit = () => {
@@ -44,19 +46,26 @@ const moveLimit = () => {
     // 拖动超出边界值 回到可视区域
     if (bottom >= clientHeight || top <= 0) {
       if (bottom >= clientHeight) {
-        targetEl.style.top = clientHeight - targetEl.offsetHeight + 'px'
+        let handleTop = clientHeight - targetEl.offsetHeight + 'px'
+        targetEl.style.top = handleTop
+        basicData['dialogStyle_' + dialogKeyStr].top = handleTop;
       }
       if (top <= 0) {
         targetEl.style.top = '0px'
+        basicData['dialogStyle_' + dialogKeyStr].top = '0px'
         isLimit = true
+        console.log('targetEl.style.top')
       }
     }
     if (right >= clientWidth || left <= 0) {
       if (right >= clientWidth) {
-        targetEl.style.left = clientWidth - targetEl.offsetWidth + 'px'
+        let handleLeft = clientWidth - targetEl.offsetWidth + 'px';
+        targetEl.style.left = handleLeft
+        basicData['dialogStyle_' + dialogKeyStr].left = handleLeft
       }
       if (left <= 0) {
         targetEl.style.left = '0px'
+        basicData['dialogStyle_' + dialogKeyStr].left = '0px'
         isLimit = true
       }
     }
@@ -66,33 +75,39 @@ const moveLimit = () => {
   return isLimit
 }
 const mouseupEvent = () => {
-  try {
-    let {top, bottom, left, right} = targetEl.getBoundingClientRect()
-    let clientHeight = document.scrollingElement.clientHeight
-    let clientWidth = document.scrollingElement.clientWidth
-    // 拖动超出边界值 回到可视区域
-    if (bottom >= clientHeight || top <= 0) {
-      if (bottom >= clientHeight) {
-        targetEl.style.top = clientHeight - targetEl.offsetHeight + 'px'
-      }
-      if (top <= 0) {
-        targetEl.style.top = '0px'
-      }
-    }
-    if (right >= clientWidth || left <= 0) {
-      if (right >= clientWidth) {
-        targetEl.style.left = clientWidth - targetEl.offsetWidth + 'px'
-      }
-      if (left <= 0) {
-        targetEl.style.left = '0px'
-      }
-    }
-  } catch (error) {
-    console.error(error)
-  }
+  // try {
+  //   let {top, bottom, left, right} = targetEl.getBoundingClientRect()
+  //   let clientHeight = document.scrollingElement.clientHeight
+  //   let clientWidth = document.scrollingElement.clientWidth
+  //   // 拖动超出边界值 回到可视区域
+  //   if (bottom >= clientHeight || top <= 0) {
+  //     if (bottom >= clientHeight) {
+  //       targetEl.style.top = clientHeight - targetEl.offsetHeight + 'px'
+  //       basicData['dialogStyle_' + dialogKeyStr].top = clientHeight - targetEl.offsetHeight + 'px'
+  //     }
+  //     if (top <= 0) {
+  //       targetEl.style.top = '0px'
+  //       basicData['dialogStyle_' + dialogKeyStr].top = '0px'
+  //     }
+  //   }
+  //   if (right >= clientWidth || left <= 0) {
+  //     if (right >= clientWidth) {
+  //       targetEl.style.left = clientWidth - targetEl.offsetWidth + 'px'
+  //       basicData['dialogStyle_' + dialogKeyStr].left = clientWidth - targetEl.offsetWidth + 'px'
+  //     }
+  //     if (left <= 0) {
+  //       targetEl.style.left = '0px'
+  //       basicData['dialogStyle_' + dialogKeyStr].left = '0px'
+  //     }
+  //   }
+  // } catch (error) {
+  //   console.error(error)
+  // }
+  moveLimit();
   // 拖动结束可以选中文本
   document.onselectstart = null
   document.removeEventListener('mousemove', moveFun)
+  document.removeEventListener('mouseup', mouseupEvent)
   document.onselectstart = function () { return true }
 }
 const onMouseDown = (event) => {

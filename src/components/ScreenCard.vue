@@ -2,6 +2,10 @@
   <div class="card-box">
     <div class="screen-card"
       :style="renderDomStyle"
+      :class="{
+        'slide-out-right': basicData.isEnterBgWall,
+        'slide-in-right': !basicData.isEnterBgWall
+      }"
      >
       <div 
         v-for="index in totalCard"

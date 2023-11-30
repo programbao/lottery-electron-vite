@@ -1,6 +1,7 @@
 <template>
   <el-dialog
-    class="base-modal-dialog isMoveDialog pointDialog"
+    class="base-modal-dialog isMoveDialog"
+    :class="dialogKeyStr"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :modal="false"
@@ -10,7 +11,7 @@
     width="70%"
     title="系统配置">
     <template #header>
-      <slot name="title"><span class="title-text">系统配置</span></slot>
+      <slot name="title"><span class="title-text">奖项配置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
@@ -39,21 +40,19 @@ import { lotteryDataStore } from '../../../store'
 import prizeSetting from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
+const dialogKeyStr = 'prizeSetting';
 const dialogStyle = computed(() => {
-  return basicData.dialogStyle
+  return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
 let cutNum = 0;
 let addNum = 0;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
-  if (isOpen) {
-    
-  }
   if (!isFirstVisible && isOpen) {
     nextTick(() => {
       isFirstVisible = true;
-      initMoveEvent(basicData)
+      initMoveEvent(basicData, dialogKeyStr)
     })
   }
 }

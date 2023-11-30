@@ -1,5 +1,10 @@
 <template>
-  <div id="prizeBar">
+  <div 
+    id="prizeBar"  
+    :class="{
+        'slide-out-left': basicData.isEnterBgWall,
+        'slide-in-left': !basicData.isEnterBgWall
+      }">
     <div class="prize-mess">
       <label id="prizeType" class="prize-shine">{{currentPrize.name}}</label>
       <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>

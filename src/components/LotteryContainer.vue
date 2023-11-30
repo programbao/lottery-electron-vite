@@ -1,5 +1,10 @@
 <template>
-  <div id="container"></div>
+  <div 
+    :class="{
+      'slide-out-right': basicData.isEnterBgWall,
+      'slide-in-right': !basicData.isEnterBgWall
+    }" 
+    id="container"></div>
 </template>
 
 <script setup>
@@ -22,9 +27,6 @@ let targets = {
 // 动画执行中
 let isAnimating = false;
 let rotateObj;
-
-// let ROW_COUNT;
-// let COLUMN_COUNT;
 
 let paramsFields = {};
 let animationId;

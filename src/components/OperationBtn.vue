@@ -1,6 +1,12 @@
 <template>
   <div id="menu">
-    <div v-show="noHideBtn" class="lottery-operation-btn">
+    <div 
+      v-show="noHideBtn" 
+      :class="{
+        'slide-out-bottom': basicData.isEnterBgWall,
+        'slide-in-bottom': !basicData.isEnterBgWall
+      }"
+      class="lottery-operation-btn">
       <div class="begin-lottery">
         <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
@@ -34,20 +40,30 @@
     <div
       ref="bottomBar"
       class="bottom-bar">
-      <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
-      <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
-      <button class="btn"  @click="toggleSetting('cardSetting')">卡片设置</button>
-      <button class="btn">展示中奖名单</button>
-      <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-      <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置<br />mengatur ulang</button>
-      <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
-      <MusicBtn />
+      <div class="quick-operation">
+        <button class="btn" @click="bgWallClick">背景墙</button>
+        <button class="btn">屏幕墙</button>
+        <button class="btn" @click="showLotteryClick">展示抽奖</button>
+      </div>
+      <div class="setting">
+        <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
+        <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
+        <button class="btn" @click="toggleSetting('cardSetting')">卡片设置</button>
+        <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
+      </div>
+      <div class="other">
+        <button class="btn">展示中奖名单</button>
+        <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
+        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置中奖名单<br />mengatur ulang</button>
+        <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
+        <MusicBtn />
+      </div>
     </div>
-
 
     <usersSettingDialog ref="usersSettingDialogRef" />
     <prizeSettingDialog ref="prizeSettingDialogRef" />
     <cardSettingDialog ref="cardSettingDialogRef" />
+    <otherResourceSettingDialog ref="otherResourceSettingDialogRef" />
   </div>
 </template>
 
@@ -59,11 +75,13 @@ import { lotteryDataStore } from '../store'
 import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
 import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.vue"
 import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue"
+import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
 
 // 打开设置
 const usersSettingDialogRef = ref();
 const prizeSettingDialogRef = ref();
 const cardSettingDialogRef = ref();
+const otherResourceSettingDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -75,9 +93,20 @@ const toggleSetting = (settingStr) => {
     case 'cardSetting':
       cardSettingDialogRef.value.toggleConfig()
       break;
+    case 'otherResourceSetting': 
+      otherResourceSettingDialogRef.value.toggleConfig()
+      break;
     default:
       break;
   }
+}
+
+// 图片相关设置
+const bgWallClick = () => {
+  basicData.isEnterBgWall = true
+}
+const showLotteryClick = () => {
+  basicData.isEnterBgWall = false
 }
 
 
@@ -253,6 +282,13 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  > div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 10px;
+    border-right: 1px solid rgba(127, 255, 255, 0.75);
+  }
 }
 
 .bottom-bar.active {
