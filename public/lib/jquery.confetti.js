@@ -63,8 +63,10 @@
         $(window).resize(function () {
             W = window.innerWidth;
             H = window.innerHeight;
-            canvas.width = W;
-            canvas.height = H;
+            if (canvas) {
+                canvas.width = W;
+                canvas.height = H;
+            }
         });
 
     }

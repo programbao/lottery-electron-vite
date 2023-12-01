@@ -25,53 +25,53 @@ const currentPrize = computed(() => {
 const prizeMark = ref();
 const enterAnimate = ref("")
 // 显示中奖全部大名单
-const showAllPrizes = () => {
-  let prizeListBox = '';
-  prizeMark.value.style.zIndex = "6";
-  $.confetti.restart(); 
-  var companyContainerHTML = createImageAndTextContainer("http://172.90.0.10/_nuxt/img/logo.acb8f74.png");
-  console.log(basicData.luckyUsers, '展示全部数据')
-  Object.keys(basicData.luckyUsers).forEach((key, index) => {
-      // let luckyDoms = luckyUsersCard[key];
-      let prizeTypeObject = basicData.prizes.find(item => item.type === Number(key));
+// const showAllPrizes = () => {
+//   let prizeListBox = '';
+//   prizeMark.value.style.zIndex = "6";
+//   $.confetti.restart(); 
+//   var companyContainerHTML = createImageAndTextContainer("http://172.90.0.10/_nuxt/img/logo.acb8f74.png");
+//   console.log(basicData.luckyUsers, '展示全部数据')
+//   Object.keys(basicData.luckyUsers).forEach((key, index) => {
+//       // let luckyDoms = luckyUsersCard[key];
+//       let prizeTypeObject = basicData.prizes.find(item => item.type === Number(key));
       
-      let prizeItemsHtml = ''
+//       let prizeItemsHtml = ''
 
-      basicData.luckyUsers[key].forEach((luckyItem, luckysIndex) => {
-        prizeItemsHtml += `
-          <div class="prize-list-item">
-            ${companyContainerHTML}
-            <div class="name">${luckyItem[2]}</div>
-            <div class="card-info">
-              <div class="id-card">${luckyItem[1]}</div>
-            </div>
-          </div>
-        `
-      });
-      prizeListBox += `
-        <div class="prize-box">
-          <div class="prize-type-title">${prizeTypeObject['text']}, ${prizeTypeObject['title']}</div>
-          <div class="prize-list">
-            ${prizeItemsHtml}
-          </div> 
-        </div>
-      `;
-  });
-  prizeMark.value.innerHTML = `
-    <div class="prize-list-box slide-in-right">
-      <div class="prize-list-box-title">
-        抽奖已结束，谢谢参与<br />
-        undian telah selesai,terima kasih telah bergabung
-      </div>
-      ${prizeListBox}
-    </div>`
-  setTimeout(() => {
-    autoScrollFn()
-  }, 700)
-  setTimeout(() => {
-    // $.confetti.stop(); 
-  }, 5000)
-}
+//       basicData.luckyUsers[key].forEach((luckyItem, luckysIndex) => {
+//         prizeItemsHtml += `
+//           <div class="prize-list-item">
+//             ${companyContainerHTML}
+//             <div class="name">${luckyItem[2]}</div>
+//             <div class="card-info">
+//               <div class="id-card">${luckyItem[1]}</div>
+//             </div>
+//           </div>
+//         `
+//       });
+//       prizeListBox += `
+//         <div class="prize-box">
+//           <div class="prize-type-title">${prizeTypeObject['text']}, ${prizeTypeObject['title']}</div>
+//           <div class="prize-list">
+//             ${prizeItemsHtml}
+//           </div> 
+//         </div>
+//       `;
+//   });
+//   prizeMark.value.innerHTML = `
+//     <div class="prize-list-box slide-in-right">
+//       <div class="prize-list-box-title">
+//         抽奖已结束，谢谢参与<br />
+//         undian telah selesai,terima kasih telah bergabung
+//       </div>
+//       ${prizeListBox}
+//     </div>`
+//   setTimeout(() => {
+//     autoScrollFn()
+//   }, 700)
+//   setTimeout(() => {
+//     // $.confetti.stop(); 
+//   }, 5000)
+// }
 const showPrize = () => {
   basicData.isShowPrizeMark = true
   let prizeMarkRef = prizeMark.value
@@ -93,7 +93,7 @@ const hidePrizeMark = () => {
   basicData.isShowPrizeMark = false;
 }
 bus.on('showPrize', showPrize);
-bus.on('showAllPrizes', showAllPrizes);
+// bus.on('showAllPrizes', showAllPrizes);
 bus.on('hidePrizeMark', hidePrizeMark);
 </script>
 

@@ -61,6 +61,7 @@
         <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
         <button class="btn" @click="toggleSetting('cardSetting')">卡片设置</button>
         <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
+        <button class="btn lock-btn" @click="toggleSetting('secretSetting')"><el-icon :size="30"><Lock /></el-icon></button>
       </div>
       <div class="other">
         <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
@@ -75,7 +76,7 @@
     <prizeSettingDialog ref="prizeSettingDialogRef" />
     <cardSettingDialog ref="cardSettingDialogRef" />
     <otherResourceSettingDialog ref="otherResourceSettingDialogRef" />
-
+    <secretSettingDialog ref="secretSettingDialogRef" />
   </div>
 </template>
 
@@ -87,6 +88,7 @@ import { lotteryDataStore } from '../store'
 import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
 import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.vue"
 import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue"
+import secretSettingDialog from "../components/configWidget/secretSetting/dialog.vue"
 import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
 
 // 打开设置
@@ -94,6 +96,7 @@ const usersSettingDialogRef = ref();
 const prizeSettingDialogRef = ref();
 const cardSettingDialogRef = ref();
 const otherResourceSettingDialogRef = ref();
+const secretSettingDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -107,6 +110,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'otherResourceSetting': 
       otherResourceSettingDialogRef.value.toggleConfig()
+      break;
+    case 'secretSetting':
+      secretSettingDialogRef.value.toggleConfig()
       break;
     default:
       break;
@@ -312,6 +318,11 @@ onBeforeUnmount(() => {
     padding: 0 10px;
     border-right: 1px solid rgba(127, 255, 255, 0.75);
   }
+  .setting {
+    .lock-btn {
+
+    }
+  }
 }
 
 .bottom-bar.active {
@@ -430,6 +441,8 @@ onBeforeUnmount(() => {
       margin-right: auto;
       font-weight: 600;
       color: #000;
+      display: flex;
+      align-items: center;
     }
     .title-btn {
       font-size: 14px;

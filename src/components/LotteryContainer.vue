@@ -480,7 +480,8 @@ const lotteryActiveFn = async () => {
   if (!basicData.currentPrize) {
     resetCard(500).then(res => {
       // showAllPrizes();
-      bus.emit('showAllPrizes')
+      // bus.emit('showAllPrizes')
+      basicData.isShowAllLuckyUser = true;
     })
     toast.info(`抽奖已结束，谢谢参与 undian telah selesai,terima kasih telah bergabung`, { 
       duration: 3000

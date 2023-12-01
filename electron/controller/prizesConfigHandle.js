@@ -29,6 +29,7 @@ const importFile = () => {
     console.log(args, 'argsargs')
     let extensions = args[0]
     let userName = args[1]
+    let lotteryCount = args[2]
     if (!extensions) {
       extensions = []
     } else {
@@ -50,15 +51,23 @@ const importFile = () => {
         const destPath = path.join(dbPath, fileName)
         let users;
         if (userName) {
-          const isHasGroup = sharedObject.cfg.groupList && sharedObject.cfg.groupList.some(item => item.group_name === fileName);
-          if (!isHasGroup) {
-            users = loadData(filePath)
-            if (users) {
-              sharedObject.curData[userName] = users
-            } else {
-              return false
-            }
+          users = loadData(filePath)
+          if (users && !userName.includes('secret_users_')) {
+            sharedObject.curData[userName] = users
           }
+          if (lotteryCount && users.length > Number(lotteryCount)) {
+            dialog.showErrorBox("导入失败", `您导入的人员名单有${users.length}个，内置中奖人数不能大于总奖项数量 ${lotteryCount}个`);
+            return false
+          }
+          // const isHasGroup = sharedObject.cfg.groupList && sharedObject.cfg.groupList.some(item => item.group_name === fileName);
+          // if (!isHasGroup) {
+          //   users = loadData(filePath)
+          //   if (users) {
+          //     sharedObject.curData[userName] = users
+          //   } else {
+          //     return false
+          //   }
+          // }
         }
         fs.copyFileSync(filePath, destPath)
     

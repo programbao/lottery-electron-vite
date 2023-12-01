@@ -9,9 +9,9 @@
     :style="dialogStyle"
     v-model="dialogTableVisible"
     width="70%"
-    title="名单设置">
+    >
     <template #header>
-      <slot name="title"><span class="title-text">名单设置</span></slot>
+      <slot name="title"><span class="title-text"><el-icon :size="20"><Lock /></el-icon>设置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
@@ -22,9 +22,9 @@
       </div>
     </template>
     <div class="setting-content">
-      <usersSetting 
+      <secretSetting 
         :key="dialogTableVisible"
-        ref="usersSettingRef" />
+        ref="secretSettingRef" />
     </div>
   </el-dialog>
 </template>
@@ -35,10 +35,10 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import usersSetting from './draggableGroup/index.vue'
+import secretSetting from './draggableGroup/index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
-const dialogKeyStr = 'usersSetting';
+const dialogKeyStr = 'secretSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
@@ -54,7 +54,7 @@ const toggleConfig = () => {
 }
 let isFirstVisible = false;
 
-const usersSettingRef = ref();
+const secretSettingRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {
       type: 'success',
@@ -95,17 +95,17 @@ const checkAllPassStatus = (...statuses) => {
 
 const confirm = async () => {
   // 删除不必存的字段
-  const groupListData = JSON.parse(JSON.stringify(usersSettingRef.value['getGroupList']()));
+  const groupListData = JSON.parse(JSON.stringify(secretSettingRef.value['getGroupList']()));
   const excludeFields = ['index', 'isSelected'];
   groupListData.forEach((group) => {
     excludeFields.forEach((key) => {
       delete group[key];
     })
   })
-  const usersSettingPass = await handleVerifyConfig('groupList', groupListData);
+  const secretSettingPass = await handleVerifyConfig('groupList', groupListData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    usersSettingPass.status
+    secretSettingPass.status
   );
 
   if (status === 1) {
@@ -113,8 +113,6 @@ const confirm = async () => {
       message: '设置成功',
       type: 'success',
     });
-  // 设置关联名单
-    Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
     // dialogTableVisible.value = false;
     // ...其他处理
   } else if (status === 0) {
