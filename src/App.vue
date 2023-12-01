@@ -6,16 +6,13 @@ import OperationBtn from "./components/OperationBtn.vue";
 import PrizeBar from "./components/PrizeBar.vue";
 import PrizeMark from "./components/PrizeMark.vue";
 import LuckyUser from "./components/LuckyUser.vue"
+import ShowAllLuckyUser from "./components/ShowAllLuckyUser.vue"
 // import ConfigDialog from "./components/configWidget/index.vue"
 import ScreenCard from "./components/ScreenCard.vue"
 // 引入store
 import { lotteryDataStore } from './store'
 const lotteryData = lotteryDataStore();
-const importFile = async () => {
-  console.log('执行导入操作')
-  let userData = await myApi.openDialog()
-  console.log(userData, 'userData')
-}
+
 const isLoadingFinish = ref(false)
 onMounted(async () => {
   await lotteryData.initConfigData();
@@ -36,6 +33,7 @@ onMounted(async () => {
     <PrizeBar />
     <PrizeMark />
     <LuckyUser />
+    <ShowAllLuckyUser />
     <!-- <ConfigDialog /> -->
     <ScreenCard />
     <BgBox />
@@ -47,6 +45,7 @@ onMounted(async () => {
 html,body {
   overflow: hidden;
 }
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -61,6 +60,18 @@ html,body {
 }
 </style>
 <style>
+#lucky-close-icon {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  font-size: 2.5vh;
+  padding: 1vh 2vw;
+  margin: 0;
+  color: rgba(127, 255, 255, 0.75);
+  z-index: 1000;
+}
+
+
 .slide-out-top {
 	-webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 	        animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;

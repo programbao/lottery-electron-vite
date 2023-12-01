@@ -63,7 +63,7 @@
         <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
       </div>
       <div class="other">
-        <button class="btn">展示中奖名单</button>
+        <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
         <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
         <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置中奖名单<br />mengatur ulang</button>
         <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
@@ -112,6 +112,9 @@ const toggleSetting = (settingStr) => {
       break;
   }
 }
+const showAllLuckyUser = () => {
+  basicData.isShowAllLuckyUser = true
+}
 
 // 图片相关设置
 const isShowScreenImg = ref(false)
@@ -152,7 +155,7 @@ const isShowPrizeMark = computed(() => {
 const isHideCommonBtn = ref(false);
 const noHideBtn = computed(() => {
   let noHide = true;
-  if (basicData.isShowLuckyUser) {
+  if (basicData.isShowLuckyUser || basicData.isShowAllLuckyUser) {
     noHide = false;
   }
   if (isHideCommonBtn.value) {
@@ -336,7 +339,7 @@ onBeforeUnmount(() => {
 #lottery {
   animation: breath 1.6s linear infinite;
   box-shadow: 0px 0px 15px rgb(127 255 255 / 75%);
-  margin-top: 20px;
+  // margin-top: 20px;
 }
 // .begin-lottery, #showAllLucks {
 //   position: fixed;

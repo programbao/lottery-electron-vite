@@ -56,8 +56,8 @@
     }
 
     function init() {
-        SetGlobals();
-        InitializeButton();
+        // SetGlobals();
+        // InitializeButton();
         // InitializeConfetti();
 
         $(window).resize(function () {
@@ -77,9 +77,10 @@
         $('#restartConfetti').click(RestartConfetti);
     }
 
-    function SetGlobals() {
-        $('body').append('<canvas id="confettiCanvas" style="position:absolute;top:0;left:0;display:none;z-index:99;"></canvas>');
-        canvas = document.getElementById("confettiCanvas");
+    function SetGlobals(canvasDom) {
+        // $('body').append('<canvas id="confettiCanvas" style="position:absolute;top:0;left:0;display:none;z-index:99;"></canvas>');
+        // canvas = document.getElementById("confettiCanvas");
+        canvas = canvasDom
         ctx = canvas.getContext("2d");
         W = window.innerWidth;
         H = window.innerHeight;
@@ -223,6 +224,7 @@
     this.start = InitializeConfetti;
     this.stop = DeactivateConfetti;
     this.restart = RestartConfetti;
+    this.setShowContentDom = SetGlobals;
   }
   $.confetti.init();
 }(jQuery));

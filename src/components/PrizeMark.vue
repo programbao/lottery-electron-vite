@@ -22,7 +22,7 @@ const basicData = lotteryDataStore();
 const currentPrize = computed(() => {
   return basicData.currentPrize;
 });
-const prizeMark = ref(null);
+const prizeMark = ref();
 const enterAnimate = ref("")
 // 显示中奖全部大名单
 const showAllPrizes = () => {
@@ -74,7 +74,11 @@ const showAllPrizes = () => {
 }
 const showPrize = () => {
   basicData.isShowPrizeMark = true
-  prizeMark.value.style.zIndex = "6";
+  let prizeMarkRef = prizeMark.value
+  // if (!prizeMark.value) {
+  //   prizeMarkRef = document.querySelector('#prize-mark')
+  // }
+  prizeMarkRef.style.zIndex = "6";
   enterAnimate.value = basicData.currentPrizeIndex < 1 ? "bounce-in-top" : "slide-in-elliptic-top-fwd"
   setTimeout(() => {
     basicData.isNextPrize = false

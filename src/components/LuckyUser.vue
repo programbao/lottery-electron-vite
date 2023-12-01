@@ -3,6 +3,7 @@
     id="lucky-user-box"
     :style="luckyUserBoxStyle"
     class="lucky-user-box">
+    <canvas ref="confettiCanvasRef" class="confetti-canvas"></canvas>
     <div 
       :class="{
         'slide-in-right': basicData.isShowLuckyUser,
@@ -79,7 +80,7 @@
 import { computed, ref, watch } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
-
+const confettiCanvasRef = ref();
 const luckyCardConfigStyle = computed(() => {
   return basicData.luckyCardConfigStyle;
 })
@@ -90,23 +91,6 @@ const luckysRowColObj = computed(() => {
 const luckyUserBoxStyle = ref({
   'z-index': '-2',
 })
-let showTimer = null;
-// 控制入场和退场动画
-watch(
-  () => basicData.isShowLuckyUser,
-  () => {
-    clearTimeout(showTimer);
-    if (basicData.isShowLuckyUser) {
-      showTimer = setTimeout(() => {
-        luckyUserBoxStyle.value['z-index'] = '400'
-      });
-    } else {
-      showTimer = setTimeout(() => {
-        luckyUserBoxStyle.value['z-index'] = '-2'
-      }, 400);
-    }
-  }
-)
 const lucksContentStyle = computed(() => {
   let handleStyle = `
     display: grid;
@@ -138,27 +122,34 @@ const lucksContentStyle = computed(() => {
       handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
   }
-  // console.log( {
-  //   'display': 'flex',
-  //   'flex-wrap': 'wrap',
-  //   'justify-content': 'center',
-  //   'margin-bottom': '8px',
-  //   'opacity': basicData.isShowLuckyUser ? '0' : '1',
-  //   'overflow': 'auto',
-  //   'padding': '2px',
-  //   'transition': 'opacity .3s ease-in-out',
-  //   'max-height': '100vh',
-  //   'max-width': '100vw',
-  //   'width': `${columnCount * luckysRowColObj.value.tileSize + 13}px`,
-  //   'height': `${rowCount * luckysRowColObj.value.tileSize}px`,
-  // })
   return handleStyle
 });
 const currentLuckys = computed(() => {
   return basicData.currentLuckys;
 });
+let showTimer = null;
+// 控制入场和退场动画
+watch(
+  () => basicData.isShowLuckyUser,
+  () => {
+    clearTimeout(showTimer);
+    if (basicData.isShowLuckyUser) {
+      showTimer = setTimeout(() => {
+        luckyUserBoxStyle.value['z-index'] = '400'
+        $.confetti.setShowContentDom(confettiCanvasRef.value)
+        $.confetti.restart();
+      });
+    } else {
+      showTimer = setTimeout(() => {
+        luckyUserBoxStyle.value['z-index'] = '-2'
+      }, 400);
+    }
+  }
+)
+
 const closeBtn = () => {
   basicData.isShowLuckyUser = false;
+  $.confetti.stop();
 }
 // const currentLuckys = computed(() => {
 //   return basicData.currentLuckys;
@@ -193,6 +184,13 @@ const closeBtn = () => {
 }
 .lucky-item:hover {
   border: 1px solid rgba(253, 105, 0, 0.95) !important;
+}
+.confetti-canvas {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 .closeBtn {
   position: fixed;

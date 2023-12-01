@@ -26,6 +26,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       isShowPrizeMark: false, // 是否显示奖品
       isEnterLottery: false, // 是否进入抽奖
       isEnterBgWall: false, // 是否进入背景墙
+      isShowAllLuckyUser: false,// 是否显示全部中奖用户
       dialogStyle: {
         top: '4vh',
         left: '15%'
