@@ -1,59 +1,67 @@
 <template>
-  <div class="prize-setting">
-    <draggable
-        :list="prizes"
-        ghost-class="ghost"
-        chosen-class="chosenClass"
-        animation="300"
-        item-key="type"
-        class="draggable-box" 
-        handle=".move-icon"
-        @end="dragEndHandle"
-        :move="dragMoveHandle"
-        v-if="prizes.length > 0"
-      >
-      <template #item="{ element  }">
-        <div class="item-prize item" :key="element.type">
-          <el-image
-            :class="'el-image-' + element.index"
-            style="width: 100px; height: 100px"
-            :src="element.img"
-            :zoom-rate="1.2"
-            :max-scale="7"
-            :min-scale="0.2"
-            :preview-src-list="srcList"
-            :initial-index="element.index"
-            fit="contain"
-          /> 
-          <div class="prize-text">{{ element.name }}</div>
-          <div class="prize-text">{{ element.otherName }}</div>
-          <div class="mark-operation">
-            <div v-if="luckyUsers[element.type]" class="mark-tips">奖项有中奖名单, 不能删除和拖动</div>
-            <el-icon v-show="!luckyUsers[element.type]" class="move-icon" size="23" color="#fff"><Switch /></el-icon>
-            <div class="center-btn">
-              <el-icon @click="editPrize(element, 'edit')" size="23" color="#fff"><EditPen /></el-icon>
-              <el-icon @click="handlePictureCardPreview(element)" size="23" color="#fff"><ZoomIn /></el-icon>
-              <span v-show="!luckyUsers[element.type]">
-                <el-popconfirm 
-                  title="确认删除吗?" 
-                  confirm-button-type="danger"
-                  @confirm="deletePrize(element)">
-                  <template #reference>
-                    <el-icon  size="23" color="#fff"><Delete /></el-icon>
-                  </template>
-                </el-popconfirm>
-              </span>
+  <div>
+    <div class="lottery-layout">
+      <div class="header-txt">奖项 - 顺序/数量/抽奖轮次等设置</div>
+      <div class="prize-setting">
+        <draggable
+            :list="prizes"
+            ghost-class="ghost"
+            chosen-class="chosenClass"
+            animation="300"
+            item-key="type"
+            class="draggable-box" 
+            handle=".move-icon"
+            @end="dragEndHandle"
+            :move="dragMoveHandle"
+            v-if="prizes.length > 0"
+          >
+          <template #item="{ element  }">
+            <div class="item-prize item" :key="element.type">
+              <el-image
+                :class="'el-image-' + element.index"
+                style="width: 100px; height: 100px"
+                :src="element.img"
+                :zoom-rate="1.2"
+                :max-scale="7"
+                :min-scale="0.2"
+                :preview-src-list="srcList"
+                :initial-index="element.index"
+                fit="contain"
+              /> 
+              <div class="prize-text">{{ element.name }}</div>
+              <div class="prize-text">{{ element.otherName }}</div>
+              <div class="mark-operation">
+                <div v-if="luckyUsers[element.type]" class="mark-tips">奖项有中奖名单, 不能删除和拖动</div>
+                <el-icon v-show="!luckyUsers[element.type]" class="move-icon" size="23" color="#fff"><Switch /></el-icon>
+                <div class="center-btn">
+                  <el-icon @click="editPrize(element, 'edit')" size="23" color="#fff"><EditPen /></el-icon>
+                  <el-icon @click="handlePictureCardPreview(element)" size="23" color="#fff"><ZoomIn /></el-icon>
+                  <span v-show="!luckyUsers[element.type]">
+                    <el-popconfirm 
+                      title="确认删除吗?" 
+                      confirm-button-type="danger"
+                      @confirm="deletePrize(element)">
+                      <template #reference>
+                        <el-icon  size="23" color="#fff"><Delete /></el-icon>
+                      </template>
+                    </el-popconfirm>
+                  </span>
+                </div>
+              </div>
+            </div> 
+          </template>
+          <template #footer>
+            <div class="item-prize add" @click="editPrize({}, 'add')">
+              <span class="symbol">+</span>
             </div>
-          </div>
-        </div> 
-      </template>
-      <template #footer>
-        <div class="item-prize add" @click="editPrize({}, 'add')">
-          <span class="symbol">+</span>
-        </div>
-      </template>
-    </draggable>
-    <editDialog 
+          </template>
+        </draggable>
+      </div>
+    </div>
+    <div class="lottery-layout">
+      <div class="header-txt">奖项排版样式设置</div>
+    </div>
+      <editDialog 
       @close="editDialogVisible = false"
       @confirm="editConfirm"
       :openType="openType"
@@ -150,6 +158,22 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+ .lottery-layout {
+    .header-txt {
+      text-indent: 10px;
+      color: #fff;
+      margin: 15px 0;
+      background: linear-gradient(90deg,#656a79,#f2fafe);
+      border-radius: 6px;
+      line-height: 32px;
+      text-align: left;
+    }
+    &:first-child {
+      .header-txt {
+        margin-top: 0;
+      }
+    }
+  }
 .prize-setting > div {
   display: grid;
   grid-template-columns: repeat(6, 15.3%);
@@ -157,6 +181,7 @@ onMounted(() => {
   row-gap: 20px;
   // display: flex;
   flex-wrap: wrap;
+ 
 }
 .item-prize {
   // margin: 8px;
