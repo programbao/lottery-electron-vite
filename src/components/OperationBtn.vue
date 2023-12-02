@@ -60,6 +60,8 @@
         <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
         <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
         <button class="btn" @click="toggleSetting('cardSetting')">卡片设置</button>
+        <button class="btn" @click="toggleSetting('ballSetting')">球体设置</button>
+        <button class="btn" @click="toggleSetting('controlsBtnSetting')">控制按钮设置</button>
         <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
         <button class="btn lock-btn" @click="toggleSetting('secretSetting')"><el-icon :size="30"><Lock /></el-icon></button>
         <button class="btn lock-btn" @click="toggleSetting('openDevTools')"><el-icon :size="30"><SetUp /></el-icon></button>
@@ -67,7 +69,8 @@
       <div class="other">
         <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
         <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置中奖名单<br />mengatur ulang</button>
+        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">重置当前奖项中奖名单<br />mengatur ulang</button>
+        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置所有中奖名单<br />mengatur ulang</button>
         <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
         <MusicBtn />
       </div>
@@ -83,6 +86,7 @@
 
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount, computed, nextTick } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import MusicBtn from "./MusicBtn.vue";
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
@@ -215,10 +219,30 @@ const toggleFullScreen = async () => {
 const exportData = () => {
   bus.emit('exportData')
 }
+
+const resetCurrentPrizeBtnClick = () => {
+  
+}
 const resetBtnClick = () => {
-  bus.emit('resetBtnClick')
-  noBeginLottery.value = true;
-  basicData.isEnterLottery = true
+  ElMessageBox.confirm(
+    '所有中奖记录都将被清空，确认要重置吗?',
+    '警告',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      bus.emit('resetBtnClick')
+      noBeginLottery.value = true;
+      basicData.isEnterLottery = true
+      ElMessage({
+        type: 'success',
+        message: '重置成功',
+      })
+    })
+ 
 }
 // const toggleConfig = () => {
 //   bus.emit('toggleConfig')
