@@ -287,6 +287,81 @@ const rotateBall = () => {
       });
   });
 }
+// 内置名单 功能
+// 内置规则： “url?lucks={"5":["xxxxx"]}”  key为要抽中的类型， value为抽中的人员(前提是其他奖项没有抽中)
+// function getLucksObject() { 
+//   const lucks = new URLSearchParams(window.location.search).get('lucks'); 
+//   let lucksObject = {}; 
+//   if (lucks) { 
+//     const lucksDecoded = decodeURIComponent(lucks); 
+//     try { 
+//       lucksObject = JSON.parse(lucksDecoded); 
+//     } catch (error) { 
+//       lucksObject = {}; 
+//     } 
+//   } 
+//   return lucksObject; 
+// }
+const filter = (input, luckyUsers) => {
+
+  let results = input;
+  Object.keys(luckyUsers).forEach(type => {
+
+    results = input.filter(row => {
+      return !luckyUsers[type].some(r => r[0]+"" === row[0]+""); 
+    });
+  });
+
+  return results;
+
+}
+
+const findAndMerge = (arr, input, current) => { 
+  try {
+    // 添加luckyUsers参数
+    // 并在函数内先过滤input
+    if (!input || !input.length) return currentLuckys;
+    const filteredInput = filter(input, basicData.luckyUsers); 
+
+    if (!filteredInput || !filteredInput.length) return currentLuckys;
+    // 找到匹配的行 
+    const rows = arr.filter(row => filteredInput.includes(row[0]+"")); 
+    if (!rows || !rows.length) return currentLuckys;
+    // 合并到当前数组 
+    const merged = [...current]; 
+    rows.forEach(row => { 
+      const index = current.findIndex(r => (r[0]+'') === (row[0]+'')); 
+      if (index !== -1) { 
+        merged[index] = row; 
+      } else if (merged.length <= current.length) { 
+        if (rows.length) {
+          merged.pop();
+        }
+        merged.unshift(row); 
+      }
+    });
+    // 打乱数组 
+    for (let i = merged.length - 1; i > 0; i--) { 
+      const j = Math.floor(Math.random() * (i + 1)); 
+      [merged[i], merged[j]] = [merged[j], merged[i]]; 
+    }
+    return merged; 
+  } catch (error) {
+    console.log(error)
+    return currentLuckys;
+  }
+}
+
+const cheatingUser = () => {
+  try {
+      let urlLucks = getLucksObject()[currentType];
+      if (urlLucks) {
+        currentLuckys = findAndMerge(basicData.leftUsers, urlLucks, currentLuckys);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+}
 /**
  * 抽奖
  */
@@ -322,6 +397,8 @@ const rotateBall = () => {
         break;
       }
     }
+    // 内置名单
+    
 
     // 动画结束处理相关状态
     setTimeout(() => {
