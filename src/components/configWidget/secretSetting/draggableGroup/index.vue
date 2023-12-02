@@ -32,6 +32,7 @@
       <el-button plain @click="cancelSelect">取消</el-button>
     </div>
     <el-button class="upload-users-btn" @click="uploadUsers">上传内置中奖人员名单</el-button>
+    <el-button class="add-users-btn" @click="addUsers" type="primary" plain>添加</el-button>
     <!--  选项  -->
     <div class="option-container">
       <transition-group
@@ -52,6 +53,13 @@
         暂无内置人员，可添加或上传
       </div>
     </div>
+
+    <editDialog 
+      @close="editDialogVisible = false"
+      @confirm="editConfirm"
+      :optionList="optionList"
+      :editDialogVisible="editDialogVisible"
+       />
   </div>
 </template>
 
@@ -65,24 +73,61 @@ import { lotteryDataStore } from '../../../../store'
 const basicData = lotteryDataStore();
 const optionList = ref([])
 const groupList = ref([])
-const userRelatedMap = {};
-const luckyUsers = basicData.luckyUsers;
+// const userRelatedMap = {};
+// const luckyUsers = basicData.luckyUsers;
 let lotteryCount = 0;
-// const handleOptionList = () => {
-//   let arr = [];
-//   basicData.prizes.forEach(item => {
-//     const option = optionList.value.find(option => option.option_identity === item.type) || {};
-//     arr.push(Object.assign(option, {
-//       option_value: item.name,
-//       option_identity: item.type,
-//       noCanSelected: !!luckyUsers[item.type],
-//     }))
-//   })
-//   optionList.value = arr
-// }
+
+import editDialog from './editDialog.vue'
+const editDialogVisible = ref(false);
+
+
+// 添加名单
+const addUsers = () => {
+  editDialogVisible.value = true
+}
+const editConfirm = (data) => {
+  editDialogVisible.value = false
+  data.forEach(user => {
+    let addOption = {
+      option_value: user.join(','),
+      option_identity: user[0] + '',
+      index: 0
+    }
+    optionList.value.push(addOption)
+    addOption.index = optionList.value.length - 1 
+  })
+}
+
+const handleOptionList = () => {
+  // let arr = [];
+  // basicData.prizes.forEach(item => {
+  //   const option = optionList.value.find(option => option.option_identity === item.type) || {};
+  //   arr.push(Object.assign(option, {
+  //     option_value: item.name,
+  //     option_identity: item.type,
+  //     noCanSelected: !!luckyUsers[item.type],
+  //   }))
+  // })
+  const luckyUsersMap = {}
+  Object.keys(basicData.luckyUsers).forEach(key => {
+    const value = basicData.luckyUsers[key]
+    value.forEach(user => {
+      luckyUsersMap[user[0]] = true
+    })
+  })
+  optionList.value.forEach(item => {
+    item.noCanSelected = !!luckyUsersMap[item.option_identity+''];
+  })
+  // optionList.value = arr
+}
 // 页面初始化
 onMounted(() => {
   nextTick(() => {
+    const secretPrizesGroupList = JSON.parse(JSON.stringify(basicData.secretPrizesGroupList || []));
+    const groupListMap = {}
+    secretPrizesGroupList.forEach(item => {
+      groupListMap[item.group_identity] = item
+    })
     const prizes = JSON.parse(JSON.stringify(basicData.prizes));
     lotteryCount = prizes.reduce((total, prize) => {
       return total + (prize.count || 0);
@@ -94,20 +139,20 @@ onMounted(() => {
         group_identity: item.type,
         options: [],
       }
-      arr.push(obj)
+      arr.push(Object.assign(obj, groupListMap[item.type] || {}));
     });
     groupList.value = arr;
     optionList.value = JSON.parse(JSON.stringify(basicData.secretUsers));
-    // handleOptionList();
+    handleOptionList();
     // 初始化处理关联关系
-    // groupList.value.forEach(group => {
-    //   group.options.forEach(identity => {
-    //     const option = optionList.value.find(item => item.option_identity === identity)
-    //     if (option) {
-    //       option.related_group = group.group_identity
-    //     }
-    //   })
-    // })
+    groupList.value.forEach(group => {
+      group.options.forEach(identity => {
+        const option = optionList.value.find(item => item.option_identity === identity)
+        if (option) {
+          option.related_group = group.group_identity
+        }
+      })
+    })
   })
 })
 
@@ -225,6 +270,17 @@ const uploadUsers = async () => {
     //   })
     //   return
     // }
+    const handleIdSet = new Set();
+    const handleArr = JSON.parse(JSON.stringify(users)).concat(JSON.parse(JSON.stringify(optionList.value)));
+    for (let i = 0; i < handleArr.length; i++) {
+      const [id] = handleArr[i];
+      // 验证工号是否唯一和不能为空
+      if (!id || handleIdSet.has(id+'') || idSet.has(id+'')) {
+        ElMessage.error(`工号 ${id} 重复或为空`);
+        return false;
+      }
+      handleIdSet.add(id+'');
+    }
     if (users) {
       users.forEach(user => {
         let addOption = {
@@ -256,7 +312,7 @@ const getGroupList = () => {
 // 暴露属性
 defineExpose({
   getGroupList,
-  userRelatedMap
+  optionList: optionList
 })
 </script>
 
@@ -268,6 +324,12 @@ defineExpose({
 }
 .upload-users-btn {
   margin: 10px 16px;
+}
+.add-users-btn {
+  margin: 0px 16px 15px;
+}
+.add-users-btn.el-button.is-plain {
+  margin-left: 16px;
 }
 .relate-box {
   margin: 10px 0 10px;

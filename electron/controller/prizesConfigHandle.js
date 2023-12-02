@@ -59,6 +59,24 @@ const importFile = () => {
             dialog.showErrorBox("导入失败", `您导入的人员名单有${users.length}个，内置中奖人数不能大于总奖项数量 ${lotteryCount}个`);
             return false
           }
+          // 判断工号不能为空和重复
+          if (users && userName.includes('secret_users_')) {
+            const handleIdSet = new Set();
+            for (const item of data) {
+              if (!Array.isArray(item) || item.length !== 3) {
+                dialog.showErrorBox("导入失败", 'excel格式有误')
+                return false;
+              }
+              const [id, department, name] = item;
+              // 验证工号是否唯一和不能为空
+              if (!id || handleIdSet.has(id+'') || idSet.has(id+'')) {
+                dialog.showErrorBox("导入失败", `工号 ${id} 重复或为空`);
+                return false;
+              }
+              handleIdSet.add(id+'');
+            }
+          }
+
           // const isHasGroup = sharedObject.cfg.groupList && sharedObject.cfg.groupList.some(item => item.group_name === fileName);
           // if (!isHasGroup) {
           //   users = loadData(filePath)

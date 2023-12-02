@@ -26,6 +26,7 @@
         :key="dialogTableVisible"
         ref="secretSettingRef" />
     </div>
+   
   </el-dialog>
 </template>
 
@@ -36,6 +37,8 @@ import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
 import secretSetting from './draggableGroup/index.vue'
+
+
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
 const dialogKeyStr = 'secretSetting';
@@ -81,7 +84,6 @@ const handleVerifyConfig = async (handleStr, verifyData) => {
   return isPassSetting; 
 }
 
-
 const checkAllPassStatus = (...statuses) => {
   // 检查所有状态数组
   if (statuses.some(status => status === 0)) {
@@ -96,16 +98,24 @@ const checkAllPassStatus = (...statuses) => {
 const confirm = async () => {
   // 删除不必存的字段
   const groupListData = JSON.parse(JSON.stringify(secretSettingRef.value['getGroupList']()));
-  const excludeFields = ['index', 'isSelected'];
+  const optionListData = JSON.parse(JSON.stringify(secretSettingRef.value.optionList));
+  const excludeFields = ['index', 'isSelected', 'oCanSelected'];
   groupListData.forEach((group) => {
     excludeFields.forEach((key) => {
       delete group[key];
     })
   })
-  const secretSettingPass = await handleVerifyConfig('groupList', groupListData);
+  optionListData.forEach((option) => {
+    excludeFields.forEach((key) => {
+      delete option[key];
+    })
+  })
+  const secretSettingPass = await handleVerifyConfig('secretPrizesGroupList', groupListData);
+  const secretUsersPass = await handleVerifyConfig('secretUsers', optionListData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    secretSettingPass.status
+    secretSettingPass.status,
+    secretUsersPass.status
   );
 
   if (status === 1) {

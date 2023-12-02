@@ -53,11 +53,11 @@
         </el-tooltip>
       </div>
       <!-- 关闭按钮 -->
-      <el-icon 
+      <!-- <el-icon 
         class="close-btn" 
         :size="20"
         @click.stop="closeGroupBtn"
-        ><CircleClose /></el-icon> 
+        ><CircleClose /></el-icon>  -->
     </div>
   </div>
 </template>
