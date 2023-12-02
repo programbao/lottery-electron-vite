@@ -303,12 +303,11 @@ const rotateBall = () => {
 //   return lucksObject; 
 // }
 const filter = (input, luckyUsers) => {
-
   let results = input;
+  // 过滤已中奖的人员
   Object.keys(luckyUsers).forEach(type => {
-
     results = input.filter(row => {
-      return !luckyUsers[type].some(r => r[0]+"" === row[0]+""); 
+      return !luckyUsers[type].some(r => r[0]+"" === row+""); 
     });
   });
 
@@ -320,13 +319,12 @@ const findAndMerge = (arr, input, current) => {
   try {
     // 添加luckyUsers参数
     // 并在函数内先过滤input
-    if (!input || !input.length) return currentLuckys;
+    if (!input || !input.length) return basicData.currentLuckys;
     const filteredInput = filter(input, basicData.luckyUsers); 
-
-    if (!filteredInput || !filteredInput.length) return currentLuckys;
+    if (!filteredInput || !filteredInput.length) return basicData.currentLuckys;
     // 找到匹配的行 
     const rows = arr.filter(row => filteredInput.includes(row[0]+"")); 
-    if (!rows || !rows.length) return currentLuckys;
+    if (!rows || !rows.length) return basicData.currentLuckys;
     // 合并到当前数组 
     const merged = [...current]; 
     rows.forEach(row => { 
@@ -348,19 +346,22 @@ const findAndMerge = (arr, input, current) => {
     return merged; 
   } catch (error) {
     console.log(error)
-    return currentLuckys;
+    return basicData.currentLuckys;
   }
 }
-
+// 内置名单代码
 const cheatingUser = () => {
   try {
-      let urlLucks = getLucksObject()[currentType];
-      if (urlLucks) {
-        currentLuckys = findAndMerge(basicData.leftUsers, urlLucks, currentLuckys);
+    const secretPrizesGroupList = basicData.secretPrizesGroupList;
+    if (secretPrizesGroupList && secretPrizesGroupList.length) {
+      const secretGroup = secretPrizesGroupList.find(group => group.group_identity === basicData.currentPrize.type);
+      if (secretGroup) {
+        basicData.currentLuckys = findAndMerge(paramsFields.member, secretGroup.options, basicData.currentLuckys);
       }
-    } catch (error) {
-      console.error(error);
     }
+  } catch (error) {
+    console.error(error);
+  }
 }
 /**
  * 抽奖
@@ -398,7 +399,7 @@ const cheatingUser = () => {
       }
     }
     // 内置名单
-    
+    cheatingUser();
 
     // 动画结束处理相关状态
     setTimeout(() => {
