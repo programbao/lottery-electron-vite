@@ -171,6 +171,10 @@ const enterAnimate = (resetPrizeStatus = true) => {
   // 进入球体动画
   animate();
   transform(targets.sphere, 1500);
+  // 自动旋转球体
+  setTimeout(() => {
+    rotateBall(60000);
+  }, 1600)
   if (resetPrizeStatus) {
     setTimeout(() => {
       basicData.isNextPrize = true
@@ -264,7 +268,8 @@ const initHandleData = () => {
   // shineCard(basicData, paramsFields);
 }
 // 球体旋转
-const rotateBall = () => {
+const rotateBall = (rotateTime) => {
+  const confirmRotateTime = rotateTime || basicData.rotateTime;
   return new Promise((resolve, reject) => {
     scene.rotation.y = 0;
     rotateObj = new TWEEN.Tween(scene.rotation);
@@ -273,7 +278,7 @@ const rotateBall = () => {
         {
           y: Math.PI * 6 * basicData.rotateLoop
         },
-        basicData.rotateTime * basicData.rotateLoop
+        confirmRotateTime * basicData.rotateLoop
       )
       .onUpdate(render)
       // .easing(TWEEN.Easing.Linear)
@@ -368,6 +373,7 @@ const cheatingUser = () => {
  */
  const lottery = () => {
   if (basicData.isNextPrize) return;
+  rotateObj.stop();
   basicData.isLotting = true;
   rotateBall().then(() => {
     // 将之前的记录置空
@@ -421,6 +427,8 @@ const cheatingUser = () => {
       //   })
       // }, 200)
       // basicData.isNextPrize = true;
+      // 自动旋转球体
+      rotateBall(60000);
     }, 500)
     // 抽中之后要处理的事
     basicData.isShowLuckyUser = true;

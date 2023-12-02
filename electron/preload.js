@@ -46,6 +46,13 @@ const importFile = async (...args) => {
   let result = await ipcRenderer.invoke('importFile', ...args)
   return result
 }
+
+// 打开开发者工具
+const openDevTools = async (...args) => {
+  let result = await ipcRenderer.invoke('openDevTools', ...args)
+  return result
+}
+
 // 暴露electron处理函数 渲染进程和主进程通信
 contextBridge.exposeInMainWorld('myApi', {
   openDialog,
@@ -56,7 +63,8 @@ contextBridge.exposeInMainWorld('myApi', {
   handleExportData,
   toggleFullScreen,
   importFile,
-  savePrizesConfig
+  savePrizesConfig,
+  openDevTools
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

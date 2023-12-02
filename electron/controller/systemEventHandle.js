@@ -34,7 +34,14 @@ const savePrizesConfig = () => {
     return isPass;
   })
 }
+const openDevTools = () => {
+  ipcMain.handle('openDevTools', async () => {
+    const win = BrowserWindow.getFocusedWindow();
+    win.webContents.openDevTools();
+  })
+}
 module.exports = {
   toggleFullScreen,
-  savePrizesConfig
+  savePrizesConfig,
+  openDevTools
 }

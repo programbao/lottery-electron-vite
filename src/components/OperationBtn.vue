@@ -62,6 +62,7 @@
         <button class="btn" @click="toggleSetting('cardSetting')">卡片设置</button>
         <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
         <button class="btn lock-btn" @click="toggleSetting('secretSetting')"><el-icon :size="30"><Lock /></el-icon></button>
+        <button class="btn lock-btn" @click="toggleSetting('openDevTools')"><el-icon :size="30"><SetUp /></el-icon></button>
       </div>
       <div class="other">
         <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
@@ -113,6 +114,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'secretSetting':
       secretSettingDialogRef.value.toggleConfig()
+      break;
+    case 'openDevTools':
+      myApi.openDevTools();
       break;
     default:
       break;

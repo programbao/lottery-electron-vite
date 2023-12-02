@@ -10,12 +10,13 @@ global.sharedObject = {
   errorData: [],
   defaultPage: `default data`,
   cfg: {},
+  win: null
 }
 
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
 const { getStaticUsersData, setData, resetData, handleExportData } = require('./controller/dataHandle')
-const { toggleFullScreen, savePrizesConfig } = require('./controller/systemEventHandle')
+const { toggleFullScreen, savePrizesConfig, openDevTools } = require('./controller/systemEventHandle')
 const { importFile } = require('./controller/prizesConfigHandle')
 const createWindow = () => {
   const winState = new WinState({
@@ -67,6 +68,7 @@ const createWindow = () => {
   app.on('activate', function() {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+  // global.sharedObject.win = win;
 
   // 打开dialog
   openDialog();
@@ -94,6 +96,9 @@ const createWindow = () => {
 
   // 保存配置文件
   savePrizesConfig();
+
+  // 打开开发者工具
+  openDevTools();
 }
 
 app.whenReady().then(() => {
