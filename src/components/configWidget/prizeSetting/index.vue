@@ -59,7 +59,29 @@
       </div>
     </div>
     <div class="lottery-layout">
-      <div class="header-txt">奖项排版样式设置</div>
+      <div class="header-txt">奖品栏样式设置</div>
+      <div class="layout-form">
+        <el-form
+          ref="form"
+          :model="prizesBarStyle"
+          label-width="auto"
+          label-position="top"
+          size="large"
+        >
+          <el-form-item v-for="item in labelFieldArr" :key="item.field" :label="item.label" :prop="item.field">
+            <el-input-number
+              v-if="item.type === 'number'"
+              v-model="prizesBarStyle[item.field]"
+              :step="item.step ? item.step : 1"
+              controls-position="right"
+              size="large"
+            />
+            <el-input 
+              v-else 
+              v-model="prizesBarStyle[item.field]"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
       <editDialog 
       @close="editDialogVisible = false"
@@ -83,11 +105,66 @@ const editData = ref({});
 const openType = ref('edit');
 const luckyUsers = basicData.luckyUsers;
 const emit = defineEmits(['cutPrize', 'addPrize']);
-// 暴露属性
-defineExpose({
-  prizes
-})
+
 import { nanoid } from 'nanoid';
+// 样式设置label
+const labelFieldArr = [
+  {
+    label: '左bar列表总体宽度',
+    field: 'barBoxWidth',
+  },
+  {
+    label: '奖项盒子宽度',
+    field: 'prizeBoxWidth',
+  },
+  {
+    label: '奖项盒子最小高度',
+    field: 'prizeBoxMinHeight',
+  },
+  {
+    label: '奖项之间 间距',
+    field: 'prizeSpace',
+  },
+  {
+    label: '奖项字体大小',
+    field: 'prizeFontSize',
+  },
+  {
+    label: '进度条高度',
+    field: 'progressHeight',
+  },
+  {
+    label: '进度条字体大小',
+    field: 'progressFontSize',
+  },
+  {
+    label: '图片占位宽度',
+    field: 'imgGutterWidth',
+  },
+  {
+    label: '图片占位高度',
+    field: 'imgGutterHeight',
+  },
+  {
+    label: '当前奖项放大比例',
+    field: 'currentPrizeScale',
+    type: 'number'
+  }
+]
+const prizesBarStyle = ref({
+  barBoxWidth: '25vw',
+  prizeBoxWidth: '20vw',
+  prizeBoxMinHeight: '15vh',
+  prizeSpace: '20px',
+  prizeFontSize: '1vw',
+  progressHeight: '1.8vh',
+  progressFontSize: '1vw',
+  imgGutterWidth: '8vh',
+  imgGutterHeight: '8vh',
+  currentPrizeScale: 1.2
+})
+
+
 const initHandlePrizes = () => {
   if (basicData.prizes && basicData.prizes.length > 0) {
     prizes.value = JSON.parse(JSON.stringify(basicData.prizes)).map((item, index) => {
@@ -96,6 +173,8 @@ const initHandlePrizes = () => {
       return item
     });
   }
+  // copy样式设置
+  prizesBarStyle.value = JSON.parse(JSON.stringify(basicData.prizesBarStyle))
 }
 // 图片列表
 const srcList = computed(() => {
@@ -155,6 +234,11 @@ const editConfirm = (data) => {
 onMounted(() => {
   initHandlePrizes();
 })
+// 暴露属性
+defineExpose({
+  prizes,
+  prizesBarStyle
+})
 </script>
 
 <style lang="scss" scoped>
@@ -171,6 +255,19 @@ onMounted(() => {
     &:first-child {
       .header-txt {
         margin-top: 0;
+      }
+    }
+    .layout-form {
+      .el-form {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        .el-form-item--large {
+          margin-bottom: 0px;
+          > label {
+            margin-bottom: 0;
+          }
+        }
       }
     }
   }

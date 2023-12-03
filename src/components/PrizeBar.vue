@@ -10,23 +10,46 @@
       <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>
       ，剩余<label id="prizeLeft" class="prize-shine">{{getItemPrizeConfig(currentPrize.type).surplusCount}}</label>个
     </div>
-    <ul class="prize-list" ref="prizeList">
+    <ul 
+      class="prize-list" 
+      :style="{
+        width: prizesBarStyle.barBoxWidth
+      }"
+      ref="prizeList">
       <li 
         v-for="item in prizes"
         :key="item.type"
         :id="'prize-item-' + item.type" 
+        :style="{
+          width: prizesBarStyle.prizeBoxWidth,
+          'min-height': prizesBarStyle.prizeBoxMinHeight,
+          'margin-bottom': prizesBarStyle.prizeSpace,
+          'z-index': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? 1 : 0,
+          'transform': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? `scale(${prizesBarStyle.currentPrizeScale})` : 'scale(1)',
+        }"
         :class="[
           'prize-item', 
           item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? 'shine' : '',
           getItemPrizeConfig(item.type).activeClassName == 'done' ? 'done' : ''
         ]">
-            <div class="prize-img">
+            <div 
+              :style="{
+                'width': prizesBarStyle.imgGutterWidth,
+                'height': prizesBarStyle.imgGutterHeight
+              }"
+              class="prize-img">
                 <img :src="item.img" :alt="item.otherName">
             </div>
             <div class="prize-text">
-              <h5 class="prize-title">{{item.name}} {{item.otherName}}</h5>
+              <h5 
+                :style="{
+                  'font-size': prizesBarStyle.prizeFontSize
+                }"
+                class="prize-title">{{item.name}} {{item.otherName}}</h5>
                 <div class="prize-count">
-                    <div class="progress">
+                    <div 
+                      class="progress"
+                      :style="{height: prizesBarStyle.progressHeight}">
                         <div 
                           :id="'prize-bar-' + item.type" 
                           class="progress-bar progress-bar-danger progress-bar-striped active" 
@@ -37,6 +60,7 @@
                     </div>
                     <div 
                       :id="'prize-count-' + item.type" 
+                      :style="{'font-size': prizesBarStyle.progressFontSize}"
                       class="prize-count-left">
                         {{getItemPrizeConfig(item.type).surplusCount + "/" + item.count}}
                     </div>
@@ -62,6 +86,9 @@ const prizes = computed(() => {
 const currentPrize = computed(() => {
   return basicData.prizes[basicData.currentPrizeIndex];
 });
+const prizesBarStyle  = computed(() => {
+  return basicData.prizesBarStyle;
+})
 const getItemPrizeConfig = (type) => {
   let itemPrizeConfig = prizesListConfig.value[type];
   
@@ -233,7 +260,7 @@ bus.on('setPrizeData', setPrizeData)
 }
 .prize-item {
   padding: 9px;
-  margin: 20px 0;
+  // margin: 20px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -246,6 +273,7 @@ bus.on('setPrizeData', setPrizeData)
   min-height: 15vh;
   box-sizing: border-box;
   transition: transform 1s ease-in;
+  position: relative;
 }
 
 .prize-item .prize-img {
@@ -296,7 +324,8 @@ bus.on('setPrizeData', setPrizeData)
   position: relative;
   animation: animate-positive 2s;
   background-color: #d9534f;
-  height: 1.8vh;
+  // height: 1.8vh;
+  height: 100%;
   -webkit-transition: width 0.6s ease;
   -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
@@ -504,7 +533,7 @@ bus.on('setPrizeData', setPrizeData)
 
 .shine.prize-item {
   /* width: 24vh; */
-  margin: 1.8vh 0;
+  // margin: 1.8vh 0;
 }
 
 .prize-mess {

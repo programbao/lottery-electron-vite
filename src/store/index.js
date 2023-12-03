@@ -50,6 +50,18 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       currentLotteryGroup: {},
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员
       groupList: [], // 人员名单配置
+      prizesBarStyle: { // 奖品栏样式
+        barBoxWidth: '25vw',
+        prizeBoxWidth: '20vw',
+        prizeBoxMinHeight: '15vh',
+        prizeSpace: '20px',
+        prizeFontSize: '1vw',
+        progressHeight: '1.8vh',
+        progressFontSize: '1vw',
+        imgGutterWidth: '8vh',
+        imgGutterHeight: '8vh',
+        currentPrizeScale: 1.2
+      },
       beforeLotteryLayout: {
         columnCount: 17, // 列数
         rowCount: 10, // 行数

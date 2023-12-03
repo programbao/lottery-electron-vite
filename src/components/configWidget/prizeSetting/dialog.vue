@@ -16,7 +16,7 @@
         <div class="label label-confirm"></div>
         确认
       </div>
-      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
         <div class="label label-cancel"></div>
         取消
       </div>
@@ -145,7 +145,31 @@ const handlePrizesSetting = async () => {
   return isSuccess
 }
 
-
+const handleVerifyConfig = async (handleStr, verifyData) => {
+  let isPassSetting = {
+      type: 'success',
+      status: 1
+    };
+  const verifyConfigStr =JSON.stringify(verifyData);
+  const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
+  if (prevVerifyConfigStr === verifyConfigStr) {
+    return {
+      type: 'warning',
+      status: 2
+    };
+  }
+  const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
+  if (isPass) {
+    basicData[handleStr] = JSON.parse(verifyConfigStr);
+  } else {
+    isPassSetting = {
+      type: 'error',
+      status: 0
+    };
+  }
+  bus.emit(handleStr + 'Setting')
+  return isPassSetting; 
+}
 
 const checkAllPassStatus = (...statuses) => {
   // 检查所有状态数组
@@ -160,9 +184,12 @@ const checkAllPassStatus = (...statuses) => {
 
 const confirm = async () => {
   const prizeSettingPass = await handlePrizesSetting();
+  const prizesBarStylePass = await handleVerifyConfig('prizesBarStyle', prizeSettingRef.value['prizesBarStyle']);
+
    // 检查所有状态
   const status = checkAllPassStatus(
     prizeSettingPass.status,
+    prizesBarStylePass.status
   );
   if (status === 1) {
     ElMessage({
