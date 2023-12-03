@@ -81,6 +81,7 @@
     <cardSettingDialog ref="cardSettingDialogRef" />
     <otherResourceSettingDialog ref="otherResourceSettingDialogRef" />
     <secretSettingDialog ref="secretSettingDialogRef" />
+    <ballSettingDialog ref="ballSettingDialogRef" />
   </div>
 </template>
 
@@ -95,6 +96,7 @@ import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.v
 import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue"
 import secretSettingDialog from "../components/configWidget/secretSetting/dialog.vue"
 import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
+import ballSettingDialog from "../components/configWidget/ballSetting/dialog.vue"
 
 // 打开设置
 const usersSettingDialogRef = ref();
@@ -102,6 +104,7 @@ const prizeSettingDialogRef = ref();
 const cardSettingDialogRef = ref();
 const otherResourceSettingDialogRef = ref();
 const secretSettingDialogRef = ref();
+const ballSettingDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -118,6 +121,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'secretSetting':
       secretSettingDialogRef.value.toggleConfig()
+      break;
+    case 'ballSetting':
+      ballSettingDialogRef.value.toggleConfig()
       break;
     case 'openDevTools':
       myApi.openDevTools();

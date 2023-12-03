@@ -279,7 +279,7 @@ THREE.CSS3DRenderer = function () {
 
 				domElement.style.WebkitPerspective = fov + 'px';
 				domElement.style.perspective = fov + 'px';
-				domElement.style.marginLeft = '13.5vw'
+				domElement.style.marginLeft =  window.ballRelativeLeftDistance ?  window.ballRelativeLeftDistance : '13.5vw'
 				domElement.style.transition = 'margin-left 0.5s';
 			}
 

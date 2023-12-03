@@ -150,7 +150,7 @@ const enterAnimate = (resetPrizeStatus = true) => {
     var phi = Math.acos(-1 + (2 * i) / l);
     var theta = Math.sqrt(l * Math.PI) * phi;
     var object = new THREE.Object3D();
-    object.position.setFromSphericalCoords(800 * basicData.resolution, phi, theta);
+    object.position.setFromSphericalCoords(800 * basicData.ballConfig.resolution, phi, theta);
     vector.copy(object.position).multiplyScalar(2);
     object.lookAt(vector);
     targets.sphere.push(object);
@@ -173,7 +173,7 @@ const enterAnimate = (resetPrizeStatus = true) => {
   transform(targets.sphere, 1500);
   // 自动旋转球体
   setTimeout(() => {
-    rotateBall(60000);
+    rotateBall(true);
   }, 1600)
   if (resetPrizeStatus) {
     setTimeout(() => {
@@ -268,17 +268,17 @@ const initHandleData = () => {
   // shineCard(basicData, paramsFields);
 }
 // 球体旋转
-const rotateBall = (rotateTime) => {
-  const confirmRotateTime = rotateTime || basicData.rotateTime;
+const rotateBall = (isAutoRate = false) => {
+  const confirmRotateTime = !isAutoRate ? basicData.ballConfig.rotateTime : basicData.ballConfig.autoRotateTime;
   return new Promise((resolve, reject) => {
     scene.rotation.y = 0;
     rotateObj = new TWEEN.Tween(scene.rotation);
     rotateObj
       .to(
         {
-          y: Math.PI * 6 * basicData.rotateLoop
+          y: Math.PI * 6 * basicData.ballConfig.rotateLoop
         },
-        confirmRotateTime * basicData.rotateLoop
+        confirmRotateTime * basicData.ballConfig.rotateLoop
       )
       .onUpdate(render)
       // .easing(TWEEN.Easing.Linear)
@@ -428,7 +428,7 @@ const cheatingUser = () => {
       // }, 200)
       // basicData.isNextPrize = true;
       // 自动旋转球体
-      rotateBall(60000);
+      rotateBall(true);
     }, 500)
     // 抽中之后要处理的事
     basicData.isShowLuckyUser = true;
@@ -739,6 +739,7 @@ bus.on('resetBtnClick', resetBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
 bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)
+bus.on('ballConfigSetting', adjustCardConfigStyleSetting)
 bus.on('groupListSetting', groupListSetting)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)

@@ -243,34 +243,34 @@ defineExpose({
 
 <style lang="scss" scoped>
  .lottery-layout {
+  .header-txt {
+    text-indent: 10px;
+    color: #fff;
+    margin: 15px 0;
+    background: linear-gradient(90deg,#656a79,#f2fafe);
+    border-radius: 6px;
+    line-height: 32px;
+    text-align: left;
+  }
+  &:first-child {
     .header-txt {
-      text-indent: 10px;
-      color: #fff;
-      margin: 15px 0;
-      background: linear-gradient(90deg,#656a79,#f2fafe);
-      border-radius: 6px;
-      line-height: 32px;
-      text-align: left;
+      margin-top: 0;
     }
-    &:first-child {
-      .header-txt {
-        margin-top: 0;
-      }
-    }
-    .layout-form {
-      .el-form {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 20px;
-        .el-form-item--large {
-          margin-bottom: 0px;
-          > label {
-            margin-bottom: 0;
-          }
+  }
+  .layout-form {
+    .el-form {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      .el-form-item--large {
+        margin-bottom: 0px;
+        > label {
+          margin-bottom: 0;
         }
       }
     }
   }
+}
 .prize-setting > div {
   display: grid;
   grid-template-columns: repeat(6, 15.3%);

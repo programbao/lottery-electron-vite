@@ -11,22 +11,19 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text"><el-icon :size="20"><Lock /></el-icon>设置</span></slot>
+      <slot name="title"><span class="title-text">球体相关动作设置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
       </div>
-      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
         <div class="label label-cancel"></div>
         取消
       </div>
     </template>
     <div class="setting-content">
-      <secretSetting 
-        :key="dialogTableVisible"
-        ref="secretSettingRef" />
+      <ballSetting ref="ballConfigSettingRef" />
     </div>
-   
   </el-dialog>
 </template>
 
@@ -36,15 +33,14 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import secretSetting from './draggableGroup/index.vue'
-
-
+import ballSetting from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
-const dialogKeyStr = 'secretSetting';
+const dialogKeyStr = 'ballSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
@@ -55,9 +51,8 @@ const toggleConfig = () => {
     })
   }
 }
-let isFirstVisible = false;
 
-const secretSettingRef = ref();
+const ballConfigSettingRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {
       type: 'success',
@@ -80,6 +75,9 @@ const handleVerifyConfig = async (handleStr, verifyData) => {
       status: 0
     };
   }
+  if (handleStr === 'ballConfig') {
+    window.ballRelativeLeftDistance = basicData[handleStr].ballRelativeLeftDistance
+  }
   bus.emit(handleStr + 'Setting')
   return isPassSetting; 
 }
@@ -97,25 +95,11 @@ const checkAllPassStatus = (...statuses) => {
 
 const confirm = async () => {
   // 删除不必存的字段
-  const groupListData = JSON.parse(JSON.stringify(secretSettingRef.value['getGroupList']()));
-  const optionListData = JSON.parse(JSON.stringify(secretSettingRef.value.optionList));
-  const excludeFields = ['index', 'isSelected', 'noCanSelected'];
-  groupListData.forEach((group) => {
-    excludeFields.forEach((key) => {
-      delete group[key];
-    })
-  })
-  optionListData.forEach((option) => {
-    excludeFields.forEach((key) => {
-      delete option[key];
-    })
-  })
-  const secretSettingPass = await handleVerifyConfig('secretPrizesGroupList', groupListData);
-  const secretUsersPass = await handleVerifyConfig('secretUsers', optionListData);
+  const ballConfigData = JSON.parse(JSON.stringify(ballConfigSettingRef.value['ballConfig']));
+  const ballConfigDataPass = await handleVerifyConfig('ballConfig', ballConfigData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    secretSettingPass.status,
-    secretUsersPass.status
+    ballConfigDataPass.status
   );
 
   if (status === 1) {

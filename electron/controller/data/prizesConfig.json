@@ -316,5 +316,12 @@
       "option_identity": "8230430094",
       "related_group": "D6qlvcjFekRCSqVvFe2Eo"
     }
-  ]
+  ],
+  "ballConfig": {
+    "resolution": 1.1,
+    "rotateLoop": 1000,
+    "rotateTime": 3000,
+    "autoRotateTime": 80000,
+    "ballRelativeLeftDistance": "13.5vw"
+  }
 }

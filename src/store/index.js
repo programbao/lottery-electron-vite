@@ -50,6 +50,13 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       currentLotteryGroup: {},
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员
       groupList: [], // 人员名单配置
+      ballConfig: {
+        resolution: 1.1, // 当前圆球比例
+        rotateLoop: 1000, // 是否循环旋转
+        rotateTime: 3000, // 旋转时间,
+        autoRotateTime: 60000, // 自动旋转时间
+        ballRelativeLeftDistance: '27vw', // 相对左侧距离
+      },
       prizesBarStyle: { // 奖品栏样式
         barBoxWidth: '25vw',
         prizeBoxWidth: '20vw',
@@ -135,6 +142,9 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       this.eachCount = this.prizes.map(prize => prize.eachCount);
       // 中奖用户
       this.luckyUsers = config.luckyData;
+
+      // 球体距离左边间距
+      window.ballRelativeLeftDistance = this.ballConfig.ballRelativeLeftDistance
       // 读取当前已设置的抽奖结果
       // 设置当前抽奖index
       let prizeIndex = this.prizes.length - 1;
