@@ -200,7 +200,7 @@ html,body {
   }
   100% {
     -webkit-transform: translateY(0);
-            transform: translateY(0);
+            transform: translateY(0) translateX(-30%);
     opacity: 1;
   }
 }

@@ -6,7 +6,8 @@
         'slide-out-bottom': basicData.isEnterBgWall,
         'slide-in-bottom': !basicData.isEnterBgWall
       }"
-      class="lottery-operation-btn">
+      class="lottery-operation-btn"
+      :style="operationBtnStyle">
       <div class="begin-lottery">
         <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
         <button 
@@ -105,6 +106,7 @@ const cardSettingDialogRef = ref();
 const otherResourceSettingDialogRef = ref();
 const secretSettingDialogRef = ref();
 const ballSettingDialogRef = ref();
+const operationBtnStyle = ref({})
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -309,10 +311,24 @@ const barMouseleave = () => {
     }
   }, 500);
 }
+let adjustBtnTimer = null;
+// 调整抽奖动作按钮
+const adjustLotteryActionBtn = () => {
+  clearTimeout(adjustBtnTimer);
+  adjustBtnTimer = setTimeout(() => {
+    const bottomCardDom = document.querySelector("#card-0");
+    if (!bottomCardDom) {
+      operationBtnStyle.value.left = '60%';
+    } else {
+      operationBtnStyle.value.left = bottomCardDom.getBoundingClientRect().x + 'px'
+    }
+  }, 500)
+}
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd);
   handleHideCommonBtn();
   bus.on('groupListSetting', handleHideCommonBtn);
+  bus.on('adjustLotteryActionBtn', adjustLotteryActionBtn);
   // 监听鼠标移动事件
   document.addEventListener('mousemove', mousemoveEvent);
   document.addEventListener('mouseleave', mouseleaveEvent);
@@ -366,6 +382,8 @@ onBeforeUnmount(() => {
   position: fixed;
   display: flex;
   bottom: 20px;
+  left: 60%;
+  transition: all .2s;
 }
 .screen-img {
   position: fixed;

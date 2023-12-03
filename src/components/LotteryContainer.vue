@@ -93,6 +93,7 @@ const onWindowResize = () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   render();
+  bus.emit('adjustLotteryActionBtn');
 }
 
 
@@ -174,6 +175,7 @@ const enterAnimate = (resetPrizeStatus = true) => {
   // 自动旋转球体
   setTimeout(() => {
     rotateBall(true);
+    bus.emit('adjustLotteryActionBtn')
   }, 1600)
   if (resetPrizeStatus) {
     setTimeout(() => {

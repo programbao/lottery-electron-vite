@@ -70,7 +70,10 @@
       </div>
       <!-- <div class="split-box"></div> -->
     </div>
-    <button class="btn closeBtn" @click="closeBtn">
+    <button 
+      v-if="basicData.isShowLuckyUser"
+      class="btn closeBtn slide-in-bottom" 
+      @click="closeBtn">
       Close
     </button>
   </div>
@@ -156,7 +159,7 @@ const closeBtn = () => {
 // });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .lucky-user-box {
   position: fixed;
   top: 0;
@@ -262,5 +265,20 @@ const closeBtn = () => {
     opacity: 0;
   }
 }
-
+.slide-in-bottom {
+	-webkit-animation: slide-in-bottom 1.0s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-in-bottom 1.0s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@keyframes slide-in-bottom {
+  0% {
+    -webkit-transform: translateY(1000px);
+            transform: translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
 </style>
