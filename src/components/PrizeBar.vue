@@ -250,10 +250,11 @@ bus.on('setPrizeData', setPrizeData)
   position: fixed;
   top: 10vh;
   left: 20px;
-  height: 90vh;
+  height: 85vh;
   overflow-y: auto;
   width: 25vw;
   padding: 0;
+  padding-bottom: 40px;
 }
 .prize-list::-webkit-scrollbar {
   display: none;
@@ -274,6 +275,9 @@ bus.on('setPrizeData', setPrizeData)
   box-sizing: border-box;
   transition: transform 1s ease-in;
   position: relative;
+  &:last-child {
+    // margin-bottom: 40px;
+  }
 }
 
 .prize-item .prize-img {
