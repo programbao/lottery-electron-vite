@@ -92,6 +92,23 @@ const resetData = async () => {
     return isTrue;
   })
 }
+const resetOneRoundLuckyData = async () => {
+  ipcMain.handle('resetOneRoundLuckyData', async (e, ...args) => {
+    let isTrue = true
+    let delLuckyType = args[0]
+    console.log(delLuckyType, '283409283409234234')
+    try {
+      let sharedObject =  global.sharedObject;
+      if (sharedObject.luckyData[delLuckyType]) {
+        delete sharedObject.luckyData[delLuckyType]
+        await saveDataFile(sharedObject.luckyData, "temp.json");
+      }
+    } catch (error) {
+      isTrue = false
+    }
+    return isTrue;
+  })
+}
 const hanldeExportDataFn = async () => {
   let outData = [["工号", "DEPT部门", "NAMA 姓名"]];
   let sharedObject =  global.sharedObject;
@@ -133,5 +150,6 @@ module.exports = {
   getStaticUsersData,
   setData,
   resetData,
-  handleExportData
+  handleExportData,
+  resetOneRoundLuckyData
 };

@@ -23,6 +23,12 @@ const resetData = async (...args) => {
   return result
 }
 
+// 重置当前或上一轮奖项所有中奖名单
+ const resetOneRoundLuckyData = async (...args) => {
+  let result = await ipcRenderer.invoke('resetOneRoundLuckyData', ...args)
+  return result
+}
+
 // 处理数据导出
 const handleExportData = async (...args) => {
   let result = await ipcRenderer.invoke('handleExportData', ...args)
@@ -60,6 +66,7 @@ contextBridge.exposeInMainWorld('myApi', {
   getStaticUsersData,
   setData,
   resetData,
+  resetOneRoundLuckyData,
   handleExportData,
   toggleFullScreen,
   importFile,

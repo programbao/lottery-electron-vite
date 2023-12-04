@@ -112,7 +112,8 @@
       "group_identity": "users_2",
       "options": [
         "-TEDYwm9RWRy7Q9HDmuEf",
-        "YZL6HBlu2ZSQ6N4PB_RD8"
+        "YZL6HBlu2ZSQ6N4PB_RD8",
+        "cUyTXOIN1415C3EM8pKhY"
       ]
     },
     {
@@ -131,8 +132,7 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "group_identity": "users_4",
       "options": [
-        "IuWwApzph3wAqIiHTHct_",
-        "cUyTXOIN1415C3EM8pKhY"
+        "IuWwApzph3wAqIiHTHct_"
       ],
       "errorMsg": "users_festival.xlsx人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
     },

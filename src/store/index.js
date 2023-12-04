@@ -49,6 +49,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       },
       currentLotteryGroup: {},
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员
+      originMemberListData: {}, // 原数据名单
       groupList: [], // 人员名单配置
       ballConfig: {
         resolution: 1.1, // 当前圆球比例
@@ -135,6 +136,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       // 抽奖用户
       // Object.assign(this, usersData);
       this.memberListData = config.curData
+      this.originMemberListData = usersData;
       // 总牌数
       this.totalCards = this.beforeLotteryLayout.columnCount * this.beforeLotteryLayout.rowCount;
 

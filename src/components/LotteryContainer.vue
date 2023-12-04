@@ -252,8 +252,7 @@ const initParamsFieldsData = (userGroup) => {
   }
   return isPass
 }
-const initHandleData = () => {
-  cleanUp();
+const adjuctLotteryGroup = (cb) => {
   // 找到要展示的member
   const userGroup = findCurrentLotteryGroup();
   if (!userGroup) {
@@ -261,9 +260,21 @@ const initHandleData = () => {
       type: 'error',
       message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
     })
-    return
+    return false
+  }
+  if (cb) {
+    cb(userGroup);
   }
   initParamsFieldsData(userGroup);
+  return true
+}
+const initHandleData = () => {
+  cleanUp();
+  // 找到要展示的member
+  let isPass = adjuctLotteryGroup();
+  if (!isPass) {
+    return
+  }
   initCards();
   // animate();
   // 随机切换背景和人员信息
@@ -386,7 +397,6 @@ const cheatingUser = () => {
     let luckyData = basicData.luckyUsers[basicData.currentPrize.type];
     let leftCount = paramsFields.totalMember;
     let leftPrizeCount = basicData.currentPrize.count - (luckyData ? luckyData.length : 0);
-
     if (leftCount < perCount) {
       toast.error("剩余参与抽奖人员不足，现在重新设置所有人员可以进行二次抽奖！  Jumlah orang yang tersisa untuk berpartisipasi dalam lotere tidak mencukupi. Sekarang setel ulang semua orang untuk membuat lotere kedua!");
       perCount = leftCount
@@ -671,6 +681,8 @@ const resetBtnClick = async () => {
   basicData.isShowLuckyUser = false;
   basicData.isContinueLottery = false
   basicData.isEnterLottery = false
+  // 人员名单重置
+  basicData.memberListData  = JSON.parse(JSON.stringify(basicData.originMemberListData));
   // document.getElementById("container").classList.remove('slide-in-fwd-center');
   // document.querySelector('.screen-card').style.display = 'grid'
   bus.emit('adjuctScreenCardDisplay', 'grid')
@@ -700,11 +712,44 @@ const reLottery = () => {
   if (basicData.currentPrizeIndex !== basicData.lastTimePrizeIndex) {
     basicData.currentPrizeIndex = basicData.lastTimePrizeIndex;
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+    // basicData.currentLotteryGroup = 
+    // const userGroup = findCurrentLotteryGroup();
+    // switchLotteryMemberData(userGroup);
+    // setTimeout(() => {
+    //   removeLuckyUser();
+    //   lottery();
+    // }, 1500)
+    // return
   }
   removeLuckyUser();
   lottery();
 }
+// 重置当前奖项所有中奖名单 或者上一轮所有中奖名单
+const resetCurrentPrizeBtnClick = async () => {
+  basicData.isReLottery = true;
+  basicData.isNextPrize = false
+  if (basicData.currentPrizeIndex !== basicData.lastTimePrizeIndex) {
+    basicData.currentPrizeIndex = basicData.lastTimePrizeIndex;
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+  }
+  let type = basicData.currentPrize.type;
+  // let currentLuckys = basicData.currentLuckys.map(item => item[0]); // 提取currentLuckys的第一个元素
 
+  if (basicData.luckyUsers[type]) {
+    await myApi.resetOneRoundLuckyData(type);
+    delete basicData.luckyUsers[type]
+    // // 重置当前奖项 所有人员原来名单
+    const userGroup = findCurrentLotteryGroup();
+    basicData.memberListData[userGroup.group_identity] = JSON.parse(JSON.stringify(basicData.originMemberListData[userGroup.group_identity]));
+    switchLotteryMemberData(userGroup);
+    // const adjustMemberListDataFn = (userGroup) => {
+    //   basicData.memberListData[userGroup.group_identity] = JSON.parse(JSON.stringify(basicData.originMemberListData[userGroup.group_identity]));
+    // }
+    // // 找到要展示的member
+    // let isPass = adjuctLotteryGroup(adjustMemberListDataFn);
+    bus.emit('adjustCurrentPrize', { isReGet: true });
+  }
+}
 // 导出数据
 const exportData = () => {
   saveData().then(async res => {
@@ -735,9 +780,12 @@ const groupListSetting = () => {
   }
   basicData.currentLotteryGroup = userGroup || {};
 }
+
+// 重置当前奖项所有中奖人员
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
 bus.on('resetBtnClick', resetBtnClick)
+bus.on('resetCurrentPrizeBtnClick', resetCurrentPrizeBtnClick)
 bus.on('reLottery', reLottery)
 bus.on('exportData', exportData)
 bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)

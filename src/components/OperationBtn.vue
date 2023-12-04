@@ -27,6 +27,7 @@
         class="btn" 
         @click="reLottery"
         v-show="!noBeginLottery 
+          && !isResetCurrentPrize
           && !isLotting
           && !isFirstPrize">
           {{ (isNextPrize || isShowPrizeMark) ? '重新抽取上一轮' : '重新抽奖' }}<br />
@@ -70,7 +71,7 @@
       <div class="other">
         <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
         <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">重置当前奖项中奖名单<br />mengatur ulang</button>
+        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">重置当前/上一轮奖项中奖名单<br />mengatur ulang</button>
         <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置所有中奖名单<br />mengatur ulang</button>
         <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
         <MusicBtn />
@@ -188,9 +189,11 @@ const noHideBtn = computed(() => {
 const isFirstPrize = ref(true);
 const noBeginLottery = ref(true);
 const isFullScreen = ref(false)
+const isResetCurrentPrize = ref(false)
 const enterLottery = () => {
   bus.emit('enterLottery')
   basicData.isEnterLottery = true
+  isResetCurrentPrize.value = false
 }
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
@@ -198,6 +201,7 @@ const handleEnterLotteryEnd = () => {
 const beginLottery = () => {
   bus.emit('beginLottery')
   isFirstPrize.value = false
+  isResetCurrentPrize.value = false
 }
 const showPrize = () => {
   bus.emit('showPrize')
@@ -229,7 +233,23 @@ const exportData = () => {
 }
 
 const resetCurrentPrizeBtnClick = () => {
-  
+  ElMessageBox.confirm(
+    '当前中奖记录都将被清空，确认要重置吗?',
+    '警告',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      bus.emit('resetCurrentPrizeBtnClick')
+      ElMessage({
+        type: 'success',
+        message: '当前奖项已重置成功',
+      })
+      isResetCurrentPrize.value = true
+    }) 
 }
 const resetBtnClick = () => {
   ElMessageBox.confirm(
@@ -250,7 +270,6 @@ const resetBtnClick = () => {
         message: '重置成功',
       })
     })
- 
 }
 // const toggleConfig = () => {
 //   bus.emit('toggleConfig')
@@ -335,7 +354,6 @@ onBeforeMount(() => {
   nextTick(() => {
     bottomBar.value.addEventListener('mouseenter', barMouseenter)
     bottomBar.value.addEventListener('mouseleave', barMouseleave)
-
   })
 })
 onBeforeUnmount(() => {
