@@ -24,7 +24,7 @@
     <!-- <div class="setting-content"> -->
       <checkFileList 
         :key="dialogTableVisible"
-        ref="ballConfigSettingRef" />
+        ref="checkFileListRef" />
     <!-- </div> -->
   </el-dialog>
 </template>
@@ -54,70 +54,6 @@ const toggleConfig = () => {
   }
 }
 
-const ballConfigSettingRef = ref();
-const handleVerifyConfig = async (handleStr, verifyData) => {
-  let isPassSetting = {
-      type: 'success',
-      status: 1
-    };
-  const verifyConfigStr =JSON.stringify(verifyData);
-  const prevVerifyConfigStr = JSON.stringify(basicData[handleStr]);
-  if (prevVerifyConfigStr === verifyConfigStr) {
-    return {
-      type: 'warning',
-      status: 2
-    };
-  }
-  const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
-  if (isPass) {
-    basicData[handleStr] = JSON.parse(verifyConfigStr);
-  } else {
-    isPassSetting = {
-      type: 'error',
-      status: 0
-    };
-  }
-  if (handleStr === 'ballConfig') {
-    window.ballRelativeLeftDistance = basicData[handleStr].ballRelativeLeftDistance
-  }
-  bus.emit(handleStr + 'Setting')
-  return isPassSetting; 
-}
-
-const checkAllPassStatus = (...statuses) => {
-  // 检查所有状态数组
-  if (statuses.some(status => status === 0)) {
-    return 0; // 存在状态为0，设置失败
-  } else if (statuses.some(status => status === 1)) {
-    return 1; // 存在状态为1，设置成功
-  } else if (statuses.every(status => status === 2)) {
-    return 2; // 所有状态为2，未修改过配置
-  }
-};
-
-const confirm = async () => {
-  // 删除不必存的字段
-  const ballConfigData = JSON.parse(JSON.stringify(ballConfigSettingRef.value['ballConfig']));
-  const ballConfigDataPass = await handleVerifyConfig('ballConfig', ballConfigData);
-   // 检查所有状态
-  const status = checkAllPassStatus(
-    ballConfigDataPass.status
-  );
-
-  if (status === 1) {
-    ElMessage({
-      message: '设置成功',
-      type: 'success',
-    });
-    // dialogTableVisible.value = false;
-    // ...其他处理
-  } else if (status === 0) {
-    ElMessage.error('设置失败');
-  } else if (status === 2) {
-    ElMessage.warning('没有修改过配置');
-  }
-  dialogTableVisible.value = false;
-}
 // 暴露属性
 defineExpose({
   toggleConfig

@@ -9,7 +9,13 @@
       class="lottery-operation-btn"
       :style="operationBtnStyle">
       <div class="begin-lottery">
-        <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">进入抽奖<br />masuk undian</button>
+        <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">
+          {{ controlsBtnConfig.enter.chineseText }}
+          <span v-if="controlsBtnConfig.enter.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.enter.otherLanguagesText }}
+          </span>
+        </button>
         <button 
           class="btn"
           id="showPrize" 
@@ -20,7 +26,19 @@
           <!-- <br/>奖项 undian selanjutnya -->
         </button>
         <button class="btn" id="lottery" v-show="!noBeginLottery && !isNextPrize" @click="beginLottery">
-          {{ isLotting ? '结束抽奖' : isContinueLottery ? '继续抽奖' : '开始抽奖' }} <br/> {{ isLotting ? 'mulai undian' : 'undian selesai' }}
+          {{ isLotting ? controlsBtnConfig.lotteryEnd.chineseText : isContinueLottery ?  controlsBtnConfig.continueLottery.chineseText : controlsBtnConfig.lottery.chineseText }}
+          <span v-if="controlsBtnConfig.lotteryEnd.otherLanguagesText && isLotting">
+            <br/>
+            {{ controlsBtnConfig.lotteryEnd.otherLanguagesText }}
+          </span>
+          <span v-if="controlsBtnConfig.continueLottery.otherLanguagesText && isContinueLottery && !isLotting">
+            <br/>
+            {{ controlsBtnConfig.continueLottery.otherLanguagesText }}
+          </span>
+          <span v-if="controlsBtnConfig.lottery.otherLanguagesText && !isContinueLottery && !isLotting">
+            <br/>
+            {{ controlsBtnConfig.lottery.otherLanguagesText }}
+          </span>
         </button>
       </div>
       <button 
@@ -30,11 +48,23 @@
           && !isResetCurrentPrize
           && !isLotting
           && !isFirstPrize">
-          {{ (isNextPrize || isShowPrizeMark) ? '重新抽取上一轮' : '重新抽奖' }}<br />
-          {{ (isNextPrize || isShowPrizeMark) ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }}
+          {{ (isNextPrize || isShowPrizeMark) ? controlsBtnConfig.lastRoundLottery.chineseText : controlsBtnConfig.reLottery.chineseText }}
+          <!-- {{ (isNextPrize || isShowPrizeMark) ? 'Gambar ulang putaran sebelumnya' : 'Gambar ulang' }} -->
+          <span v-if="controlsBtnConfig.lastRoundLottery.otherLanguagesText && (isNextPrize || isShowPrizeMark)">
+            <br/>
+            {{ controlsBtnConfig.lastRoundLottery.otherLanguagesText }}
+          </span>
+          <span v-if="controlsBtnConfig.reLottery.otherLanguagesText && !(isNextPrize || isShowPrizeMark)">
+            <br/>
+            {{ controlsBtnConfig.reLottery.otherLanguagesText }}
+          </span>
       </button>
       <button id="showAllLucks" class="btn" v-show="!currentPrize">
-        展示全部中奖名单<br/>daftar nama pemenang
+        {{ controlsBtnConfig.showAllLucks.chineseText }}
+          <span v-if="controlsBtnConfig.showAllLucks.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.showAllLucks.otherLanguagesText }}
+          </span>
       </button>
     </div>
 
@@ -64,27 +94,121 @@
       }"
       class="bottom-bar">
       <div class="quick-operation">
-        <button class="btn" @click="bgWallClick">背景墙</button>
-        <button class="btn" @click="toggleScreenImg">屏幕墙</button>
-        <button class="btn" @click="showLotteryClick">展示抽奖</button>
+        <button class="btn" @click="bgWallClick">
+          {{ controlsBtnConfig.bgWallClick.chineseText }}
+          <span v-if="controlsBtnConfig.bgWallClick.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.bgWallClick.otherLanguagesText }}
+          </span>
+        </button>
+        <button class="btn" @click="toggleScreenImg">
+          {{ controlsBtnConfig.toggleScreenImg.chineseText }}
+          <span v-if="controlsBtnConfig.toggleScreenImg.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleScreenImg.otherLanguagesText }}
+          </span>
+        </button>
+        <button class="btn" @click="showLotteryClick">
+          {{ controlsBtnConfig.showLotteryClick.chineseText }}
+          <span v-if="controlsBtnConfig.showLotteryClick.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.showLotteryClick.otherLanguagesText }}
+          </span>
+        </button>
       </div>
       <div class="setting">
-        <button class="btn" @click="toggleSetting('usersSetting')">名单设置</button>
-        <button class="btn" @click="toggleSetting('prizeSetting')">奖项设置</button>
-        <button class="btn" @click="toggleSetting('cardSetting')">卡片设置</button>
-        <button class="btn" @click="toggleSetting('ballSetting')">球体设置</button>
-        <button class="btn" @click="toggleSetting('controlsBtnSetting')">控制按钮设置</button>
-        <button class="btn" @click="toggleSetting('otherResourceSetting')">其他资源设置</button>
+        <button class="btn" @click="toggleSetting('usersSetting')">
+          {{ controlsBtnConfig.toggleSettingUsersSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingUsersSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingUsersSetting.otherLanguagesText }}
+          </span>
+        </button>
+        <button class="btn" @click="toggleSetting('prizeSetting')">
+          {{ controlsBtnConfig.toggleSettingPrizeSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingPrizeSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingPrizeSetting.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" @click="toggleSetting('cardSetting')">
+          {{ controlsBtnConfig.toggleSettingCardSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingCardSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingCardSetting.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" @click="toggleSetting('ballSetting')">
+          {{ controlsBtnConfig.toggleSettingBallSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingBallSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingBallSetting.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" @click="toggleSetting('controlsBtnSetting')">
+          {{ controlsBtnConfig.toggleSettingControlsBtnSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingControlsBtnSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingControlsBtnSetting.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" @click="toggleSetting('otherResourceSetting')">
+          {{ controlsBtnConfig.toggleSettingOtherResourceSetting.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingOtherResourceSetting.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingOtherResourceSetting.otherLanguagesText }}
+          </span>
+       </button>
         <button class="btn lock-btn" @click="toggleSetting('secretSetting')"><el-icon :size="30"><Lock /></el-icon></button>
         <button class="btn lock-btn" @click="toggleSetting('openDevTools')"><el-icon :size="30"><SetUp /></el-icon></button>
       </div>
       <div class="other">
-        <button :key="tipsOpenFileKey" class="btn bounce-top" @click="toggleSetting('checkFileList')">打开中奖名单文件列表</button>
-        <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
-        <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
-        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">重置当前/上一轮奖项中奖名单<br />mengatur ulang</button>
-        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">重置所有中奖名单<br />mengatur ulang</button>
-        <button class="btn" id="fullScreen" @click="toggleFullScreen">{{ isFullScreen ? '退出全屏' : '全屏' }}</button>
+        <button :key="tipsOpenFileKey" class="btn bounce-top" @click="toggleSetting('checkFileList')">
+          {{ controlsBtnConfig.toggleSettingCheckFileList.chineseText }}
+          <span v-if="controlsBtnConfig.toggleSettingCheckFileList.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.toggleSettingCheckFileList.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" @click="showAllLuckyUser">
+          {{ controlsBtnConfig.showAllLuckyUser.chineseText }}
+          <span v-if="controlsBtnConfig.showAllLuckyUser.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.showAllLuckyUser.otherLanguagesText }}
+          </span>
+       </button>
+        <button id="save" class="fixed-btn btn" @click="exportData">
+          {{ controlsBtnConfig.exportData.chineseText }}
+          <span v-if="controlsBtnConfig.exportData.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.exportData.otherLanguagesText }}
+          </span>
+       </button>
+        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">
+          {{ controlsBtnConfig.resetCurrentPrizeBtnClick.chineseText }}
+          <span v-if="controlsBtnConfig.resetCurrentPrizeBtnClick.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.resetCurrentPrizeBtnClick.otherLanguagesText }}
+          </span>
+       </button>
+        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">
+          {{ controlsBtnConfig.resetBtnClick.chineseText }}
+          <span v-if="controlsBtnConfig.resetBtnClick.otherLanguagesText">
+            <br/>
+            {{ controlsBtnConfig.resetBtnClick.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn" id="fullScreen" @click="toggleFullScreen">
+          {{ isFullScreen ? controlsBtnConfig.quitFullScreen.chineseText : controlsBtnConfig.enterFullScreen.chineseText }}
+          <span v-if="controlsBtnConfig.quitFullScreen.otherLanguagesText && isFullScreen">
+            <br/>
+            {{ controlsBtnConfig.quitFullScreen.otherLanguagesText }}
+          </span>
+          <span v-if="controlsBtnConfig.enterFullScreen.otherLanguagesText && !isFullScreen">
+            <br/>
+            {{ controlsBtnConfig.enterFullScreen.otherLanguagesText }}
+          </span>
+        </button>
         <MusicBtn />
       </div>
     </div>
@@ -96,6 +220,7 @@
     <secretSettingDialog ref="secretSettingDialogRef" />
     <ballSettingDialog ref="ballSettingDialogRef" />
     <checkFileListDialog ref="checkFileListDialogRef" />
+    <controlsBtnSettingDialog ref="controlsBtnSettingDialogRef" />
   </div>
 </template>
 
@@ -112,6 +237,8 @@ import secretSettingDialog from "../components/configWidget/secretSetting/dialog
 import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
 import ballSettingDialog from "../components/configWidget/ballSetting/dialog.vue"
 import checkFileListDialog from "../components/configWidget/checkFileList/dialog.vue"
+import controlsBtnSettingDialog from "../components/configWidget/controlsBtnSetting/dialog.vue"
+const operationBtnStyle = ref({});
 
 // 打开设置
 const usersSettingDialogRef = ref();
@@ -120,8 +247,8 @@ const cardSettingDialogRef = ref();
 const otherResourceSettingDialogRef = ref();
 const secretSettingDialogRef = ref();
 const ballSettingDialogRef = ref();
-const operationBtnStyle = ref({});
 const checkFileListDialogRef = ref();
+const controlsBtnSettingDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -147,6 +274,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'checkFileList': // 显示文件列表
       checkFileListDialogRef.value.toggleConfig()
+      break;
+    case 'controlsBtnSetting': 
+      controlsBtnSettingDialogRef.value.toggleConfig()
       break;
     default:
       break;
@@ -175,6 +305,9 @@ const toggleScreenImg = (bool) => {
 }
 
 const basicData = lotteryDataStore();
+const controlsBtnConfig = computed(() => {
+  return basicData.controlsBtnConfig
+})
 const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
