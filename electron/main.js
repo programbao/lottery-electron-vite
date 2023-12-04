@@ -15,7 +15,7 @@ global.sharedObject = {
 
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
-const { getStaticUsersData, setData, resetData, resetOneRoundLuckyData, handleExportData, getSaveExcelFileInfoList } = require('./controller/dataHandle')
+const { getStaticUsersData, setData, resetData, resetOneRoundLuckyData, handleExportData, getSaveExcelFileInfoList, openFileOrFolder } = require('./controller/dataHandle')
 const { toggleFullScreen, savePrizesConfig, openDevTools } = require('./controller/systemEventHandle')
 const { importFile } = require('./controller/prizesConfigHandle')
 const createWindow = () => {
@@ -90,6 +90,9 @@ const createWindow = () => {
 
   // 获取导出文件列表
   getSaveExcelFileInfoList();
+
+  // 打开文件/文件夹
+  openFileOrFolder();
 
   // 处理数据导出
   handleExportData();

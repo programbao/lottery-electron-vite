@@ -1,7 +1,7 @@
 
 
 const dataBath = __dirname;
-const { ipcMain, dialog } = require('electron')
+const { ipcMain, dialog, shell } = require('electron')
 const path = require('path')
 const fs = require('fs');
 const dayjs = require('dayjs');
@@ -12,7 +12,6 @@ const {
   saveDataFile,
   shuffle,
   saveErrorDataFile,
-
 } = require("./utils/help");
 const getStaticUsersData = async () => {
   ipcMain.handle('getStaticUsersData', async (e, ...args) => {
@@ -155,13 +154,12 @@ const dbPath = path.join(__dirname, '../assets')
 
 const readExcelFilesInDirectory = () => {
   const files = fs.readdirSync(dbPath); // 读取目录下所有文件和文件夹
+  const saveFolderPath = path.join(dbPath);
   const excelFiles = files.filter(file => {
     const filePath = path.join(dbPath, file);
-    const saveFolderPath = path.join(dbPath);
     // 检查文件是否是Excel文件
     return fs.statSync(filePath).isFile() && path.extname(filePath).toLowerCase() === '.xlsx';
   });
-
   const filesInfo = excelFiles.map(file => {
     const filePath = path.join(dbPath, file);
     return {
@@ -185,11 +183,31 @@ const getSaveExcelFileInfoList = async () => {
     return result; 
   })
 }
+
+// 打开目录或文件
+const openFileOrFolder = async (data) => {
+  ipcMain.handle('openFileOrFolder', async (e, ...args) => {
+    let isOpen = false;
+    const filePath = args[0]
+    try {
+      try {
+        isOpen = await shell.openPath(filePath)
+      } catch (error) {
+        isOpen = await shell.showItemInFolder(filePath)
+      }
+    } catch (error) {
+      console.log(error, '2348092384')
+    }
+    return isOpen; 
+  }) 
+}
+
 module.exports = {
   getStaticUsersData,
   setData,
   resetData,
   handleExportData,
   resetOneRoundLuckyData,
-  getSaveExcelFileInfoList
+  getSaveExcelFileInfoList,
+  openFileOrFolder
 };

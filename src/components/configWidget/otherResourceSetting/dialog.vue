@@ -22,7 +22,9 @@
       </div>
     </template>
     <div class="setting-content">
-      <otherResourceSetting ref="otherResourceSettingRef" />
+      <otherResourceSetting
+        :key="dialogTableVisible"
+        ref="otherResourceSettingRef" />
     </div>
   </el-dialog>
 </template>

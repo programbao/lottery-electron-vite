@@ -12,17 +12,19 @@
     >
     <template #header>
       <slot name="title"><span class="title-text">文件列表</span></slot>
-      <div class="title-btn confirm-btn" type="confirm" @click="confirm">
+      <!-- <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
-      </div>
+      </div> -->
       <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
         <div class="label label-cancel"></div>
-        取消
+        关闭
       </div>
     </template>
     <!-- <div class="setting-content"> -->
-      <checkFileList ref="ballConfigSettingRef" />
+      <checkFileList 
+        :key="dialogTableVisible"
+        ref="ballConfigSettingRef" />
     <!-- </div> -->
   </el-dialog>
 </template>

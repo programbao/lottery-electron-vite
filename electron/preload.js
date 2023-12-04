@@ -35,6 +35,12 @@ const getSaveExcelFileInfoList = async (...args) => {
   return result
 }
 
+// 打开文件或文件夹
+const openFileOrFolder = async (...args) => {
+  let result = await ipcRenderer.invoke('openFileOrFolder', ...args)
+  return result
+}
+
 // 处理数据导出
 const handleExportData = async (...args) => {
   let result = await ipcRenderer.invoke('handleExportData', ...args)
@@ -78,7 +84,8 @@ contextBridge.exposeInMainWorld('myApi', {
   importFile,
   savePrizesConfig,
   openDevTools,
-  getSaveExcelFileInfoList
+  getSaveExcelFileInfoList,
+  openFileOrFolder
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

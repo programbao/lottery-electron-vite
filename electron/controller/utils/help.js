@@ -44,7 +44,17 @@ function loadTempData(normalDataPathStr, errorDataPathStr) {
  * 读取XML文件数据
  */
 function loadXML(xmlPath) {
-  let userData = xlsx.parse(xmlPath);
+  let userData = []
+ 
+  try {
+    userData = xlsx.parse(xmlPath);
+  } catch (error) {
+    return {
+      type: "error",
+      msg: "找不到文件，文件丢失"
+    }
+  }
+  xlsx.parse(xmlPath);
   let outData = [];
   let excelHeader = [];
 

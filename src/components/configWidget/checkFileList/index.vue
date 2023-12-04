@@ -1,12 +1,17 @@
 <template>
  <div class="lottery-layout">
     <!-- <div class="header-txt">文件列表</div> -->
+    <div class="operation-open-folder">
+      <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0].saveFolderPath)">打开文件夹</el-button>
+    </div>
     <div v-for="(file, index) in fileInfoList" :key="index" class="file-item">
       <div class="left-info">
         <el-icon :size="15"><Document /></el-icon>
         <span class="file-name">{{ file.fileName }}</span>
       </div>
-      <div class="operation-btn"></div>
+      <div class="operation-btn">
+        <el-button link type="primary" plain @click="openFileOrFolder(file.filePath)">打开文件</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -17,18 +22,33 @@ const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
+import { ElLoading } from 'element-plus'
 
 const fileInfoList = ref([])
 onMounted(async () => {
   fileInfoList.value = await myApi.getSaveExcelFileInfoList();
 })
-
+const openFileOrFolder = async (filePath) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '打开中...',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  await myApi.openFileOrFolder(filePath);
+  setTimeout(() => {
+    loading.close();
+  }, 500)
+}
 defineExpose({
 })
 </script>
 
 <style lang="scss" scoped>
  .lottery-layout {
+  .operation-open-folder {
+    text-align: right;
+    margin-bottom: 20px;
+  }
   .header-txt {
     text-indent: 10px;
     color: #fff;

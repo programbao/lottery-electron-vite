@@ -22,7 +22,9 @@
       </div>
     </template>
     <div class="setting-content">
-      <ballSetting ref="ballConfigSettingRef" />
+      <ballSetting 
+        :key="dialogTableVisible"
+        ref="ballConfigSettingRef" />
     </div>
   </el-dialog>
 </template>
