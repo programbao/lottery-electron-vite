@@ -351,22 +351,47 @@ onBeforeUnmount(() => {
 // 底部控制bar
 .bottom-bar {
   position: fixed;
-  bottom: -70px; /* 隐藏操作栏 */
+  bottom: -80px; /* 隐藏操作栏 */
   left: 0;
   right: 0;
-  height: 70px;
+  height: 80px;
   background-color: rgba(0,0,0,0.9);
   transition: bottom 0.3s ease-out; /* 过渡动画 */
   z-index: 100;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  box-sizing: border-box;
+  padding: 7px 0;
   > div {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding: 0 10px;
     border-right: 1px solid rgba(127, 255, 255, 0.75);
+
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: 100%;
+    
+    > .btn, .music {
+      margin: 5px;
+    }
+
+    &::-webkit-scrollbar{
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track{
+      // background: rgb(239, 239, 239);
+      border-radius:2px;
+    }
+    &::-webkit-scrollbar-thumb{
+      background: #bfbfbf;
+      border-radius:10px;
+    }
+    &::-webkit-scrollbar-thumb:hover{
+      background: #333;
+    }
   }
   .setting {
     .lock-btn {
@@ -447,7 +472,8 @@ onBeforeUnmount(() => {
   border: 0;
   padding: 1vh;
   margin: 0 0.6vh;
-  font-size: 1.2vh;
+  // font-size: 1.2vh;
+  font-size: 1.14vh;
   font-weight: bold;
   cursor: pointer;
   height: 50px;
