@@ -101,7 +101,8 @@ watch(
   () => basicData.isShowAllLuckyUser,
   () => {
     clearTimeout(showTimer);
-    clearInterval(autoScrollTimer);
+    cancelAnimationFrame(autoScrollTimer);
+    // clearInterval(autoScrollTimer);
     if (basicData.isShowAllLuckyUser) {
       showTimer = setTimeout(() => {
         luckyUserBoxStyle.value['z-index'] = '400'
@@ -164,7 +165,7 @@ const autoScrollFn = (params) => {
   // 获取滚动容器和内容
   const scrollContainer = allLuckyUserBoxRef.value;
  
-  const scrollSpeed = 1;
+  const scrollSpeed = 2;
   const scrollDirection = 'down';
 
   let scrolling = true;
@@ -174,26 +175,30 @@ const autoScrollFn = (params) => {
     return scrollDirection === 'down'
         ? scrollContainer.scrollTop + scrollContainer.clientHeight < scrollContainer.scrollHeight
         : scrollContainer.scrollTop > 0;
-}
+  }
   function autoScroll() {
-    if (scrolling) {
-      if (scrollDirection === 'up') {
-        scrollContainer.scrollTop -= scrollSpeed;
-      } else {
-        scrollContainer.scrollTop += scrollSpeed;
-      }
+    console.log('autoScroll')
+    autoScrollTimer = requestAnimationFrame(function () {
+      if (scrolling) {
+        if (scrollDirection === 'up') {
+          scrollContainer.scrollTop -= scrollSpeed;
+        } else {
+          scrollContainer.scrollTop += scrollSpeed;
+        }
 
-      // 如果滚动到底部，回到顶部
-      if (scrollDirection === 'up' && scrollContainer.scrollTop <= 0) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      } else if (scrollDirection === 'down' && scrollContainer.scrollTop >= scrollContainer.scrollHeight - scrollContainer.clientHeight - 20) {
-        scrollContainer.scrollTop = 0;
+        // 如果滚动到底部，回到顶部
+        if (scrollDirection === 'up' && scrollContainer.scrollTop <= 0) {
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        } else if (scrollDirection === 'down' && scrollContainer.scrollTop >= scrollContainer.scrollHeight - scrollContainer.clientHeight - 20) {
+          scrollContainer.scrollTop = 0;
+        }
       }
-    }
+      autoScroll();
+    })
   }
 
   if (canScroll()) {
-    autoScrollTimer = setInterval(autoScroll, 0)
+    autoScroll();
   };
 }
 

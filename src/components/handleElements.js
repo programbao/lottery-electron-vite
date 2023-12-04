@@ -225,7 +225,7 @@ export const changeCard = (cardIndex, user) => {
   }
 }
 let shineTimer = null;
-export const shineCard = (basicDataParam, paramsFieldsParam) => {
+export const shineCard = (basicDataParam, paramsFieldsParam, switchTime = 500) => {
   basicData = basicDataParam;
   paramsFields = paramsFieldsParam;
   let maxCard = 20,
@@ -248,9 +248,9 @@ export const shineCard = (basicDataParam, paramsFieldsParam) => {
         continue;
       }
       shine(cardIndex);
-      changeCard(cardIndex, basicData.member[index]);
+      changeCard(cardIndex, paramsFields.member[index]);
     }
-  }, 500);
+  }, switchTime);
 }
 export const removeShineCard = () => {
   clearInterval(shineTimer);

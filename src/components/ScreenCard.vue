@@ -88,7 +88,10 @@ const cardConfigStyle = computed(() => {
 const member = computed(() => {
   const memberListData = basicData.memberListData
   const currentLotteryGroup = basicData.currentLotteryGroup
-  console.log(memberListData, currentLotteryGroup)
+  // console.log(memberListData, currentLotteryGroup)
+  nextTick(() => {
+    bus.emit('adjustShineUser')
+  })
   if (!currentLotteryGroup.group_identity) return []
   return memberListData[currentLotteryGroup.group_identity]
 })

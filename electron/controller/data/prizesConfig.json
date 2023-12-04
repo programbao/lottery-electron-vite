@@ -323,5 +323,17 @@
     "rotateTime": 3000,
     "autoRotateTime": 80000,
     "ballRelativeLeftDistance": "13.5vw"
+  },
+  "prizesBarStyle": {
+    "barBoxWidth": "25vw",
+    "prizeBoxWidth": "20vw",
+    "prizeBoxMinHeight": "15vh",
+    "prizeSpace": "25px",
+    "prizeFontSize": "0.8vw",
+    "progressHeight": "1.8vh",
+    "progressFontSize": "1vw",
+    "imgGutterWidth": "8vh",
+    "imgGutterHeight": "8vh",
+    "currentPrizeScale": 1.2
   }
 }

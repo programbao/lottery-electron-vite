@@ -1,49 +1,19 @@
 {
   "D6qlvcjFekRCSqVvFe2Eo": [
     [
-      8211222010,
-      "Civil Construction",
-      "La Ode Ismail"
+      8230221004,
+      "RIM",
+      "Walid Halek"
     ],
     [
-      8220622082,
-      "RIM",
-      "Ravit Maduali"
+      8211128036,
+      "Heavy Equipment Workshop",
+      "Usman"
     ],
     [
       8220401019,
       "Ferronickel",
       "Niar Mallisa"
-    ],
-    [
-      8230715031,
-      "Logistik 1",
-      "Irpan"
-    ],
-    [
-      1723030602,
-      "发电事业部",
-      "马福鑫"
-    ],
-    [
-      8230430094,
-      "Ferronickel",
-      "Erich L. Samangun"
-    ],
-    [
-      "N8190814023",
-      "RIM",
-      "Dedy Riady"
-    ],
-    [
-      8211209020,
-      "Logistik 1",
-      "Ariyanto Hamidun"
-    ],
-    [
-      8211204064,
-      "RIM",
-      "Muhammad Saleh Wailissa"
     ],
     [
       8230121047,
@@ -56,59 +26,9 @@
       "Ramadhan Ismail"
     ],
     [
-      8211128036,
-      "Heavy Equipment Workshop",
-      "Usman"
-    ],
-    [
-      1422053102,
-      "计划部",
-      "苏丰驰"
-    ],
-    [
-      8230221004,
-      "RIM",
-      "Walid Halek"
-    ],
-    [
-      8230407076,
-      "Civil Construction",
-      "Jonathan Abdial Tuuk"
-    ],
-    [
-      8211017051,
-      "Ferronickel",
-      "La Ode Abi"
-    ],
-    [
       "I8190924010",
       "Port Service",
       "Ali Ibrahim"
-    ],
-    [
-      8220401019,
-      "Ferronickel",
-      "Niar Mallisa"
-    ],
-    [
-      8230430094,
-      "Ferronickel",
-      "Erich L. Samangun"
-    ],
-    [
-      8220807071,
-      "Quality Control",
-      "Geraldo M. Leiwakabessy"
-    ],
-    [
-      8220622082,
-      "RIM",
-      "Ravit Maduali"
-    ],
-    [
-      1723030602,
-      "发电事业部",
-      "马福鑫"
     ],
     [
       "N8190814023",
@@ -119,33 +39,51 @@
       8230715031,
       "Logistik 1",
       "Irpan"
-    ]
-  ],
-  "YZL6HBlu2ZSQ6N4PB_RD8": [
+    ],
     [
-      "P8200305014",
+      8230407076,
       "Civil Construction",
-      "Iliyas Taher"
+      "Jonathan Abdial Tuuk"
     ],
     [
-      "N8200106020",
-      "Gudang",
-      "Saifudin Jalil"
-    ],
-    [
-      "N8200106060",
+      8230430094,
       "Ferronickel",
-      "Sitri Hakim"
+      "Erich L. Samangun"
     ],
     [
-      8200118001,
-      "HSE",
-      "Muhammad Nawir"
+      1723030602,
+      "发电事业部",
+      "马福鑫"
     ],
     [
-      "I8190504008",
-      "Road Sanitation",
-      "Bahdar Umala"
+      8211204064,
+      "RIM",
+      "Muhammad Saleh Wailissa"
+    ],
+    [
+      8211017051,
+      "Ferronickel",
+      "La Ode Abi"
+    ],
+    [
+      1422053102,
+      "计划部",
+      "苏丰驰"
+    ],
+    [
+      8220622082,
+      "RIM",
+      "Ravit Maduali"
+    ],
+    [
+      8211209020,
+      "Logistik 1",
+      "Ariyanto Hamidun"
+    ],
+    [
+      8210831007,
+      "Logistik 1",
+      "Fikram Suje"
     ]
   ]
 }

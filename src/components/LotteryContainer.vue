@@ -176,6 +176,7 @@ const enterAnimate = (resetPrizeStatus = true) => {
   setTimeout(() => {
     rotateBall(true);
     bus.emit('adjustLotteryActionBtn')
+    adjustShineUser(200);
   }, 1600)
   if (resetPrizeStatus) {
     setTimeout(() => {
@@ -275,7 +276,7 @@ const initHandleData = () => {
   if (!isPass) {
     return
   }
-  initCards();
+  // initCards();
   // animate();
   // 随机切换背景和人员信息
   // shineCard(basicData, paramsFields);
@@ -384,7 +385,7 @@ const cheatingUser = () => {
 /**
  * 抽奖
  */
- const lottery = () => {
+const lottery = () => {
   if (basicData.isNextPrize) return;
   rotateObj.stop();
   basicData.isLotting = true;
@@ -780,7 +781,13 @@ const groupListSetting = () => {
   }
   basicData.currentLotteryGroup = userGroup || {};
 }
-
+const adjustShineUser = (switchTime) => {
+  removeShineCard();
+  if (paramsFields.threeDCards && paramsFields.threeDCards.length <= 0 && !basicData.isEnterLottery) {
+    initCards();
+  }
+  shineCard(basicData, paramsFields, switchTime);
+}
 // 重置当前奖项所有中奖人员
 bus.on('enterLottery', enterAnimate)
 bus.on('beginLottery', beginLottery)
@@ -791,6 +798,7 @@ bus.on('exportData', exportData)
 bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)
 bus.on('ballConfigSetting', adjustCardConfigStyleSetting)
 bus.on('groupListSetting', groupListSetting)
+bus.on('adjustShineUser', adjustShineUser)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
