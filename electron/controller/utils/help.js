@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const xlsx = require("node-xlsx").default;
 let cwd = path.join(__dirname, "../data");
-
+const dbPath = path.join(__dirname, '../../assets')
 if (!fs.existsSync(cwd)) {
   fs.mkdirSync(cwd);
 }
@@ -64,27 +64,32 @@ function loadXML(xmlPath) {
   outData = outData.filter(item => item.length > 0);
   return outData;
 }
-
+function sanitizeSheetName(name) {
+  // 移除特殊字符
+  return name.replace(/[:\\\/\?\*\[\]]/g, '');
+}
 /**
  * 写入excel
  * @param {Array} data
  * @param {string} name
  */
 function writeXML(data, name) {
+  name = sanitizeSheetName(name);
+  console.log(name, 'namename2234')
   let buffer = xlsx.build([
     {
-      name: "抽奖结果",
+      name: name,
       data: data
     }
   ]);
-
+  let savePath = path.join(dbPath, name)
   return new Promise((resolve, reject) => {
-    fs.writeFile(path.join(process.cwd(), name), buffer, err => {
+    fs.writeFile(savePath, buffer, err => {
       if (err) {
         reject(err);
         return;
       }
-      resolve();
+      resolve(savePath);
     });
   });
 }

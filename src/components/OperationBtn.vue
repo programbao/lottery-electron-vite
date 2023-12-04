@@ -50,8 +50,18 @@
         'slit-in-diagonal-1': isShowScreenImg,
         'swing-out-top-bck': !isShowScreenImg
       }"/>
+    <div 
+      v-if="isTipsBottomBar" 
+      @click="isTipsBottomBar = false"
+      class="tips-bottom bounce-top-infinite">
+      点击隐藏
+      <el-icon :size="40"><CaretBottom /></el-icon>
+    </div>
     <div
       ref="bottomBar"
+      :class="{
+        'to-long-show': isTipsBottomBar
+      }"
       class="bottom-bar">
       <div class="quick-operation">
         <button class="btn" @click="bgWallClick">背景墙</button>
@@ -69,6 +79,7 @@
         <button class="btn lock-btn" @click="toggleSetting('openDevTools')"><el-icon :size="30"><SetUp /></el-icon></button>
       </div>
       <div class="other">
+        <button :key="tipsOpenFileKey" class="btn bounce-top" @click="toggleSetting('checkFileList')">打开中奖名单文件列表</button>
         <button class="btn" @click="showAllLuckyUser">展示中奖名单</button>
         <button id="save" class="fixed-btn btn" @click="exportData">导出抽奖结果<br/> hasil undian</button>
         <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">重置当前/上一轮奖项中奖名单<br />mengatur ulang</button>
@@ -84,6 +95,7 @@
     <otherResourceSettingDialog ref="otherResourceSettingDialogRef" />
     <secretSettingDialog ref="secretSettingDialogRef" />
     <ballSettingDialog ref="ballSettingDialogRef" />
+    <checkFileListDialog ref="checkFileListDialogRef" />
   </div>
 </template>
 
@@ -99,6 +111,7 @@ import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue
 import secretSettingDialog from "../components/configWidget/secretSetting/dialog.vue"
 import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
 import ballSettingDialog from "../components/configWidget/ballSetting/dialog.vue"
+import checkFileListDialog from "../components/configWidget/checkFileList/dialog.vue"
 
 // 打开设置
 const usersSettingDialogRef = ref();
@@ -107,7 +120,8 @@ const cardSettingDialogRef = ref();
 const otherResourceSettingDialogRef = ref();
 const secretSettingDialogRef = ref();
 const ballSettingDialogRef = ref();
-const operationBtnStyle = ref({})
+const operationBtnStyle = ref({});
+const checkFileListDialogRef = ref();
 const toggleSetting = (settingStr) => {
   switch (settingStr) {
     case 'usersSetting':
@@ -131,6 +145,9 @@ const toggleSetting = (settingStr) => {
     case 'openDevTools':
       myApi.openDevTools();
       break;
+    case 'checkFileList': // 显示文件列表
+      checkFileListDialogRef.value.toggleConfig()
+      break;
     default:
       break;
   }
@@ -138,6 +155,7 @@ const toggleSetting = (settingStr) => {
 const showAllLuckyUser = () => {
   basicData.isShowAllLuckyUser = true
 }
+const tipsOpenFileKey = ref(0);
 
 // 图片相关设置
 const isShowScreenImg = ref(false)
@@ -230,6 +248,7 @@ const toggleFullScreen = async () => {
 }
 const exportData = () => {
   bus.emit('exportData')
+  tipsOpenFileKey.value = new Date().getTime();
 }
 
 const resetCurrentPrizeBtnClick = () => {
@@ -290,7 +309,9 @@ const handleHideCommonBtn = () => {
 let showBarTimer = null;
 let debounceTimer = null
 let isEnterBar = false
+const isTipsBottomBar = ref(true);
 const mousemoveEvent = (event) => {
+  if (isTipsBottomBar.value) return
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
     const mouseY = event.clientY;
@@ -311,6 +332,7 @@ const mousemoveEvent = (event) => {
   }, 50)
 }
 const mouseleaveEvent = () => {
+  if (isTipsBottomBar.value) return
   clearTimeout(showBarTimer);
   setTimeout(() => {
     if (!isEnterBar) {
@@ -322,6 +344,7 @@ const barMouseenter = () => {
   isEnterBar = true
 }
 const barMouseleave = () => {
+  if (isTipsBottomBar.value) return
   isEnterBar = false
   clearTimeout(showBarTimer);
   showBarTimer = setTimeout(() => {
@@ -366,6 +389,14 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
+// 提示底部bar
+.tips-bottom {
+  position: fixed;
+  right: 10px;
+  bottom: 70px;
+  color: rgba(127, 255, 255, 0.75);
+  display: flex;
+}
 // 底部控制bar
 .bottom-bar {
   position: fixed;
@@ -420,6 +451,9 @@ onBeforeUnmount(() => {
 
 .bottom-bar.active {
   bottom: 0; /* 显示操作栏 */
+}
+.bottom-bar.to-long-show {
+  bottom: 0;
 }
 .lottery-operation-btn {
   position: fixed;

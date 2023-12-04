@@ -49,6 +49,7 @@ const importFile = () => {
     
         const fileName = path.basename(filePath)
         const destPath = path.join(dbPath, fileName)
+        const saveFolderPath = path.join(dbPath);
         let users;
         if (userName) {
           users = loadData(filePath)
@@ -91,6 +92,7 @@ const importFile = () => {
     
         return {
           savePath: destPath,
+          saveFolderPath: saveFolderPath,
           fileUrl: url.pathToFileURL(destPath).href,
           fileName: fileName,
           users

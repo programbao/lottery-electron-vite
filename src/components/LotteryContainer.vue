@@ -756,6 +756,18 @@ const exportData = () => {
   saveData().then(async res => {
     let result = await myApi.handleExportData(); 
     console.log(result)
+    if (!result || result.type === 'error') {
+      ElMessage({
+        type: 'error',
+        message: `导出失败，请联系管理员`
+      })
+    } else if (result.type === 'success') {
+      ElMessage({
+        type: 'success',
+        message: `导出成功, 请前往文件列表查看`,
+        duration: 5000
+      })
+    }
   })
 }
 const adjustCardConfigStyleSetting = (resetPrizeStatus = true) => {

@@ -29,6 +29,12 @@ const resetData = async (...args) => {
   return result
 }
 
+// 获取保存的excel文件列表
+const getSaveExcelFileInfoList = async (...args) => {
+  let result = await ipcRenderer.invoke('getSaveExcelFileInfoList', ...args)
+  return result
+}
+
 // 处理数据导出
 const handleExportData = async (...args) => {
   let result = await ipcRenderer.invoke('handleExportData', ...args)
@@ -71,7 +77,8 @@ contextBridge.exposeInMainWorld('myApi', {
   toggleFullScreen,
   importFile,
   savePrizesConfig,
-  openDevTools
+  openDevTools,
+  getSaveExcelFileInfoList
 })
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

@@ -3,6 +3,8 @@
 const dataBath = __dirname;
 const { ipcMain, dialog } = require('electron')
 const path = require('path')
+const fs = require('fs');
+const dayjs = require('dayjs');
 const {
   loadXML,
   loadTempData,
@@ -118,22 +120,24 @@ const hanldeExportDataFn = async () => {
     outData = outData.concat(sharedObject.luckyData[item.type] || []);
   });
   let result = {};
-  writeXML(outData, "/抽奖结果.xlsx")
-    .then(dt => {
-      // res.download('/抽奖结果.xlsx');
-      result = {
-        type: "success",
-        url: "抽奖结果.xlsx"
-      };
-      console.log(`导出数据成功！`);
-    })
-    .catch(err => {
-      result = {
-        type: "error",
-        error: err.error
-      };
-      console.log(`导出数据失败！`);
-    });
+  try {
+    let fileName = `抽奖结果-${dayjs().format("YYYY-MM-DD#hh.mm.ss")}.xlsx`
+    const savePath = await writeXML(outData, fileName)
+    result = {
+      type: "success",
+      fileName: fileName,
+      savePath
+    };
+    console.log(`导出数据成功！`);
+  } catch (err) {
+    console.log(err, 'errerr')
+    result = {
+      type: "error",
+      error: err
+    };
+    console.log(`导出数据失败！`); 
+  }
+  return result; 
 }
 const handleExportData = async () => {
   ipcMain.handle('handleExportData', async (e, ...args) => {
@@ -146,10 +150,46 @@ const handleExportData = async () => {
     return result; 
   })
 }
+
+const dbPath = path.join(__dirname, '../assets')
+
+const readExcelFilesInDirectory = () => {
+  const files = fs.readdirSync(dbPath); // 读取目录下所有文件和文件夹
+  const excelFiles = files.filter(file => {
+    const filePath = path.join(dbPath, file);
+    const saveFolderPath = path.join(dbPath);
+    // 检查文件是否是Excel文件
+    return fs.statSync(filePath).isFile() && path.extname(filePath).toLowerCase() === '.xlsx';
+  });
+
+  const filesInfo = excelFiles.map(file => {
+    const filePath = path.join(dbPath, file);
+    return {
+      fileName: file,
+      filePath: filePath,
+      saveFolderPath
+    };
+  });
+
+  return filesInfo;
+}
+
+const getSaveExcelFileInfoList = async () => {
+  ipcMain.handle('getSaveExcelFileInfoList', async (e, ...args) => {
+    let result = {};
+    try {
+      result = await readExcelFilesInDirectory();
+    } catch (error) {
+      console.log(error, '2348092384')
+    }
+    return result; 
+  })
+}
 module.exports = {
   getStaticUsersData,
   setData,
   resetData,
   handleExportData,
-  resetOneRoundLuckyData
+  resetOneRoundLuckyData,
+  getSaveExcelFileInfoList
 };
