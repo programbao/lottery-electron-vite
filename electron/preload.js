@@ -28,6 +28,11 @@ const resetData = async (...args) => {
   let result = await ipcRenderer.invoke('resetOneRoundLuckyData', ...args)
   return result
 }
+// 保存当前或上一轮奖项所有中奖名单
+const saveOneRoundLuckyData = async (...args) => {
+  let result = await ipcRenderer.invoke('saveOneRoundLuckyData', ...args)
+  return result
+}
 
 // 获取保存的excel文件列表
 const getSaveExcelFileInfoList = async (...args) => {
@@ -79,6 +84,7 @@ contextBridge.exposeInMainWorld('myApi', {
   setData,
   resetData,
   resetOneRoundLuckyData,
+  saveOneRoundLuckyData,
   handleExportData,
   toggleFullScreen,
   importFile,

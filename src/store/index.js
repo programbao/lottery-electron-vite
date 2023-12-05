@@ -12,6 +12,7 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       eachCount: [18, 10, 1, 1, 5, 3, 2, 10], // 每次抽取的奖品个数
       currentPrizeIndex: 0, // 当前抽取的奖品
       currentPrize: {}, // 当前抽取的奖品
+      isAnimating: false, // 是否正在抽奖
       resolution: 1.1, // 当前圆球比例
       rotateLoop: 1000, // 是否循环旋转
       rotateTime: 3000, // 旋转时间

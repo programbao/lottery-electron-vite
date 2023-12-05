@@ -230,6 +230,8 @@ import { ref, onBeforeMount, onBeforeUnmount, computed, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import MusicBtn from "./MusicBtn.vue";
 import bus from '../libs/bus'
+import { useToast } from "vue-toastification";
+const toast = useToast();
 import { lotteryDataStore } from '../store'
 import usersSettingDialog from "../components/configWidget/usersSetting/dialog.vue"
 import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.vue"
@@ -357,6 +359,12 @@ const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
 }
 const beginLottery = () => {
+  if (basicData.isAnimating) {
+    toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
+      timeout: 2000
+    });
+    return
+  }
   bus.emit('beginLottery')
   isFirstPrize.value = false
   isResetCurrentPrize.value = false

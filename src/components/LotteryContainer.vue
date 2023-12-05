@@ -25,7 +25,7 @@ let targets = {
   sphere: []
 };
 // 动画执行中
-let isAnimating = false;
+// let isAnimating = false;
 let rotateObj;
 
 let paramsFields = {};
@@ -43,7 +43,7 @@ const animate = () => {
  * 渲染地球等
  */
 const transform = (targets, duration) => {
-  isAnimating = true
+  basicData.isAnimating = true
   // TWEEN.removeAll();
   for (var i = 0; i < paramsFields.threeDCards.length; i++) {
     var object = paramsFields.threeDCards[i];
@@ -74,7 +74,7 @@ const transform = (targets, duration) => {
       .start();
   }
   setTimeout(() => {
-    isAnimating = false
+    basicData.isAnimating = false
   }, duration * 1.5)
   new TWEEN.Tween()
     .to({}, duration * 2)
@@ -466,9 +466,11 @@ const changePrizeStatus = () => {
       })
     }, 200)
     basicData.isNextPrize = true;
-    // if (currentPrizeIndex <= -1) {
-    //   currentPrizeIndex = 0;
-    // }
+    if (basicData.currentPrizeIndex <= -1) {
+      // 保存最后轮次中奖名单
+      myApi.saveOneRoundLuckyData(type, JSON.stringify(curLucky));
+      // currentPrizeIndex = 0;
+    }
     // currentPrize = basicData.prizes[currentPrizeIndex];
   }
 }
@@ -653,7 +655,7 @@ const lotteryActiveFn = async () => {
   });
 }
 const beginLottery = () => {
-  if (isAnimating) {
+  if (basicData.isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
       timeout: 2000
     });

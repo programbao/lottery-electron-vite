@@ -97,13 +97,27 @@ const resetOneRoundLuckyData = async () => {
   ipcMain.handle('resetOneRoundLuckyData', async (e, ...args) => {
     let isTrue = true
     let delLuckyType = args[0]
-    console.log(delLuckyType, '283409283409234234')
     try {
       let sharedObject =  global.sharedObject;
       if (sharedObject.luckyData[delLuckyType]) {
         delete sharedObject.luckyData[delLuckyType]
         await saveDataFile(sharedObject.luckyData, "temp.json");
       }
+    } catch (error) {
+      isTrue = false
+    }
+    return isTrue;
+  })
+}
+const saveOneRoundLuckyData = async () => {
+  ipcMain.handle('saveOneRoundLuckyData', async (e, ...args) => {
+    let isTrue = true
+    const type = args[0];
+    const data = JSON.parse(args[1]);
+    try {
+      let sharedObject =  global.sharedObject;
+      sharedObject.luckyData[type] = Array.isArray(data) ? data : [data];
+      await saveDataFile(sharedObject.luckyData, "temp.json");
     } catch (error) {
       isTrue = false
     }
@@ -208,6 +222,7 @@ module.exports = {
   resetData,
   handleExportData,
   resetOneRoundLuckyData,
+  saveOneRoundLuckyData,
   getSaveExcelFileInfoList,
   openFileOrFolder
 };
