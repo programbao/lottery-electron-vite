@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import ltDialog from '../../common/lt-dialog.vue'
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
@@ -221,21 +221,31 @@ const clearSelect = () => {
     img: ''
   }
 }
-watch(
-  () => props.editDialogVisible,
-  () => {
-    if (props.editDialogVisible) {
-      formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
-      currentLucky = luckyUsers[formLabelAlign.value.type]
-      const findIndex = basicData.prizes.findIndex(item => item.type === formLabelAlign.value.type)
-      prevPrizesData.value = basicData.prizes[findIndex - 1] || {}
-      if (formLabelAlign.value.eachCount === undefined) {
-        formLabelAlign.value.eachCount = formLabelAlign.value.count
-      }
+// watch(
+//   () => props.editDialogVisible,
+//   () => {
+//     if (props.editDialogVisible) {
+//       formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
+//       currentLucky = luckyUsers[formLabelAlign.value.type]
+//       const findIndex = basicData.prizes.findIndex(item => item.type === formLabelAlign.value.type)
+//       prevPrizesData.value = basicData.prizes[findIndex - 1] || {}
+//       if (formLabelAlign.value.eachCount === undefined) {
+//         formLabelAlign.value.eachCount = formLabelAlign.value.count
+//       }
+//     }
+//   }
+// );
+onMounted(() => {
+  if (props.editDialogVisible) {
+    formLabelAlign.value = JSON.parse(JSON.stringify(props.editData))
+    currentLucky = luckyUsers[formLabelAlign.value.type]
+    const findIndex = basicData.prizes.findIndex(item => item.type === formLabelAlign.value.type)
+    prevPrizesData.value = basicData.prizes[findIndex - 1] || {}
+    if (formLabelAlign.value.eachCount === undefined) {
+      formLabelAlign.value.eachCount = formLabelAlign.value.count
     }
   }
-);
-
+})
 const importFile = async (disabled) => {
   if (disabled) return
   let { fileUrl } = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));

@@ -106,7 +106,7 @@ watch(
     if (basicData.isShowAllLuckyUser) {
       showTimer = setTimeout(() => {
         luckyUserBoxStyle.value['z-index'] = '400'
-        allLuckyUsers.value = basicData.luckyUsers;
+        allLuckyUsers.value = JSON.parse(JSON.stringify(basicData.luckyUsers));
         luckysRowColObj.value = basicData.luckysRowColObj;
         luckyCardConfigStyle.value = basicData.luckyCardConfigStyle;
         basicData.prizes.forEach((item) => {
