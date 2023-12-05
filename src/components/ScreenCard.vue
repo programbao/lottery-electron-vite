@@ -69,8 +69,8 @@
       </div>
     </div>
     <div class="tips">
-      <span v-if="basicData.currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
-      <span v-else>抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
+      <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
+      <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
     </div>
   </div>
 </template>
@@ -82,7 +82,9 @@ const basicData = lotteryDataStore();
 import bus from '../libs/bus'
 
 // const isShowScreenCard = ref(true);
-
+const currentPrize = computed(() => {
+  return basicData.prizes[basicData.currentPrizeIndex];
+});
 const cardConfigStyle = computed(() => {
   return basicData.cardConfigStyle;
 })

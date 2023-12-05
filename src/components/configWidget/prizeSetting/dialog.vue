@@ -65,6 +65,18 @@ const cutPrize = () => {
 const addPrize = () => {
   addNum++
 }
+// 定位抽奖组
+const findCurrentLotteryGroup = () => {
+  // 找到要展示的member
+  const currentPrize = basicData.currentPrize;
+  if (!basicData.currentPrize) return
+  const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
+  console.log(userGroup)
+  if (!userGroup) {
+    return;
+  }
+  return userGroup;
+}
 
 const prizeSettingRef = ref();
 // 处理奖项相关设置
@@ -125,7 +137,12 @@ const handlePrizesSetting = async () => {
     // 纠正当前的奖项
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
-
+    
+    if (modifyCurrentIndex < 0 &&  basicData.currentPrizeIndex >= 0) {
+      basicData.currentLotteryGroup = findCurrentLotteryGroup();
+      // bus.emit('groupListSetting')
+      bus.emit('toInitContainerHandleData')
+    }
     if (addNum) {
       bus.emit('adjustCurrentPrize', { isReGet: true })
     }

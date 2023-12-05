@@ -20,7 +20,7 @@ const basicData = lotteryDataStore();
 
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
-  return basicData.currentPrize;
+  return basicData.prizes[basicData.currentPrizeIndex];
 });
 const prizeMark = ref();
 const enterAnimate = ref("")

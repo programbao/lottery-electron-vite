@@ -9,7 +9,7 @@
       class="lottery-operation-btn"
       :style="operationBtnStyle">
       <div class="begin-lottery">
-        <button class="btn" id="enter"  v-show="noBeginLottery" @click="enterLottery">
+        <button class="btn" id="enter"  v-if="noBeginLottery" @click="enterLottery">
           {{ controlsBtnConfig.enter.chineseText }}
           <span v-if="controlsBtnConfig.enter.otherLanguagesText">
             <br/>
@@ -320,7 +320,7 @@ const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
-  return basicData.currentPrize;
+  return basicData.prizes[basicData.currentPrizeIndex];
 });
 const isNextPrize = computed(() => {
   return basicData.isNextPrize;
@@ -353,6 +353,7 @@ const enterLottery = () => {
   bus.emit('enterLottery')
   basicData.isEnterLottery = true
   isResetCurrentPrize.value = false
+  noBeginLottery.value = false
 }
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
@@ -518,6 +519,7 @@ const adjustLotteryActionBtn = () => {
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd);
   handleHideCommonBtn();
+  bus.on('toInitContainerHandleData', handleHideCommonBtn);
   bus.on('groupListSetting', handleHideCommonBtn);
   bus.on('adjustLotteryActionBtn', adjustLotteryActionBtn);
   // 监听鼠标移动事件

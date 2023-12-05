@@ -237,7 +237,7 @@ const initParamsFieldsData = (userGroup) => {
   if (member.length <= 0) {
     ElMessage({
       type: 'error',
-      message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
+      message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
     })
     bus.emit('groupListSetting')
     isPass = false
@@ -259,7 +259,7 @@ const adjuctLotteryGroup = (cb) => {
   if (!userGroup) {
     ElMessage({
       type: 'error',
-      message: `未找到${basicData.currentPrize.name}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
+      message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
     })
     return false
   }
@@ -817,6 +817,7 @@ bus.on('cardConfigStyleSetting', adjustCardConfigStyleSetting)
 bus.on('ballConfigSetting', adjustCardConfigStyleSetting)
 bus.on('groupListSetting', groupListSetting)
 bus.on('adjustShineUser', adjustShineUser)
+bus.on('toInitContainerHandleData', initHandleData)
 onBeforeUnmount(() => {
   // bus.off('initConfigDataEnd', initHandleData)
   bus.off('enterLottery', enterAnimate)
