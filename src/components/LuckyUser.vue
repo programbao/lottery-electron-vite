@@ -67,6 +67,20 @@
             <div :style="{height: 'calc(' + luckyCardConfigStyle.detailsFontSize + ' + -4px)'}"></div>
             <span id="user-dept">{{lucky[1]}}</span>
         </div>
+
+        <!-- 操作按钮 -->
+        <div class="mark-operation">
+          <div class="center-btn">
+            <el-popconfirm 
+              title="确认删除吗?" 
+              confirm-button-type="danger"
+              @confirm="deleteLucky(lucky)">
+              <template #reference>
+                <el-icon  size="30" color="#fff"><Delete /></el-icon>
+              </template>
+            </el-popconfirm>
+          </div>
+        </div>
       </div>
       <!-- <div class="split-box"></div> -->
     </div>
@@ -81,6 +95,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 const confettiCanvasRef = ref();
@@ -131,6 +146,7 @@ const currentLuckys = computed(() => {
   return basicData.currentLuckys;
 });
 let showTimer = null;
+let isHandleDel = false
 // 控制入场和退场动画
 watch(
   () => basicData.isShowLuckyUser,
@@ -149,14 +165,37 @@ watch(
     }
   }
 )
-
+let currentIndex = -1;
+let lastIndex = -1;
 const closeBtn = () => {
   basicData.isShowLuckyUser = false;
   $.confetti.stop();
+  if (isHandleDel) {
+    bus.emit('adjustCurrentPrize', {
+      beforeModifyPrize: basicData.prizes[currentIndex],
+      byIndexModifyPrize: basicData.prizes[lastIndex]
+    });
+    isHandleDel = false
+    basicData.isNextPrize = false
+    basicData.isContinueLottery = true
+  }
 }
-// const currentLuckys = computed(() => {
-//   return basicData.currentLuckys;
-// });
+
+const deleteLucky = (lucky) => {
+  isHandleDel = true
+  currentIndex = basicData.currentPrizeIndex
+  lastIndex = basicData.lastTimePrizeIndex
+  if (currentIndex !== lastIndex) {
+    basicData.currentPrizeIndex = lastIndex;
+    basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
+  }
+  let type = basicData.currentPrize.type;
+  if (basicData.luckyUsers[type]) {
+    basicData.currentLuckys = basicData.currentLuckys.filter(item => item[0] !== lucky[0]);
+    basicData.luckyUsers[type] = basicData.luckyUsers[type].filter(user => lucky[0] !== user[0]);
+  } 
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -184,9 +223,37 @@ const closeBtn = () => {
   box-shadow: 0 0 12px rgba(253, 105, 0, 0.95) !important;
   border: 1px solid rgba(253, 105, 0, 0.5) !important;
   background-color: rgba(0,127,127,0.5077637237470506) !important;
+  position: relative;
+  .mark-operation {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background-color: rgba(0, 0, 0, 0.5);
+    .center-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      .el-icon {
+        cursor: pointer;
+      }
+    }
+  }
 }
 .lucky-item:hover {
   border: 1px solid rgba(253, 105, 0, 0.95) !important;
+  .mark-operation {
+    opacity: 1;
+  }
 }
 .confetti-canvas {
   position: fixed;

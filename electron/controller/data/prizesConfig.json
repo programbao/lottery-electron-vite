@@ -335,5 +335,137 @@
     "imgGutterWidth": "8vh",
     "imgGutterHeight": "8vh",
     "currentPrizeScale": 1.2
+  },
+  "controlsBtnConfig": {
+    "enter": {
+      "defaultText": "进入抽奖",
+      "chineseText": "进入抽奖1",
+      "otherLanguagesText": "masuk undian1"
+    },
+    "showPrize": {
+      "defaultText": "显示奖品",
+      "chineseText": "显示奖品",
+      "otherLanguagesText": "奖项 undian selanjutnya"
+    },
+    "lottery": {
+      "defaultText": "开始抽奖",
+      "chineseText": "开始抽奖",
+      "otherLanguagesText": "begin lottery"
+    },
+    "reLottery": {
+      "defaultText": "重新抽奖",
+      "chineseText": "重新抽奖",
+      "otherLanguagesText": "reLottery"
+    },
+    "continueLottery": {
+      "defaultText": "继续抽奖",
+      "chineseText": "继续抽奖",
+      "otherLanguagesText": "continue lottery"
+    },
+    "lotteryEnd": {
+      "defaultText": "结束抽奖",
+      "chineseText": "结束抽奖",
+      "otherLanguagesText": "lottery over"
+    },
+    "lastRoundLottery": {
+      "defaultText": "重新抽取上一轮",
+      "chineseText": "重新抽取上一轮",
+      "otherLanguagesText": "last round lottery"
+    },
+    "showAllLucks": {
+      "defaultText": "展示全部中奖名单",
+      "chineseText": "展示全部中奖名单",
+      "otherLanguagesText": "daftar nama pemenang"
+    },
+    "bgWallClick": {
+      "defaultText": "背景墙",
+      "chineseText": "背景墙",
+      "otherLanguagesText": "bgImg"
+    },
+    "toggleScreenImg": {
+      "defaultText": "屏幕墙",
+      "chineseText": "屏幕墙",
+      "otherLanguagesText": "screenImg"
+    },
+    "showLotteryClick": {
+      "defaultText": "展示抽奖",
+      "chineseText": "展示抽奖",
+      "otherLanguagesText": "show lottery"
+    },
+    "toggleSettingUsersSetting": {
+      "defaultText": "名单设置",
+      "chineseText": "名单设置",
+      "otherLanguagesText": "user setting"
+    },
+    "toggleSettingPrizeSetting": {
+      "defaultText": "奖项设置",
+      "chineseText": "奖项设置",
+      "otherLanguagesText": "prize setting"
+    },
+    "toggleSettingCardSetting": {
+      "defaultText": "卡片设置",
+      "chineseText": "卡片设置",
+      "otherLanguagesText": "card setting"
+    },
+    "toggleSettingBallSetting": {
+      "defaultText": "球体设置",
+      "chineseText": "球体设置",
+      "otherLanguagesText": "ball setting"
+    },
+    "toggleSettingControlsBtnSetting": {
+      "defaultText": "控制按钮设置",
+      "chineseText": "控制按钮设置",
+      "otherLanguagesText": "control button setting"
+    },
+    "toggleSettingOtherResourceSetting": {
+      "defaultText": "其他资源设置",
+      "chineseText": "其他资源设置",
+      "otherLanguagesText": "other resource setting"
+    },
+    "toggleSettingSecretSetting": {
+      "defaultText": "",
+      "chineseText": "内置中奖名单",
+      "otherLanguagesText": "内置中奖名单"
+    },
+    "toggleSettingCheckFileList": {
+      "defaultText": "打开中奖名单文件列表",
+      "chineseText": "打开中奖名单文件列表",
+      "otherLanguagesText": "open file list"
+    },
+    "showAllLuckyUser": {
+      "defaultText": "展示中奖名单",
+      "chineseText": "展示中奖名单",
+      "otherLanguagesText": "daftar nama pemenang"
+    },
+    "exportData": {
+      "defaultText": "导出抽奖结果",
+      "chineseText": "导出抽奖结果",
+      "otherLanguagesText": "export data"
+    },
+    "resetCurrentPrizeBtnClick": {
+      "defaultText": "重置当前/上一轮奖项中奖名单",
+      "chineseText": "重置当前/上一轮奖项中奖名单",
+      "otherLanguagesText": "reset current/last prize"
+    },
+    "resetBtnClick": {
+      "defaultText": "重置所有中奖名单",
+      "chineseText": "重置所有中奖名单",
+      "otherLanguagesText": "reset all lucky user"
+    },
+    "enterFullScreen": {
+      "defaultText": "全屏",
+      "chineseText": "全屏",
+      "otherLanguagesText": ""
+    },
+    "quitFullScreen": {
+      "defaultText": "退出全屏",
+      "chineseText": "退出全屏",
+      "otherLanguagesText": "quit fullscreen"
+    },
+    "musicBtn": {
+      "defaultText": "",
+      "chineseText": "音乐",
+      "otherLanguagesText": "music"
+    }
   }
 }

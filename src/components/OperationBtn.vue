@@ -662,9 +662,9 @@ onBeforeUnmount(() => {
   font-weight: bold;
   cursor: pointer;
   height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
 }
 
 .btn:hover {

@@ -32,7 +32,6 @@ const controlsBtnConfig = ref({})
 
 onMounted(() => {
   controlsBtnConfig.value = JSON.parse(JSON.stringify(basicData.controlsBtnConfig))
-  console.log(controlsBtnConfig.value, 'controlsBtnConfig.valuecontrolsBtnConfig.value')
   Object.keys(controlsBtnConfig.value).forEach(key => {
     let controlObj = controlsBtnConfig.value[key];
     let addLabelField = {
