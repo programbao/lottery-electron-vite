@@ -123,7 +123,7 @@ const scrollTop = () => {
     const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().top - document.documentElement.clientHeight * 10.8 / 100 - 40 - oldScrollTop;
     anime({
       targets: handleDom,
-      scrollTop: [oldScrollTop, scrollTop],
+      scrollTop: [oldScrollTop, oldScrollTop + scrollTop],
       duration: 2000,
       easing: 'cubicBezier(0.17, 0.08, 0.25, 1.00)'
     })

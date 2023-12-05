@@ -432,7 +432,8 @@ const resetBtnClick = () => {
     .then(() => {
       bus.emit('resetBtnClick')
       noBeginLottery.value = true;
-      basicData.isEnterLottery = true
+      basicData.isEnterLottery = false
+      handleHideCommonBtn();
       exportData();
       ElMessage({
         type: 'success',

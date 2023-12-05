@@ -140,8 +140,9 @@ const handlePrizesSetting = async () => {
     
     if (modifyCurrentIndex < 0 &&  basicData.currentPrizeIndex >= 0) {
       basicData.currentLotteryGroup = findCurrentLotteryGroup();
-      // bus.emit('groupListSetting')
-      bus.emit('toInitContainerHandleData')
+      if (!basicData.isEnterLottery) {
+        bus.emit('toInitContainerHandleData')
+      }
     }
     if (addNum) {
       bus.emit('adjustCurrentPrize', { isReGet: true })
