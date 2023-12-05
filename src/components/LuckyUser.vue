@@ -130,10 +130,16 @@ const lucksContentStyle = computed(() => {
     case 2:
       // rowCount = Math.ceil(currentLuckys.value.length / columnCount);
       columnCount = Math.ceil(currentLuckys.value.length / rowCount);
+      if (columnCount > currentLuckys.value.length) {
+        columnCount = currentLuckys.value.length
+      }
       handleStyle += `grid-template-rows: repeat(${rowCount}, 1fr);grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
     case 1:
       // columnCount = Math.ceil(currentLuckys.value.length / rowCount);
+      if (columnCount > currentLuckys.value.length) {
+        columnCount = currentLuckys.value.length
+      }
       handleStyle += `grid-template-columns: repeat(${columnCount}, 1fr);`
       break;
     default:

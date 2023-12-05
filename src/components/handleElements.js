@@ -240,9 +240,11 @@ export const shineCard = (basicDataParam, paramsFieldsParam, switchTime = 500) =
       return;
     }
     maxUser = paramsFields.totalMember;
+    let totalNum = basicData.totalCards;
+    if (totalNum > maxUser) totalNum = maxUser;
     for (let i = 0; i < shineCard; i++) {
       let index = random(maxUser),
-        cardIndex = random(basicData.totalCards);
+        cardIndex = random(totalNum);
       // 当前显示的已抽中名单不进行随机切换
       if (paramsFields.selectedCardIndex.includes(cardIndex)) {
         continue;
