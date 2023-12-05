@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onBeforeMount, onMounted, computed, nextTick } from 'vue'
+import { ref, onBeforeUnmount, onBeforeMount, onMounted, computed, nextTick, watch } from 'vue'
 import bus from '../libs/bus'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
@@ -84,7 +84,13 @@ const prizes = computed(() => {
   return basicData.prizes;
 });
 const currentPrize = computed(() => {
-  return basicData.prizes[basicData.currentPrizeIndex];
+  return basicData.prizes[basicData.currentPrizeIndex] || {
+    type: -1,
+    count: 0,
+    name: "谢谢参与 undian telah selesai,terima kasih telah bergabung",
+    otherName: "已结束",
+    img: ""
+  };
 });
 const prizesBarStyle  = computed(() => {
   return basicData.prizesBarStyle;
@@ -97,13 +103,24 @@ const getItemPrizeConfig = (type) => {
   }
   return itemPrizeConfig;
 }
+let changeScrollStep = 0
+// 监听奖项index变化
+watch(() => basicData.currentPrizeIndex, () => {
+  if (changeScrollStep >= 2) {
+    nextTick(() => {
+      scrollTop()
+      changeScrollStep = 0
+    })
+  }
+})
 // 滑动到特定位置
 const scrollTop = () => {
   nextTick(() => {
+    if (!basicData.currentPrize) return
     const handleDom = prizeList.value;
     const oldScrollTop = handleDom.scrollTop
-    const type = prizes.value[prizes.value.length - 1].type
-    const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().bottom - oldScrollTop;
+    const type = basicData.currentPrize.type
+    const scrollTop = document.querySelector(`#prize-item-${type}`).getBoundingClientRect().top - document.documentElement.clientHeight * 10.8 / 100 - 40 - oldScrollTop;
     anime({
       targets: handleDom,
       scrollTop: [oldScrollTop, scrollTop],
@@ -119,8 +136,8 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
   let currentPrize = basicData.prizes[currentPrizeIndex] ||  {
     type: -1,
     count: 0,
-    text: "谢谢参与 undian telah selesai,terima kasih telah bergabung",
-    title: "已结束",
+    name: "谢谢参与 undian telah selesai,terima kasih telah bergabung",
+    otherName: "已结束",
     img: ""
   },
     type = currentPrize.type,
@@ -137,9 +154,13 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "shine");
 
     basicData.lasetPrizeIndex = currentPrizeIndex;
+    changeScrollStep += 1;
   }
 
-  prizesListConfig.value[type].surplusCount = count;
+  prizesListConfig.value[type] && (prizesListConfig.value[type].surplusCount = count);
+  if (currentPrize.type === -1) {
+    prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "done")
+  }
   if (count !== totalCount && count !== 0) {
     basicData.isContinueLottery = true
   } else {
@@ -218,6 +239,9 @@ onBeforeUnmount(() => {
 })
 onBeforeMount(() => {
   initHandlePrizeData();
+  // if (basicData.prizes.length - basicData.currentPrizeIndex >= 2) {
+  //   scrollTop();
+  // }
 })
 const adjustCurrentPrize = (data) => {
   let { beforeModifyPrize, byIndexModifyPrize, isReGet } = data
@@ -254,7 +278,7 @@ bus.on('setPrizeData', setPrizeData)
   overflow-y: auto;
   width: 25vw;
   padding: 0;
-  padding-bottom: 40px;
+  padding: 40px 0;
 }
 .prize-list::-webkit-scrollbar {
   display: none;

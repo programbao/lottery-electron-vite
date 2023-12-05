@@ -20,7 +20,7 @@
           class="btn"
           id="showPrize" 
           @click="showPrize" 
-          v-show="!noBeginLottery && isNextPrize">
+          v-if="!noBeginLottery && isNextPrize && currentPrize">
           <div v-html="currentPrize.name">
           </div>
           <!-- <br/>奖项 undian selanjutnya -->
@@ -46,6 +46,7 @@
         @click="reLottery"
         v-show="!noBeginLottery 
           && !isResetCurrentPrize
+          && !isShowAllLuckys
           && !isLotting
           && !isFirstPrize">
           {{ (isNextPrize || isShowPrizeMark) ? controlsBtnConfig.lastRoundLottery.chineseText : controlsBtnConfig.reLottery.chineseText }}
@@ -59,7 +60,7 @@
             {{ controlsBtnConfig.reLottery.otherLanguagesText }}
           </span>
       </button>
-      <button id="showAllLucks" class="btn" v-show="!currentPrize">
+      <button id="showAllLucks" class="btn" v-if="!currentPrize"  @click="showAllLuckyUser('showAllLuckys')">
         {{ controlsBtnConfig.showAllLucks.chineseText }}
           <span v-if="controlsBtnConfig.showAllLucks.otherLanguagesText">
             <br/>
@@ -282,8 +283,13 @@ const toggleSetting = (settingStr) => {
       break;
   }
 }
-const showAllLuckyUser = () => {
+
+const isShowAllLuckys = ref(false);
+const showAllLuckyUser = (isShowAllLuckysKey) => {
   basicData.isShowAllLuckyUser = true
+  if (isShowAllLuckysKey === 'showAllLuckys') {
+    isShowAllLuckys.value = true
+  }
 }
 const tipsOpenFileKey = ref(0);
 
@@ -312,6 +318,7 @@ const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
+  console.log(basicData.currentPrize, 'basicData.currentPrizebasicData.currentPrizebasicData.currentPrize')
   return basicData.currentPrize;
 });
 const isNextPrize = computed(() => {

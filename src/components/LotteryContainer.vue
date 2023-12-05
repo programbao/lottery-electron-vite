@@ -42,7 +42,6 @@ const animate = () => {
 /**
  * 渲染地球等
  */
-
 const transform = (targets, duration) => {
   isAnimating = true
   // TWEEN.removeAll();

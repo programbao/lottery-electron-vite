@@ -131,9 +131,7 @@
       "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_festival.xlsx",
       "group_identity": "users_4",
-      "options": [
-        "IuWwApzph3wAqIiHTHct_"
-      ],
+      "options": [],
       "errorMsg": "users_festival.xlsx人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
     },
     {
@@ -142,7 +140,8 @@
       "savePath": "D:/Users/Desktop/vue_vite_electron/electron/controller/data/users_christian_catholic.xlsx",
       "group_identity": "users_5",
       "options": [
-        "FTNdOJDL46KcELWmB_z7g"
+        "FTNdOJDL46KcELWmB_z7g",
+        "IuWwApzph3wAqIiHTHct_"
       ]
     }
   ],

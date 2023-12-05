@@ -10,7 +10,8 @@
         'slide-out-left': !basicData.isShowLuckyUser
       }"
       class="lucky-content" 
-      :style="lucksContentStyle">
+      :style="lucksContentStyle"
+      v-if="currentLuckys && currentLuckys.length">
       <!-- <div class="split-box"></div> -->
       <div 
         v-for="(lucky, index) in currentLuckys" 

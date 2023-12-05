@@ -1,5 +1,5 @@
 <template>
-  <div class="card-box">
+  <div class="card-box" v-if="basicData.currentPrize">
     <div class="screen-card"
       :style="renderDomStyle"
       :class="{
