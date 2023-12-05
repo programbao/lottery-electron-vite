@@ -85,10 +85,12 @@
     </div>
       <editDialog 
       @close="editDialogVisible = false"
+      :key="editDialogVisible"
       @confirm="editConfirm"
       :openType="openType"
       :editDialogVisible="editDialogVisible"
-      :editData="editData" />
+      :editData="editData"
+      :prizes="prizes" />
   </div>
 </template>
 
@@ -105,7 +107,7 @@ const editData = ref({});
 const openType = ref('edit');
 const luckyUsers = basicData.luckyUsers;
 const emit = defineEmits(['cutPrize', 'addPrize']);
-
+const handleAddGroup = ref(null);
 import { nanoid } from 'nanoid';
 // 样式设置label
 const labelFieldArr = [
@@ -218,26 +220,33 @@ const editPrize = (element, type) => {
 
 // 编辑/添加奖项确认
 const editConfirm = (data) => {
-  const handleObj = prizes.value.find(item => item.type === data.type);
+  let { editValue, addGroup } = data
+  const handleObj = prizes.value.find(item => item.type === editValue.type);
   if (!handleObj) {
     const type = nanoid();
+    if (addGroup) {
+      addGroup.options.push(type)
+      handleAddGroup.value = addGroup;
+    }
     let findIndex = prizes.value.findIndex(item => item.isHasLucky);
     findIndex = findIndex === -1 ? prizes.value.length : findIndex;
-    let addObj = { type, ...data, index: findIndex, isHasLucky: false };
+    let addObj = { type, ...editValue, index: findIndex, isHasLucky: false };
     prizes.value.splice(findIndex, 0, addObj);
     emit('addPrize', addObj);
   } else {
-    Object.assign(handleObj, data);
+    Object.assign(handleObj, editValue);
   }
 }
 // bus.on('initConfigDataEnd', initHandlePrizes)
 onMounted(() => {
   initHandlePrizes();
+  handleAddGroup.value = null
 })
 // 暴露属性
 defineExpose({
   prizes,
-  prizesBarStyle
+  prizesBarStyle,
+  handleAddGroup
 })
 </script>
 

@@ -19,17 +19,17 @@
       :rules="rules"
       ref="ruleFormRef"
     >
-      <div class="tips" v-if="!!luckyUsers[formLabelAlign.type]">该奖项已有中奖名单，名称不能修改</div> 
-      <div class="tips" v-if="!!luckyUsers[prevPrizesData.type]">前面奖项已有中奖名单，抽取数和图片不能修改</div> 
+      <div class="tips" v-if="openType !== 'add'  && !!luckyUsers[formLabelAlign.type]">该奖项已有中奖名单，名称不能修改</div> 
+      <div class="tips" v-if="openType !== 'add'  && !!luckyUsers[prevPrizesData.type]">前面奖项已有中奖名单，抽取数和图片不能修改</div> 
       <el-row :gutter="24">
         <el-col :span="12">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="formLabelAlign.name" :disabled="!!luckyUsers[formLabelAlign.type]" />
+            <el-input v-model="formLabelAlign.name" :disabled="openType !== 'add'  && !!luckyUsers[formLabelAlign.type]" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="其他语言名称" prop="otherName">
-            <el-input v-model="formLabelAlign.otherName" :disabled="!!luckyUsers[formLabelAlign.type]" />
+            <el-input v-model="formLabelAlign.otherName" :disabled="openType !== 'add'  && !!luckyUsers[formLabelAlign.type]" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -37,7 +37,7 @@
         <el-col :span="12">
           <el-form-item label="抽取总数" prop="count">
             <el-input-number
-              :disabled="!!luckyUsers[prevPrizesData.type]"
+              :disabled="openType !== 'add'  && !!luckyUsers[prevPrizesData.type]"
               v-model="formLabelAlign.count"
               :min="1"
               controls-position="right"
@@ -48,7 +48,7 @@
         <el-col :span="12">
           <el-form-item label="每轮抽取数" prop="eachCount">
             <el-input-number
-              :disabled="!!luckyUsers[prevPrizesData.type]"
+              :disabled="openType !== 'add'  && !!luckyUsers[prevPrizesData.type]"
               v-model="formLabelAlign.eachCount"
               :min="1"
               controls-position="right"
@@ -60,10 +60,10 @@
       <el-row :gutter="24">
         <el-col :span="24">
           <el-form-item label="图片" prop="img">
-            <div class="upload add" @click="importFile(!!luckyUsers[prevPrizesData.type])">
+            <div class="upload add" @click="importFile(openType !== 'add'  && !!luckyUsers[prevPrizesData.type])">
               <el-image
                 v-if="formLabelAlign.img"
-                :disabled="!!luckyUsers[prevPrizesData.type]"
+                :disabled="openType !== 'add'  && !!luckyUsers[prevPrizesData.type]"
                 :src="formLabelAlign.img"
                 :zoom-rate="1.2"
                 :max-scale="7"
@@ -77,6 +77,23 @@
         </el-col>
       </el-row>
     </el-form>
+    <div class="select-box" v-if="openType === 'add'">
+      <div class="select-title">
+        可选择一个奖项，同步相同配置
+        <el-button type="primary" plain @click="clearSelect">清空</el-button>
+      </div>
+      <div class="prizes">
+        <div 
+          class="prize"
+          :class="{
+            action: index === selectedPrizeIndex
+          }"
+          @click="prizeClick(item, index)"
+          v-for="(item, index) in prizes" :key="index">
+          {{ item.name }} 
+        </div>
+      </div>
+    </div>
   </lt-dialog>
 </template>
 
@@ -85,6 +102,8 @@ import { ref, watch, computed } from 'vue'
 import ltDialog from '../../common/lt-dialog.vue'
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
+let addGroup = null;
+let groupList = JSON.parse(JSON.stringify(basicData.groupList)) 
 const props = defineProps({
   editDialogVisible: {
     type: Boolean,
@@ -96,6 +115,10 @@ const props = defineProps({
   },
   openType: {
     type: String,
+    required: true
+  },
+  prizes: {
+    type: Array,
     required: true
   }
 });
@@ -109,6 +132,8 @@ const dialogVisible = computed({
     emit('close', false)
   }
 })
+
+
 const luckyUsers = basicData.luckyUsers
 const prevPrizesData = ref({});
 let currentLucky = undefined;
@@ -175,6 +200,27 @@ const formLabelAlign = ref({
   otherName: "",
   img: ''
 })
+const selectedPrizeIndex = ref(-1)
+const prizeClick = (item, index) => {
+  selectedPrizeIndex.value = index
+  let someData = JSON.parse(JSON.stringify(item))
+  let fields = ['count', 'eachCount', 'name', 'otherName', 'img']
+  fields.forEach(key => {
+    formLabelAlign.value[key] = someData[key]
+  })
+  addGroup = groupList.find(item => item.options.includes(someData.type)) || null;
+  console.log(addGroup, 'addGroupaddGroup')
+}
+const clearSelect = () => {
+  selectedPrizeIndex.value = -1
+  formLabelAlign.value = {
+    count: 0,
+    eachCount: 0,
+    name: "",
+    otherName: "",
+    img: ''
+  }
+}
 watch(
   () => props.editDialogVisible,
   () => {
@@ -202,8 +248,12 @@ const confirm = async () => {
   await ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       console.log('submit!')
-      emit('confirm', formLabelAlign.value)
+      emit('confirm', {
+        editValue: formLabelAlign.value,
+        addGroup,
+      })
       emit('close', false)
+      selectedPrizeIndex.value = -1
     } else {
       console.log('error submit!', fields)
     }
@@ -212,6 +262,52 @@ const confirm = async () => {
 </script>
 
 <style lang="scss" scoped>
+.select-box {
+  .select-title {
+    font-size: 18px;
+    font-weight: 700;
+    position: relative;
+    .el-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+
+    }
+  }
+  .prizes {
+    display: flex;
+    flex-wrap: wrap;
+    .prize {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 10px 12px 10px 8px;
+      margin-right: 8px;
+      margin-bottom: 12px;
+      // overflow: hidden;
+      position: relative;
+      user-select: none;
+      touch-callout: none;
+      -webkit-touch-callout:none;
+      -webkit-user-select: none;
+      font-size: 14px;
+      color: #3a414a;
+      font-weight: 500;
+      word-break: break-word;
+      transition: all .2s;
+      &.action {
+        background: #ffffff;
+        border: 2px solid #409eff;
+        color: #101216;
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
 .tips {
   color: orange;
   font-weight: 700;

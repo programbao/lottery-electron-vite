@@ -101,8 +101,17 @@ const handlePrizesSetting = async () => {
       status: 2
     }
   }
-  const isPass = await myApi.savePrizesConfig(prizesDataStr, 'prizes');
+  let isPass = await myApi.savePrizesConfig(prizesDataStr, 'prizes');
+  let handleAddGroup = prizeSettingRef.value.handleAddGroup
+  if (addNum && handleAddGroup) {
+    let findGroup = basicData.groupList.find(group => group.group_identity === handleAddGroup.group_identity);
+    if (findGroup) {
+      findGroup.options = handleAddGroup.options;
+      isPass =  await myApi.savePrizesConfig(JSON.stringify(basicData.groupList), 'groupList');
+    }
+  }
   if (isPass) {
+    const currentPrizeIndex =  basicData.currentPrizeIndex;
     const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
     const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;
     const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
@@ -138,7 +147,7 @@ const handlePrizesSetting = async () => {
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
     
-    if (modifyCurrentIndex < 0 &&  basicData.currentPrizeIndex >= 0) {
+    if (currentPrizeIndex < 0 &&  basicData.currentPrizeIndex >= 0) {
       basicData.currentLotteryGroup = findCurrentLotteryGroup();
       if (!basicData.isEnterLottery) {
         bus.emit('toInitContainerHandleData')
