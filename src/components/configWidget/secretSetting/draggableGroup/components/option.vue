@@ -13,6 +13,13 @@
     <i v-if="removeAble" @click="$emit('remove')" class="survey-iconfont icon-xuanxiangfenzubiaoqian-guanbi"></i>
     <div class="related-txt" v-if="option.related_group && !option.noCanSelected">已关联</div>
     <div class="related-txt" v-if="option.noCanSelected">已在中奖名单，不可取消关联</div>
+    <!-- 关闭按钮 -->
+      <el-icon 
+        class="close-btn" 
+        :size="20"
+        @click.stop="closeOptionBtn"
+        v-if="!option.noCanSelected"
+        ><CircleClose /></el-icon> 
   </div>
 </template>
 
@@ -37,6 +44,10 @@ const display = computed(() => {
     text: props.option.option_value_html || props.option.option_value
   }
 })
+const emit = defineEmits(['optionDel'])
+const closeOptionBtn = () => {
+  emit('optionDel', props.option) 
+}
 </script>
 
 <style lang="scss" scoped>
@@ -79,6 +90,13 @@ const display = computed(() => {
       padding: 0 !important;
       color: #808b96;
     }
+  }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+    cursor: pointer;
   }
 }
 

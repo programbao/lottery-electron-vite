@@ -174,10 +174,12 @@ watch(
 )
 let currentIndex = -1;
 let lastIndex = -1;
-const closeBtn = () => {
+const closeBtn = async () => {
   basicData.isShowLuckyUser = false;
   $.confetti.stop();
   if (isHandleDel) {
+    let type = basicData.currentPrize.type;
+    await myApi.saveOneRoundLuckyData(type, JSON.stringify(basicData.luckyUsers[type]));
     bus.emit('adjustCurrentPrize', {
       beforeModifyPrize: basicData.prizes[currentIndex],
       byIndexModifyPrize: basicData.prizes[lastIndex]

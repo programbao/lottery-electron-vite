@@ -89,7 +89,7 @@ const showPrize = () => {
 }
 const hidePrizeMark = () => {
   enterAnimate.value = '';
-  prizeMark.value.style.zIndex = '-2';
+  prizeMark.value && (prizeMark.value.style.zIndex = '-2');
   basicData.isShowPrizeMark = false;
 }
 bus.on('showPrize', showPrize);

@@ -320,7 +320,6 @@ const bottomBar = ref();
 // const isShowPrizeBtn = ref(true);
 // console.log(lotteryData, 'lotteryDatalotteryData')
 const currentPrize = computed(() => {
-  console.log(basicData.currentPrize, 'basicData.currentPrizebasicData.currentPrizebasicData.currentPrize')
   return basicData.currentPrize;
 });
 const isNextPrize = computed(() => {
@@ -381,6 +380,7 @@ const reLottery = () => {
 //   isShowPrizeBtn.value = false
 // }
 const findCurrentLotteryGroup = () => {
+  if (!basicData.currentPrize) return
   // 找到要展示的member
   const currentPrize = basicData.currentPrize;
   const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
@@ -420,7 +420,7 @@ const resetCurrentPrizeBtnClick = () => {
 }
 const resetBtnClick = () => {
   ElMessageBox.confirm(
-    '所有中奖记录都将被清空，确认要重置吗?',
+    '所有中奖记录都将被清空，确认要重置吗? 系统将会导出历史中奖记录，请注意查看文件列表',
     '警告',
     {
       confirmButtonText: '确认',
@@ -432,6 +432,7 @@ const resetBtnClick = () => {
       bus.emit('resetBtnClick')
       noBeginLottery.value = true;
       basicData.isEnterLottery = true
+      exportData();
       ElMessage({
         type: 'success',
         message: '重置成功',

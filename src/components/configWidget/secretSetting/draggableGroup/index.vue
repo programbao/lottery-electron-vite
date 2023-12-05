@@ -47,6 +47,7 @@
           :key="index"
           :class="option.isSelected ? 'dragging-style' : ''"
           @click="optionClick(option)"
+          @optionDel="optionDel"
         ></Option>
       </transition-group>
       <div class="no-data-tips" v-else>
@@ -173,6 +174,8 @@ const optionClick = (option) => {
     group.options = group.options.concat(optionList.value.filter(item => item.isSelected).map(item => item.option_identity));
   }
 }
+
+
 const isSelectMode = computed(() => {
   return optionList.value.some(item => item.isSelected)
 })
@@ -228,6 +231,16 @@ const optionCancel = (emitObj) => {
   }
 }
 
+// 删除名单
+const optionDel = (handleOption) => {
+  optionList.value = optionList.value.filter(item => item.option_identity !== handleOption.option_identity)
+  if (handleOption.related_group) {
+    const group = groupList.value.find(item => item.group_identity === handleOption.related_group)
+    if (group) {
+      group.options = group.options.filter(identity => identity !== option.option_identity)
+    }
+  }
+}
 // 取消人员名单
 const groupCancel = (emitObj) => {
   const groupIndex = groupList.value.findIndex(item => item.group_identity === emitObj.group_identity)

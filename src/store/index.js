@@ -283,6 +283,9 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       // 读取当前已设置的抽奖结果
       // 设置当前抽奖index
       let prizeIndex = this.prizes.length - 1;
+      this.currentPrize = undefined;
+      this.currentPrizeIndex = -1;
+      this.lastTimePrizeIndex = 0;
       for (; prizeIndex > -1; prizeIndex--) {
         if (
           this.luckyUsers[this.prizes[prizeIndex].type] &&

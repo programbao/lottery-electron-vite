@@ -1,5 +1,5 @@
 <template>
-  <div class="card-box" v-if="basicData.currentPrize">
+  <div class="card-box" v-if="!basicData.isEnterLottery">
     <div class="screen-card"
       :style="renderDomStyle"
       :class="{
@@ -69,7 +69,8 @@
       </div>
     </div>
     <div class="tips">
-      {{ basicData.currentPrize.name }} 奖项没有 抽奖人员名单，请前往系统配置设置
+      <span v-if="basicData.currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
+      <span v-else>抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
     </div>
   </div>
 </template>
@@ -80,12 +81,13 @@ import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import bus from '../libs/bus'
 
-const isShowScreenCard = ref(true);
+// const isShowScreenCard = ref(true);
 
 const cardConfigStyle = computed(() => {
   return basicData.cardConfigStyle;
 })
 const member = computed(() => {
+  if (basicData.isEnterLottery) return []
   const memberListData = basicData.memberListData
   const currentLotteryGroup = basicData.currentLotteryGroup
   // console.log(memberListData, currentLotteryGroup)
@@ -96,15 +98,17 @@ const member = computed(() => {
   return memberListData[currentLotteryGroup.group_identity]
 })
 const totalCard = computed(() => {
+  if (basicData.isEnterLottery) return 0
   const { columnCount, rowCount } = basicData.beforeLotteryLayout
   let total = rowCount * columnCount; 
   if (member.value && total > member.value.length) {
     total = member.value.length
   }
-  return  total;
+  return total;
 })
 
 const renderDomStyle = computed(() => {
+  if (basicData.isEnterLottery) return ''
   const { rowCount, columnCount, rowGap, columnGap, scale, top, left } = basicData.beforeLotteryLayout;
   return `
     grid-template-columns: repeat(${columnCount}, 1fr);
@@ -119,7 +123,8 @@ const renderDomStyle = computed(() => {
 })
 
 const toAnimate = () => {
-    anime({
+  if (basicData.isEnterLottery) return
+  anime({
     targets: ".screen-card",
     scale: [0, basicData.beforeLotteryLayout.scale],
     easing: 'cubicBezier(0.250, 0.460, 0.450, 0.940)',
@@ -133,9 +138,11 @@ const getUser = (index) => {
   return user
 }
 const adjuctScreenCardDisplay = (displayStr) => {
+  if (basicData.isEnterLottery) return
   document.querySelector('.screen-card').style.display = displayStr
 }
 const findCurrentLotteryGroup = () => {
+  if (!basicData.currentPrize) return
   // 找到要展示的member
   const currentPrize = basicData.currentPrize;
   const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
@@ -145,6 +152,7 @@ const findCurrentLotteryGroup = () => {
   return userGroup;
 }
 const groupListSetting = () => {
+  if (basicData.isEnterLottery) return
   const userGroup = findCurrentLotteryGroup();
   if (userGroup) {
     const member = basicData.memberListData[userGroup.group_identity]

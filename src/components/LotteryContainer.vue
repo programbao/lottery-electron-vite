@@ -222,6 +222,7 @@ const initCards = (isInit = true) => {
 const findCurrentLotteryGroup = () => {
   // 找到要展示的member
   const currentPrize = basicData.currentPrize;
+  if (!basicData.currentPrize) return
   const userGroup = basicData.groupList.find(group => group.options.includes(currentPrize.type));
   console.log(userGroup)
   if (!userGroup) {
@@ -405,6 +406,7 @@ const lottery = () => {
     for (let i = 0; i < perCount; i++) {
       let luckyId = random(leftCount);
       basicData.currentLuckys.push(paramsFields.member.splice(luckyId, 1)[0]);
+      paramsFields.totalMember -= 1;
       leftCount--;
       leftPrizeCount--;
       // let cardIndex = random(basicData.totalCards);
@@ -723,6 +725,9 @@ const reLottery = () => {
     // }, 1500)
     // return
   }
+  paramsFields.member = JSON.parse(JSON.stringify(basicData.memberListData[ basicData.currentLotteryGroup.group_identity] || []));
+  paramsFields.totalMember = paramsFields.member.length
+
   removeLuckyUser();
   lottery();
 }

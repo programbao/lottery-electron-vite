@@ -179,7 +179,10 @@ const initHandlePrizeData = (toInit = false) => {
     isInitPrizeData = true
     const totalPrizeLen = basicData.prizes.length - 1
     const currentIndex = basicData.currentPrizeIndex
-    const needCount = totalPrizeLen - currentIndex
+    let needCount = totalPrizeLen - currentIndex
+    if (needCount > totalPrizeLen) {
+      needCount = totalPrizeLen
+    }
     let needChangeIndex = totalPrizeLen;
     const prizes = basicData.prizes 
     // 初始化奖项相关样式类名和数量配置
@@ -202,6 +205,9 @@ const initHandlePrizeData = (toInit = false) => {
       }
       setPrizeData({ currentPrizeIndex: needChangeIndex, count: itemLucky.length })
       needChangeIndex -= 1
+    }
+    if (totalPrizeLen - currentIndex > totalPrizeLen) {
+      setPrizeData({ currentPrizeIndex: -1, count: 0 })
     }
 }
 const resetPrizes = () => {
@@ -249,7 +255,7 @@ const adjustCurrentPrize = (data) => {
     initHandlePrizeData(true);
   } else {
     const modifyType = byIndexModifyPrize.type
-    prizesListConfig.value[beforeModifyPrize.type].activeClassName = ''
+    beforeModifyPrize && (prizesListConfig.value[beforeModifyPrize.type].activeClassName = '')
     const adjustPrizeConfig = prizesListConfig.value[modifyType]
     adjustPrizeConfig.activeClassName = 'shine'
     adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - basicData.luckyUsers[modifyType].length;
