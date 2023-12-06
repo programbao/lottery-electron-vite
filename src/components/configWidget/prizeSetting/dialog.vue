@@ -8,17 +8,16 @@
     :show-close="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
-    width="70%"
-    title="系统配置">
+    width="70%">
     <template #header>
-      <slot name="title"><span class="title-text">奖项配置</span></slot>
+      <slot name="title"><span class="title-text">{{ textMappingConfig.prizeConfiguration.chineseText + ' ' + textMappingConfig.prizeConfiguration.otherLanguagesText }}</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
-        确认
+        {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
       </div>
-      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
-        取消
+        {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <div class="setting-content">
@@ -44,6 +43,9 @@ const dialogKeyStr = 'prizeSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 let cutNum = 0;
 let addNum = 0;
 const toggleConfig = () => {

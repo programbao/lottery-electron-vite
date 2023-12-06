@@ -71,6 +71,9 @@ const dialogTableVisible = ref(false);
 const dialogStyle = computed(() => {
   return basicData.dialogStyle
 });
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 let cutNum = 0;
 let addNum = 0;
 const toggleConfig = () => {
@@ -95,10 +98,10 @@ const cutPrize = () => {
 const addPrize = () => {
   addNum++
 }
-const configList = [
-  "奖项设置", // 替换 更新 上传奖项图片相关设置
-  "卡片排列"
-]
+// const configList = [
+//   "奖项设置", // 替换 更新 上传奖项图片相关设置
+//   "卡片排列"
+// ]
 const prizeSettingRef = ref();
 const cardSettingRef = ref();
 const usersSettingRef = ref();

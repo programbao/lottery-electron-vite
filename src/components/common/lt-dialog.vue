@@ -4,17 +4,16 @@
     width="50%"
     class="lt-dialog dialog level-dialog"
     :close-on-click-modal="false"
-    :show-close="false"
-    title="奖项编辑">
+    :show-close="false">
     <template #header>
       <slot name="title"><span class="title-text">{{ title }}</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
-        确认
+        {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
       </div>
       <div class="title-btn cancel-btn" type="cancel"  @click="cancel" >
         <div class="label label-cancel"></div>
-        取消
+        {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <slot></slot>
@@ -23,6 +22,11 @@
 
 <script setup>
 import { computed } from 'vue'
+import { lotteryDataStore } from '../../store'
+const basicData = lotteryDataStore();
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const props = defineProps({
   visible: {
     type: Boolean,

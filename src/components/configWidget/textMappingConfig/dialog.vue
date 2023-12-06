@@ -11,18 +11,18 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text">文案设置</span></slot>
+      <slot name="title"><span class="title-text">{{ textMappingConfig.toggleSettingTextMappingConfig.chineseText + ' ' + textMappingConfig.toggleSettingTextMappingConfig.otherLanguagesText }}</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
-        确认
+        {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
       </div>
-      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false">
+      <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
-        取消
+        {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <div class="setting-content">
-      <textMappingConfig 
+      <textMappingConfigSetting 
         :key="dialogTableVisible"
         ref="textMappingConfigRef" />
     </div>
@@ -35,13 +35,16 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import textMappingConfig from './index.vue'
+import textMappingConfigSetting from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
 const dialogKeyStr = 'textMappingConfig';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value

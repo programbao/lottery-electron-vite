@@ -10,14 +10,18 @@
     v-model="dialogTableVisible"
     width="70%">
     <template #header>
-      <slot name="title"><span class="title-text">卡片配置</span></slot>
+      <slot name="title">
+        <span class="title-text">
+          {{ textMappingConfig.cardConfiguration.chineseText + ' ' + textMappingConfig.cardConfiguration.otherLanguagesText }}
+        </span>
+      </slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
-        确认
+        {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
       </div>
       <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
-        取消
+        {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <div class="setting-content">
@@ -33,14 +37,17 @@ import { ref, nextTick, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
-import { lotteryDataStore } from '../../../store'
 import cardSetting from './index.vue'
+import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
 const dialogKeyStr = 'cardSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen

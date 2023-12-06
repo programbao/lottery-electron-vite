@@ -11,14 +11,14 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text"><el-icon :size="20"><Lock /></el-icon>设置</span></slot>
+      <slot name="title"><span class="title-text"><el-icon :size="20"><Lock /></el-icon>{{ textMappingConfig.settings.chineseText + ' ' + textMappingConfig.settings.otherLanguagesText }}</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
-        确认
+        {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
       </div>
       <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
-        取消
+        {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <div class="setting-content">
@@ -45,6 +45,9 @@ const dialogKeyStr = 'secretSetting';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
