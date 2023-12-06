@@ -2,8 +2,8 @@
   <div class="card-setting">
     <!-- <div class="title">排列设置</div> -->
     <div class="lottery-layout">
-      <div class="header-txt">抽奖前卡片排列及位置</div>
-      <div class="tips" v-if="isEnterLottery">已进入抽奖，不能修改</div> 
+      <div class="header-txt">{{ textMappingConfig.cardArrangementBeforeLottery.chineseText + ' ' + textMappingConfig.cardArrangementBeforeLottery.otherLanguagesText }}</div>
+      <div class="tips" v-if="isEnterLottery">{{ textMappingConfig.cannotModifyAfterEnter.chineseText + ' ' + textMappingConfig.cannotModifyAfterEnter.otherLanguagesText }}</div> 
       <div class="layout-form">
         <el-form
           ref="form"
@@ -30,15 +30,15 @@
       </div>
     </div>
     <div class="lottery-layout">
-      <div class="header-txt">中奖-卡片排列</div>
+      <div class="header-txt">{{ textMappingConfig.winningCardArrangement.chineseText + ' ' + textMappingConfig.winningCardArrangement.otherLanguagesText }}</div>
       <div class="layout-form">
         <el-radio-group v-model="luckysRowColObj.type">
-          <el-radio :label="1">以"列"为基准排列</el-radio>
-          <el-radio :label="2">以"行"为基准排列</el-radio>
-          <el-radio :label="3">固定行列</el-radio>
+          <el-radio :label="1">{{ textMappingConfig.columnBasedArrangement.chineseText + ' ' + textMappingConfig.columnBasedArrangement.otherLanguagesText }}</el-radio>
+          <el-radio :label="2">{{ textMappingConfig.rowBasedArrangement.chineseText + ' ' + textMappingConfig.rowBasedArrangement.otherLanguagesText }}</el-radio>
+          <el-radio :label="3">{{ textMappingConfig.fixedRowsColumns.chineseText + ' ' + textMappingConfig.fixedRowsColumns.otherLanguagesText }}</el-radio>
         </el-radio-group>
         <div class="lucky-row-col">
-          <el-form-item label="列数" v-if="luckysRowColObj.type !== 2">
+          <el-form-item :label="textMappingConfig.numberOfColumns.chineseText + ' ' + textMappingConfig.numberOfColumns.otherLanguagesText" v-if="luckysRowColObj.type !== 2">
             <el-input-number
                 v-model="luckysRowColObj.columnCount"
                 :min="1"
@@ -46,7 +46,7 @@
                 size="large"
               />
           </el-form-item>
-          <el-form-item label="行数" v-if="luckysRowColObj.type !== 1">
+          <el-form-item :label="textMappingConfig.numberOfRows.chineseText + ' ' + textMappingConfig.numberOfRows.otherLanguagesText" v-if="luckysRowColObj.type !== 1">
             <el-input-number
                 v-model="luckysRowColObj.rowCount"
                 :min="1"
@@ -57,7 +57,7 @@
         </div>
 
         <div class="lucky-row-col">
-          <el-form-item label="行间距">
+          <el-form-item :label="textMappingConfig.rowSpacing.chineseText + ' ' + textMappingConfig.rowSpacing.otherLanguagesText">
             <el-input
                 v-model="luckysRowColObj.rowGap"
                 :min="1"
@@ -65,7 +65,7 @@
                 size="large"
               />
           </el-form-item>
-          <el-form-item label="列间距">
+          <el-form-item :label="textMappingConfig.columnSpacing.chineseText + ' ' + textMappingConfig.columnSpacing.otherLanguagesText">
             <el-input
                 v-model="luckysRowColObj.columnGap"
                 :min="1"
@@ -78,7 +78,7 @@
       </div>
     </div>
     <div class="lottery-layout">
-      <div class="header-txt">基础-卡片样式设置</div>
+      <div class="header-txt">{{ textMappingConfig.basicCardStyleSettings.chineseText + ' ' + textMappingConfig.basicCardStyleSettings.otherLanguagesText }}</div>
       <div class="layout-form">
         <el-form
           ref="form"
@@ -115,7 +115,7 @@
       </div>
     </div>
     <div class="lottery-layout">
-      <div class="header-txt">中奖-卡片样式设置</div>
+      <div class="header-txt">{{ textMappingConfig.winningCardStyleSettings.chineseText + ' ' + textMappingConfig.winningCardStyleSettings.otherLanguagesText }}</div>
       <div class="layout-form">
         <el-form
           ref="form"

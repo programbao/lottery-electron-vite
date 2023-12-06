@@ -240,16 +240,7 @@ const findCurrentLotteryGroup = () => {
   }
   return userGroup;
 }
-const passTxt = {
-  'prizesSetting': '奖项设置',
-  'beforeLotteryLayout': '抽奖前卡片排列及位置',
-  'cardConfigStyle': '卡片样式设置',
-}
-const settingStatus = {
-  0: '未通过',
-  1: '通过',
-  2: '未修改'
-}
+
 
 const checkAllPassStatus = (...statuses) => {
   // 检查所有状态数组
