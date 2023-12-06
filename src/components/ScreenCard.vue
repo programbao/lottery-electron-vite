@@ -68,10 +68,10 @@
         </div>
       </div>
     </div>
-    <div class="tips">
-      <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
-      <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
-    </div>
+  </div>
+  <div class="card-empty-tips" v-show="(member.length <= 0 && currentPrize) || (!currentPrize)">
+    <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
+    <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
   </div>
 </template>
 
@@ -89,15 +89,21 @@ const cardConfigStyle = computed(() => {
   return basicData.cardConfigStyle;
 })
 const member = computed(() => {
-  if (basicData.isEnterLottery) return []
+  // if (basicData.isEnterLottery) return []
   const memberListData = basicData.memberListData
   const currentLotteryGroup = basicData.currentLotteryGroup
   // console.log(memberListData, currentLotteryGroup)
+  
+  let resultMember = []
+  if (currentLotteryGroup.group_identity) {
+    resultMember = memberListData[currentLotteryGroup.group_identity] || []
+  }
+  // if (resultMember.length) {
   nextTick(() => {
     bus.emit('adjustShineUser')
   })
-  if (!currentLotteryGroup.group_identity) return []
-  return memberListData[currentLotteryGroup.group_identity]
+  // }
+  return resultMember
 })
 const totalCard = computed(() => {
   if (basicData.isEnterLottery) return 0
@@ -141,7 +147,11 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   if (basicData.isEnterLottery) return
-  document.querySelector('.screen-card').style.display = displayStr
+  nextTick(() => {
+    setTimeout(() => {
+      document.querySelector('.screen-card') && (document.querySelector('.screen-card').style.display = displayStr)
+    }, 100)
+  })
 }
 const findCurrentLotteryGroup = () => {
   if (!basicData.currentPrize) return
@@ -159,17 +169,17 @@ const groupListSetting = () => {
   if (userGroup) {
     const member = basicData.memberListData[userGroup.group_identity]
     if (!member || member.length <= 0) {
-      document.querySelector('.card-box .tips').style.display = 'grid'
+      document.querySelector('.card-empty-tips').style.display = 'grid'
       adjuctScreenCardDisplay('none')
     } else if (basicData.isEnterLottery) {
-      document.querySelector('.card-box .tips').style.display = 'none'
+      document.querySelector('.card-empty-tips').style.display = 'none'
       adjuctScreenCardDisplay('none')
     } else if (!basicData.isEnterLottery) {
-      document.querySelector('.card-box .tips').style.display = 'none'
+      document.querySelector('.card-empty-tips').style.display = 'none'
       adjuctScreenCardDisplay('grid')
     }
   } else {
-    document.querySelector('.card-box .tips').style.display = 'grid'
+    document.querySelector('.card-empty-tips').style.display = 'grid'
   }
 }
 bus.on('handleBeforeLotteryLayoutSetting', toAnimate)
@@ -195,7 +205,7 @@ onMounted(() => {
     width: 100%;
   }
 }
-.tips {
+.card-empty-tips {
   position: fixed;
   top: 50%;
   left: 60%;
@@ -204,6 +214,5 @@ onMounted(() => {
   font-size: 25px;
   color: orange;
   width: 40%;
-  display: none;
 }
 </style>

@@ -128,9 +128,9 @@ const handlePrizesSetting = async () => {
     // 根据状态回显抽完奖的 奖项
     const byIndexCurrentType = byIndexCurrentPrize.type;
     const byIndexModifyType = byIndexModifyPrize.type
+    // debugger
+    
     if (
-      byIndexModifyType ===  byIndexCurrentType && 
-        byIndexModifyPrize.count > byIndexCurrentPrize.count &&
         basicData.luckyUsers[byIndexCurrentType] &&
         basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
       ) {
@@ -138,6 +138,13 @@ const handlePrizesSetting = async () => {
         // 纠正是否暂时下一个奖项状态 和 当前奖项是否继续
         basicData.isNextPrize = false;
         basicData.isContinueLottery = true;
+        // bus.emit('adjustCurrentPrize', {
+        //   beforeModifyPrize: beforeModifyPrize,
+        //   byIndexModifyPrize: byIndexModifyPrize
+        // })
+    }
+    if (byIndexModifyType ===  byIndexCurrentType && 
+        byIndexModifyPrize.count > byIndexCurrentPrize.count) {
         bus.emit('adjustCurrentPrize', {
           beforeModifyPrize: beforeModifyPrize,
           byIndexModifyPrize: byIndexModifyPrize

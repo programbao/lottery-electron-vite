@@ -258,7 +258,7 @@ const adjustCurrentPrize = (data) => {
     beforeModifyPrize && (prizesListConfig.value[beforeModifyPrize.type].activeClassName = '')
     const adjustPrizeConfig = prizesListConfig.value[modifyType]
     adjustPrizeConfig.activeClassName = 'shine'
-    adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - basicData.luckyUsers[modifyType].length;
+    adjustPrizeConfig.surplusCount = byIndexModifyPrize.count - (!basicData.luckyUsers[modifyType] ? 0 : basicData.luckyUsers[modifyType].length);
   }
 }
 bus.on('adjustCurrentPrize', adjustCurrentPrize)
