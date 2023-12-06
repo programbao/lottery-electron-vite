@@ -484,7 +484,7 @@ const mousemoveEvent = (event) => {
         if (!isEnterBar) {
           bottomBar.value.classList.remove('active');
         }
-      }, 500); 
+      }, 300); 
     }
   }, 50)
 }
@@ -495,7 +495,7 @@ const mouseleaveEvent = () => {
     if (!isEnterBar) {
       bottomBar.value.classList.remove('active');
     }
-  }, 200)
+  }, 300)
 }
 const barMouseenter = () => {
   isEnterBar = true
@@ -508,7 +508,7 @@ const barMouseleave = () => {
     if (!isEnterBar) {
       bottomBar.value.classList.remove('active');
     }
-  }, 500);
+  }, 300);
 }
 let adjustBtnTimer = null;
 // 调整抽奖动作按钮
@@ -516,7 +516,7 @@ const adjustLotteryActionBtn = () => {
   clearTimeout(adjustBtnTimer);
   adjustBtnTimer = setTimeout(() => {
     const bottomCardDom = document.querySelector("#card-0");
-    if (!bottomCardDom) {
+    if (!bottomCardDom || !basicData.isEnterLottery) {
       operationBtnStyle.value.left = '60%';
     } else {
       operationBtnStyle.value.left = bottomCardDom.getBoundingClientRect().x + 'px'
@@ -574,7 +574,7 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 0 10px;
+    // padding: 0 10px;
     border-right: 1px solid rgba(127, 255, 255, 0.75);
 
     flex-wrap: wrap;
@@ -582,7 +582,7 @@ onBeforeUnmount(() => {
     height: 100%;
     
     > .btn, .music {
-      margin: 5px;
+      margin: 2px 4px;
     }
 
     &::-webkit-scrollbar{
