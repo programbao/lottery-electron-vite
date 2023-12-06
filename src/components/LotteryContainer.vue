@@ -298,7 +298,7 @@ const rotateBall = (isAutoRate = false) => {
       // .easing(TWEEN.Easing.Linear)
       .start()
       .onStop(() => {
-        scene.rotation.y = 0;
+        scene && (scene.rotation.y = 0);
         resolve();
       })
       .onComplete(() => {

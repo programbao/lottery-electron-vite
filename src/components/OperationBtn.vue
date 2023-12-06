@@ -286,10 +286,11 @@ const toggleSetting = (settingStr) => {
       break;
   }
 }
-const currentPrizeSurplusCount = computed(() => {
-  const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];
-  return basicData.handlePrize.count - (!basicData.luckyUsers[handlePrize.type] ? 0 : basicData.luckyUsers[handlePrize.type].length);
-})
+// const currentPrizeSurplusCount = computed(() => {
+//   console.log(basicData.lastTimePrizeIndex, 'basicData.lastTimePrizeIndex')
+//   const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];
+//   return basicData.handlePrize.count - (!basicData.luckyUsers[handlePrize.type] ? 0 : basicData.luckyUsers[handlePrize.type].length);
+// })
 const isShowAllLuckys = ref(false);
 const showAllLuckyUser = (isShowAllLuckysKey) => {
   basicData.isShowAllLuckyUser = true
@@ -327,6 +328,7 @@ const currentPrize = computed(() => {
   return basicData.prizes[basicData.currentPrizeIndex];
 });
 const isNextPrize = computed(() => {
+  // console.log(currentPrizeSurplusCount.value, 'currentPrizeSurplusCountcurrentPrizeSurplusCount')
   return basicData.isNextPrize;
 })
 const isLotting = computed(() => {

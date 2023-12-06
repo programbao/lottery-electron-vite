@@ -165,11 +165,20 @@ const handlePrizesSetting = async () => {
     // 纠正当前的奖项
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
-    debugger
+    // debugger
     if (currentPrizeIndex < 0) {
       basicData.currentLotteryGroup = findCurrentLotteryGroup();
       if (!basicData.isEnterLottery) {
         bus.emit('toInitContainerHandleData')
+      }
+    }
+    //   const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];
+//   return basicData.handlePrize.count - (!basicData.luckyUsers[handlePrize.type] ? 0 : basicData.luckyUsers[handlePrize.type].length);
+    if (basicData.currentPrizeIndex === 0 && cutNum) {
+      const currentPrizeSurplusCount = basicData.currentPrize.count - (!basicData.luckyUsers[basicData.currentPrize.type] ? 0 : basicData.luckyUsers[basicData.currentPrize.type].length);
+      if (currentPrizeSurplusCount <= 0) {
+        basicData.currentPrize = undefined;
+        basicData.currentPrizeIndex = -1;
       }
     }
     // if (addNum) {
