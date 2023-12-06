@@ -129,9 +129,9 @@ const confirm = async () => {
     // dialogTableVisible.value = false;
     // ...其他处理
   } else if (status === 0) {
-    ElMessage.error('设置失败');
+    ElMessage.error(textMappingConfig.value.settingFailure.chineseText + ' ' + textMappingConfig.value.settingFailure.otherLanguagesText);
   } else if (status === 2) {
-    ElMessage.warning('没有修改过配置');
+    ElMessage.warning(textMappingConfig.value.noConfigurationChanges.chineseText + ' ' + textMappingConfig.value.noConfigurationChanges.otherLanguagesText);
   }
   dialogTableVisible.value = false;
 }

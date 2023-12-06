@@ -11,7 +11,7 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text">文件列表</span></slot>
+      <slot name="title"><span class="title-text">{{ textMappingConfig.fileList.chineseText + ' ' + textMappingConfig.fileList.otherLanguagesText }}</span></slot>
       <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
         {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}

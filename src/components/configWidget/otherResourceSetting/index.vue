@@ -9,7 +9,7 @@
     >
       <el-row :gutter="24">
         <el-col :span="12">
-          <el-form-item label="背景墙图片" prop="bgImg.fileUrl">
+          <el-form-item :label="textMappingConfig.backgroundImageWall.chineseText + ' ' + textMappingConfig.backgroundImageWall.otherLanguagesText" prop="bgImg.fileUrl">
             <div class="upload add" @click="importFile('bgImg')">
               <el-image
                 v-if="formLabelAlign.bgImg.fileUrl"
@@ -25,7 +25,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="屏幕墙图片" prop="screenImg.fileUrl">
+          <el-form-item :label="textMappingConfig.screenWallImage.chineseText + ' ' + textMappingConfig.screenWallImage.otherLanguagesText"  prop="screenImg.fileUrl">
             <div class="upload add" @click="importFile('screenImg')">
               <el-image
                 v-if="formLabelAlign.screenImg.fileUrl"
@@ -43,7 +43,7 @@
       </el-row>
       <el-row :gutter="24">
         <el-col :span="12">
-          <el-form-item label="音乐文件" prop="musicFile.fileUrl" class="music-form-item">
+          <el-form-item :label="textMappingConfig.musicFile.chineseText + ' ' + textMappingConfig.musicFile.otherLanguagesText"  prop="musicFile.fileUrl" class="music-form-item">
             <div
               class="music-desc"
               v-if="formLabelAlign.musicFile.fileUrl"
@@ -59,11 +59,11 @@
             <el-button 
               v-if="!formLabelAlign.musicFile.fileUrl"
               @click="importFile('musicFile')"
-              type="primary">请上传音乐</el-button>
+              type="primary">{{ textMappingConfig.uploadMusic.chineseText + ' ' + textMappingConfig.uploadMusic.otherLanguagesText }}</el-button>
             <el-button 
               v-if="formLabelAlign.musicFile.fileUrl"
               @click="importFile('musicFile')"
-              type="primary">更换音乐</el-button> 
+              type="primary">{{ textMappingConfig.changeMusic.chineseText + ' ' + textMappingConfig.changeMusic.otherLanguagesText }}</el-button> 
           </el-form-item>
         </el-col>
       </el-row>
@@ -71,32 +71,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const isPlay = ref(false);
 const music = ref();
 const rules = {
   'bgImg.fileUrl': [
     {
       required: true,
-      message: '请上传图片',
+      message: textMappingConfig.value.uploadImage.chineseText + ' ' + textMappingConfig.value.uploadImage.otherLanguagesText,
       trigger: 'blur',
     },
   ],
   'screenImg.fileUrl': [
     {
       required: true,
-      message: '请上传图片',
+      message: textMappingConfig.value.uploadImage.chineseText + ' ' + textMappingConfig.value.uploadImage.otherLanguagesText,
       trigger: 'blur',
     },
   ],
   'musicFile.fileUrl': [
   {
       required: true,
-      message: '请上传音频',
+      message: textMappingConfig.value.uploadAudio.chineseText + ' ' + textMappingConfig.value.uploadAudio.otherLanguagesText,
       trigger: 'blur',
     },
   ]

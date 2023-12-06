@@ -115,6 +115,9 @@ const luckyUsers = basicData.luckyUsers;
 const emit = defineEmits(['cutPrize', 'addPrize']);
 const handleAddGroup = ref(null);
 import { nanoid } from 'nanoid';
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 // 样式设置label
 const labelFieldArr = [
   {
@@ -130,7 +133,7 @@ const labelFieldArr = [
     field: 'prizeBoxMinHeight',
   },
   {
-    label: '奖项之间 间距',
+    label: '奖项之间间距',
     field: 'prizeSpace',
   },
   {

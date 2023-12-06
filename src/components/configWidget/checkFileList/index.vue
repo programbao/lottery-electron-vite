@@ -2,7 +2,7 @@
  <div class="lottery-layout">
     <!-- <div class="header-txt">文件列表</div> -->
     <div class="operation-open-folder">
-      <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0].saveFolderPath)">打开文件夹</el-button>
+      <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0].saveFolderPath)">{{ textMappingConfig.openFolder.chineseText + ' ' + textMappingConfig.openFolder.otherLanguagesText }}</el-button>
     </div>
     <div v-for="(file, index) in fileInfoList" :key="index" class="file-item">
       <div class="left-info">
@@ -10,7 +10,7 @@
         <span class="file-name">{{ file.fileName }}</span>
       </div>
       <div class="operation-btn">
-        <el-button link type="primary" plain @click="openFileOrFolder(file.filePath)">打开文件</el-button>
+        <el-button link type="primary" plain @click="openFileOrFolder(file.filePath)">{{ textMappingConfig.openFile.chineseText + ' ' + textMappingConfig.openFile.otherLanguagesText }}</el-button>
       </div>
     </div>
   </div>
@@ -23,7 +23,9 @@ const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
 import { ElLoading } from 'element-plus'
-
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const fileInfoList = ref([])
 onMounted(async () => {
   fileInfoList.value = await myApi.getSaveExcelFileInfoList();
@@ -31,7 +33,7 @@ onMounted(async () => {
 const openFileOrFolder = async (filePath) => {
   const loading = ElLoading.service({
     lock: true,
-    text: '打开中...',
+    text: textMappingConfig.value.opening.chineseText + ' ' + textMappingConfig.value.opening.otherLanguagesText,
     background: 'rgba(0, 0, 0, 0.7)',
   })
   await myApi.openFileOrFolder(filePath);

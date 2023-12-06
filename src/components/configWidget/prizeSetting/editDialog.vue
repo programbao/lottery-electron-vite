@@ -105,6 +105,9 @@ import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
 let addGroup = null;
 let groupList = JSON.parse(JSON.stringify(basicData.groupList)) 
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const props = defineProps({
   editDialogVisible: {
     type: Boolean,
@@ -188,7 +191,7 @@ const rules = {
   img: [
     {
       required: true,
-      message: '请上传图片',
+      message: textMappingConfig.value.uploadImage.chineseText + ' ' + textMappingConfig.value.uploadImage.otherLanguagesText,
       trigger: 'blur',
     },
   ]

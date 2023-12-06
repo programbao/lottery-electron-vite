@@ -8,8 +8,7 @@
     :show-close="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
-    width="70%"
-    title="名单设置">
+    width="70%">
     <template #header>
       <slot name="title"><span class="title-text">{{ textMappingConfig.otherResourcesSettings.chineseText + ' ' + textMappingConfig.otherResourcesSettings.otherLanguagesText }}</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
@@ -117,9 +116,9 @@ const confirm = async () => {
     // dialogTableVisible.value = false;
     // ...其他处理
   } else if (status === 0) {
-    ElMessage.error('设置失败');
+    ElMessage.error(textMappingConfig.value.settingFailure.chineseText + ' ' + textMappingConfig.value.settingFailure.otherLanguagesText);
   } else if (status === 2) {
-    ElMessage.warning('没有修改过配置');
+    ElMessage.warning(textMappingConfig.value.noConfigurationChanges.chineseText + ' ' + textMappingConfig.value.noConfigurationChanges.otherLanguagesText);
   }
   dialogTableVisible.value = false;
 }
