@@ -24,15 +24,15 @@
       ></Group>
     </transition-group>
     <div class="no-data-tips" v-else>
-      暂无奖项，请去“奖项设置”配置
+      {{ textMappingConfig.noPrizesAvailable.chineseText + ' ' + textMappingConfig.noPrizesAvailable.otherLanguagesText }}
     </div>
 
     <div class="relate-box" v-if="isSelectMode">
-      <el-button type="primary" plain @click="confirmRelated">确认关联</el-button>
-      <el-button plain @click="cancelSelect">取消</el-button>
+      <el-button type="primary" plain @click="confirmRelated">{{ textMappingConfig.confirmAssociation.chineseText + ' ' + textMappingConfig.confirmAssociation.otherLanguagesText }}</el-button>
+      <el-button plain @click="cancelSelect">{{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}</el-button>
     </div>
-    <el-button class="upload-users-btn" @click="uploadUsers">上传内置中奖人员名单</el-button>
-    <el-button class="add-users-btn" @click="addUsers" type="primary" plain>添加</el-button>
+    <el-button class="upload-users-btn" @click="uploadUsers">{{ textMappingConfig.uploadInternalLuckyList.chineseText + ' ' + textMappingConfig.uploadInternalLuckyList.otherLanguagesText }}</el-button>
+    <el-button class="add-users-btn" @click="addUsers" type="primary" plain>{{ textMappingConfig.add.chineseText + ' ' + textMappingConfig.add.otherLanguagesText }}</el-button>
     <!--  选项  -->
     <div class="option-container">
       <transition-group
@@ -51,7 +51,7 @@
         ></Option>
       </transition-group>
       <div class="no-data-tips" v-else>
-        暂无内置人员，可添加或上传
+        {{ textMappingConfig.noInternalPersons.chineseText + ' ' + textMappingConfig.noInternalPersons.otherLanguagesText }}
       </div>
     </div>
 
@@ -74,6 +74,9 @@ import { lotteryDataStore } from '../../../../store'
 const basicData = lotteryDataStore();
 const optionList = ref([])
 const groupList = ref([])
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 // const userRelatedMap = {};
 // const luckyUsers = basicData.luckyUsers;
 let lotteryCount = 0;
@@ -213,7 +216,7 @@ const confirmRelated = () => {
     group.isSelected = false
   } else {
     ElMessage({
-      message: '请选择关联分组和选项',
+      message: textMappingConfig.value.selectGroupAndOption.chineseText + ' ' + textMappingConfig.value.selectGroupAndOption.otherLanguagesText,
       type: 'warning',
     })
   }
@@ -279,7 +282,7 @@ const uploadUsers = async () => {
     // if (isHasGroup) {
     //   ElMessage({
     //     type: 'warning',
-    //     message: '该分组名称，已存在在分组中'
+    //     message: textMappingConfig.value.groupNameExists.chineseText + ' ' + textMappingConfig.value.groupNameExists.otherLanguagesText
     //   })
     //   return
     // }
@@ -310,7 +313,7 @@ const uploadUsers = async () => {
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: '上传失败',
+      message: textMappingConfig.value.uploadFailed.chineseText + ' ' + textMappingConfig.value.uploadFailed.otherLanguagesText,
     })
     loading.close()
   }

@@ -121,43 +121,43 @@ const textMappingConfig = computed(() => {
 // 样式设置label
 const labelFieldArr = [
   {
-    label: '左bar列表总体宽度',
+    label: textMappingConfig.value.leftBarListWidth.chineseText + ' ' + textMappingConfig.value.leftBarListWidth.otherLanguagesText,
     field: 'barBoxWidth',
   },
   {
-    label: '奖项盒子宽度',
+    label: textMappingConfig.value.prizeBoxWidth.chineseText + ' ' + textMappingConfig.value.prizeBoxWidth.otherLanguagesText,
     field: 'prizeBoxWidth',
   },
   {
-    label: '奖项盒子最小高度',
+    label: textMappingConfig.value.minimumPrizeBoxHeight.chineseText + ' ' + textMappingConfig.value.minimumPrizeBoxHeight.otherLanguagesText,
     field: 'prizeBoxMinHeight',
   },
   {
-    label: '奖项之间间距',
+    label: textMappingConfig.value.spaceBetweenPrizes.chineseText + ' ' + textMappingConfig.value.spaceBetweenPrizes.otherLanguagesText,
     field: 'prizeSpace',
   },
   {
-    label: '奖项字体大小',
+    label: textMappingConfig.value.prizeFontSize.chineseText + ' ' + textMappingConfig.value.prizeFontSize.otherLanguagesText,
     field: 'prizeFontSize',
   },
   {
-    label: '进度条高度',
+    label: textMappingConfig.value.progressBarHeight.chineseText + ' ' + textMappingConfig.value.progressBarHeight.otherLanguagesText,
     field: 'progressHeight',
   },
   {
-    label: '进度条字体大小',
+    label: textMappingConfig.value.progressBarFontSize.chineseText + ' ' + textMappingConfig.value.progressBarFontSize.otherLanguagesText,
     field: 'progressFontSize',
   },
   {
-    label: '图片占位宽度',
+    label: textMappingConfig.value.imagePlaceholderWidth.chineseText + ' ' + textMappingConfig.value.imagePlaceholderWidth.otherLanguagesText,
     field: 'imgGutterWidth',
   },
   {
-    label: '图片占位高度',
+    label: textMappingConfig.value.imagePlaceholderHeight.chineseText + ' ' + textMappingConfig.value.imagePlaceholderHeight.otherLanguagesText,
     field: 'imgGutterHeight',
   },
   {
-    label: '当前奖项放大比例',
+    label: textMappingConfig.value.currentPrizeScale.chineseText + ' ' + textMappingConfig.value.currentPrizeScale.otherLanguagesText,
     field: 'currentPrizeScale',
     type: 'number'
   }

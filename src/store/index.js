@@ -585,6 +585,91 @@ export const lotteryDataStore = defineStore('LOTTERY', {
           defaultText: '',
           chineseText: '添加人员',
           otherLanguagesText: ''
+        },
+        leftBarListWidth: {
+          defaultText: '',
+          chineseText: '左bar列表总体宽度',
+          otherLanguagesText: ''
+        },
+        prizeBoxWidth: {
+          defaultText: '',
+          chineseText: '奖项盒子宽度',
+          otherLanguagesText: ''
+        },
+        minimumPrizeBoxHeight: {
+          defaultText: '',
+          chineseText: '奖项盒子最小高度',
+          otherLanguagesText: ''
+        },
+        spaceBetweenPrizes: {
+          defaultText: '',
+          chineseText: '奖项之间间距',
+          otherLanguagesText: ''
+        },
+        prizeFontSize: {
+          defaultText: '',
+          chineseText: '奖项字体大小',
+          otherLanguagesText: ''
+        },
+        progressBarHeight: {
+          defaultText: '',
+          chineseText: '进度条高度',
+          otherLanguagesText: ''
+        },
+        progressBarFontSize: {
+          defaultText: '',
+          chineseText: '进度条字体大小',
+          otherLanguagesText: ''
+        },
+        imagePlaceholderWidth: {
+          defaultText: '',
+          chineseText: '图片占位宽度',
+          otherLanguagesText: ''
+        },
+        imagePlaceholderHeight: {
+          defaultText: '',
+          chineseText: '图片占位高度',
+          otherLanguagesText: ''
+        },
+        currentPrizeScale: {
+          defaultText: '',
+          chineseText: '当前奖项放大比例',
+          otherLanguagesText: ''
+        },
+        groupNameExists: {
+          defaultText: '',
+          chineseText: '该分组名称，已存在在分组中',
+          otherLanguagesText: ''
+        },
+        uploadPersonList: {
+          defaultText: '',
+          chineseText: '请上传人员名单',
+          otherLanguagesText: ''
+        },
+        associatePrizeHere: {
+          defaultText: '',
+          chineseText: '关联奖项到此',
+          otherLanguagesText: ''
+        },
+        associatePersonHere: {
+          defaultText: '',
+          chineseText: '关联人员到此',
+          otherLanguagesText: ''
+        },
+        alreadyAssociated: {
+          defaultText: '',
+          chineseText: '已关联',
+          otherLanguagesText: ''
+        },
+        generatedWinnerListCannotUnassociate: {
+          defaultText: '',
+          chineseText: '产生了中奖名单，不可取消关联',
+          otherLanguagesText: ''
+        },
+        alreadyInWinnerListCannotUnassociate: {
+          defaultText: '',
+          chineseText: '已在中奖名单，不可取消关联',
+          otherLanguagesText: ''
         }
       },
       ballConfig: {

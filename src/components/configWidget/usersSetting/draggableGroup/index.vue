@@ -1,6 +1,6 @@
 <template>
   <div class="qd-optiongroup-question">
-    <el-button class="upload-users-btn" @click="uploadUsers">上传人员名单</el-button>
+    <el-button class="upload-users-btn" @click="uploadUsers">{{ textMappingConfig.uploadPersonList.chineseText + ' ' + textMappingConfig.uploadPersonList.otherLanguagesText }}</el-button>
     <!--  分组  -->
     <transition-group
       v-if="groupList.length"
@@ -25,11 +25,11 @@
       ></Group>
     </transition-group>
     <div class="no-data-tips" v-else>
-      请上传人员名单
+      {{ textMappingConfig.uploadPersonList.chineseText + ' ' + textMappingConfig.uploadPersonList.otherLanguagesText }}
     </div>
     <div class="relate-box" v-if="isSelectMode">
-      <el-button type="primary" plain @click="confirmRelated">确认关联</el-button>
-      <el-button plain @click="cancelSelect">取消</el-button>
+      <el-button type="primary" plain @click="confirmRelated">{{ textMappingConfig.confirmAssociation.chineseText + ' ' + textMappingConfig.confirmAssociation.otherLanguagesText }}</el-button>
+      <el-button plain @click="cancelSelect">{{ textMappingConfig.add.chineseText + ' ' + textMappingConfig.add.otherLanguagesText }}</el-button>
     </div>
     <!--  选项  -->
     <div class="option-container">
@@ -62,6 +62,9 @@ const optionList = ref([])
 const groupList = ref([])
 const userRelatedMap = {};
 const luckyUsers = basicData.luckyUsers;
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 watch(() => basicData.prizes, () => {
   handleOptionList();
 })
@@ -148,7 +151,7 @@ const confirmRelated = () => {
     group.isSelected = false
   } else {
     ElMessage({
-      message: '请选择关联分组和选项',
+      message: textMappingConfig.value.selectGroupAndOption.chineseText + ' ' + textMappingConfig.value.selectGroupAndOption.otherLanguagesText,
       type: 'warning',
     })
   }
@@ -203,7 +206,7 @@ const uploadUsers = async () => {
     if (isHasGroup) {
       ElMessage({
         type: 'warning',
-        message: '该分组名称，已存在在分组中'
+        message: textMappingConfig.value.groupNameExists.chineseText + ' ' + textMappingConfig.value.groupNameExists.otherLanguagesText
       })
       return
     }
@@ -223,7 +226,7 @@ const uploadUsers = async () => {
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: '上传失败',
+      message: textMappingConfig.value.uploadFailed.chineseText + ' ' + textMappingConfig.value.uploadFailed.otherLanguagesText,
     })
     loading.close()
   }

@@ -13,7 +13,7 @@
         <!-- 小于四列 -->
         <div class="content-title" v-html="groupInfo.group_name_html || groupInfo.group_name"></div>
         <div class="content-tags">
-          <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">关联人员到此</div>
+          <div class="tags-drag-tips" v-if="groupInfo.options.length === 0">{{ textMappingConfig.associatePersonHere.chineseText + ' ' + textMappingConfig.associatePersonHere.otherLanguagesText }}</div>
           <template v-else>
             <div
               class="group-option-container"
@@ -64,6 +64,11 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
+import { lotteryDataStore } from '../../../../../store'
+const basicData = lotteryDataStore();
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const props = defineProps({
   text: {
     type: String,

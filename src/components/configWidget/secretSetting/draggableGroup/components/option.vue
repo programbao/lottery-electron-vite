@@ -11,8 +11,8 @@
     <i v-if="!removeAble" class="survey-iconfont icon-tuozhuai"></i>
     <div class="text" v-html="display.text"></div>
     <i v-if="removeAble" @click="$emit('remove')" class="survey-iconfont icon-xuanxiangfenzubiaoqian-guanbi"></i>
-    <div class="related-txt" v-if="option.related_group && !option.noCanSelected">已关联</div>
-    <div class="related-txt" v-if="option.noCanSelected">已在中奖名单，不可取消关联</div>
+    <div class="related-txt" v-if="option.related_group && !option.noCanSelected">{{ textMappingConfig.alreadyAssociated.chineseText + ' ' + textMappingConfig.alreadyAssociated.otherLanguagesText }}</div>
+    <div class="related-txt" v-if="option.noCanSelected">{{ textMappingConfig.alreadyInWinnerListCannotUnassociate.chineseText + ' ' + textMappingConfig.alreadyInWinnerListCannotUnassociate.otherLanguagesText }}</div>
     <!-- 关闭按钮 -->
       <el-icon 
         class="close-btn" 
@@ -25,6 +25,11 @@
 
 <script setup>
 import { computed } from 'vue'
+import { lotteryDataStore } from '../../../../../store'
+const basicData = lotteryDataStore();
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const props = defineProps({
   option: {
     default: () => {},
