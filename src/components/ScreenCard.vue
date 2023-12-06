@@ -69,9 +69,15 @@
       </div>
     </div>
   </div>
-  <div class="card-empty-tips" v-show="(member.length <= 0 && currentPrize) || (!currentPrize && !basicData.isEnterLottery)">
+  <div 
+    class="card-empty-tips" 
+    v-show="basicData.prizes.length 
+      && ((member.length <= 0 && currentPrize) || (!currentPrize && !basicData.isEnterLottery))">
     <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
     <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
+  </div>
+  <div class="prizes-empty-tips" v-if="!basicData.prizes.length">
+    <span>暂无抽奖奖项，请前往奖项设置进行设置</span>
   </div>
 </template>
 
@@ -95,7 +101,7 @@ const member = computed(() => {
   // console.log(memberListData, currentLotteryGroup)
   
   let resultMember = []
-  if (currentLotteryGroup.group_identity) {
+  if (currentLotteryGroup && currentLotteryGroup.group_identity) {
     resultMember = memberListData[currentLotteryGroup.group_identity] || []
   }
   // if (resultMember.length) {
@@ -147,6 +153,7 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   if (basicData.isEnterLottery) return
+  debugger
   nextTick(() => {
     setTimeout(() => {
       document.querySelector('.screen-card') && (document.querySelector('.screen-card').style.display = displayStr)
@@ -178,7 +185,7 @@ const groupListSetting = () => {
       document.querySelector('.card-empty-tips').style.display = 'none'
       adjuctScreenCardDisplay('grid')
     }
-  } else {
+  } else if (basicData.prizes.length) {
     document.querySelector('.card-empty-tips').style.display = 'grid'
   }
 }
@@ -214,5 +221,14 @@ onMounted(() => {
   font-size: 25px;
   color: orange;
   width: 40%;
+}
+.prizes-empty-tips {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  font-size: 25px;
+  color: orange;
 }
 </style>

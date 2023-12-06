@@ -5,7 +5,7 @@
         'slide-out-left': basicData.isEnterBgWall,
         'slide-in-left': !basicData.isEnterBgWall
       }">
-    <div class="prize-mess">
+    <div v-if="prizes.length" class="prize-mess">
       <label id="prizeType" class="prize-shine">{{currentPrize.name}}</label>
       <label id="prizeText" class="prize-shine">{{currentPrize.otherName}}</label>
       ，剩余<label id="prizeLeft" class="prize-shine">{{getItemPrizeConfig(currentPrize.type).surplusCount}}</label>个
@@ -177,7 +177,8 @@ let isInitPrizeData = false
 const initHandlePrizeData = (toInit = false) => {
     if (!toInit && (!basicData.prizes || isInitPrizeData)) return
     isInitPrizeData = true
-    const totalPrizeLen = basicData.prizes.length - 1
+    let totalPrizeLen = basicData.prizes.length - 1
+    totalPrizeLen = totalPrizeLen < 0 ? 0 : totalPrizeLen
     const currentIndex = basicData.currentPrizeIndex
     let needCount = totalPrizeLen - currentIndex
     if (needCount > totalPrizeLen) {
@@ -197,6 +198,7 @@ const initHandlePrizeData = (toInit = false) => {
     })
     // 滚动位置
     !toInit && scrollTop();
+    if (needCount <= 0) return
     for (let i = 0; i < needCount + 1; i++) {
       let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
       if (itemLucky === undefined) {

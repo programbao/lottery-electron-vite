@@ -793,7 +793,7 @@ const groupListSetting = () => {
     cleanUp();
     bus.emit('adjuctUsersDataTips')
   } else {
-    if (userGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
+    if (userGroup && basicData.currentLotteryGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
       switchLotteryMemberData(userGroup);
     }
   }

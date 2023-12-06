@@ -13,9 +13,10 @@
             handle=".move-icon"
             @end="dragEndHandle"
             :move="dragMoveHandle"
-            v-if="prizes.length > 0"
           >
-          <template #item="{ element  }">
+          <template 
+            #item="{ element  }"
+            v-if="prizes.length > 0">
             <div class="item-prize item" :key="element.type">
               <el-image
                 :class="'el-image-' + element.index"
@@ -49,6 +50,11 @@
                 </div>
               </div>
             </div> 
+          </template>
+          <template #item v-if="prizes.length <= 0">
+            <div class="item-prize add" @click="editPrize({}, 'add')">
+              <span class="symbol">+</span>
+            </div>
           </template>
           <template #footer>
             <div class="item-prize add" @click="editPrize({}, 'add')">

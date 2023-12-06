@@ -82,7 +82,7 @@
         可选择一个奖项，同步相同配置
         <el-button type="primary" plain @click="clearSelect">清空</el-button>
       </div>
-      <div class="prizes">
+      <div class="prizes" v-if="prizes.length">
         <div 
           class="prize"
           :class="{
@@ -93,6 +93,7 @@
           {{ item.name }} 
         </div>
       </div>
+      <div class="prizes-empty">暂无可选奖项</div>
     </div>
   </lt-dialog>
 </template>
@@ -248,7 +249,9 @@ onMounted(() => {
 })
 const importFile = async (disabled) => {
   if (disabled) return
-  let { fileUrl } = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  const importData = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  if (!importData) return
+  let { fileUrl } = importData;
   if (fileUrl) {
     formLabelAlign.value.img = fileUrl
   }
