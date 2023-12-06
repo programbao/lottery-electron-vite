@@ -109,6 +109,10 @@ const handlePrizesSetting = async () => {
       findGroup.options = handleAddGroup.options;
       isPass =  await myApi.savePrizesConfig(JSON.stringify(basicData.groupList), 'groupList');
     }
+  } else if (addNum && !handleAddGroup) {
+    setTimeout(() => {
+      bus.emit('groupListSetting')
+    })
   }
   if (isPass) {
     const currentPrizeIndex =  basicData.currentPrizeIndex;

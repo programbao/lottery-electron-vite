@@ -20,7 +20,10 @@
       v-for="(currentLuckys, key) in allLuckyUsers"
       :key="key"
      >
-      <div class="prize-type-title">{{ prizeTypeObjectMap[key] ? prizeTypeObjectMap[key]['name'] : '' }}, {{ prizeTypeObjectMap[key] ? prizeTypeObjectMap[key]['otherName'] : '' }}</div>
+      <div class="prize-type-title">
+        {{ prizeTypeObjectMap[key] ? prizeTypeObjectMap[key]['name'] : '' }}
+        {{ prizeTypeObjectMap[key] && prizeTypeObjectMap[key]['otherName'] ? ', ' + prizeTypeObjectMap[key]['otherName'] : '' }}
+      </div>
       <div 
         class="lucky-content" 
         :style="lucksContentStyle(currentLuckys)">

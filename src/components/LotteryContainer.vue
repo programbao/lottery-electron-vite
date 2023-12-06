@@ -487,7 +487,8 @@ const saveData = () => {
   let type = basicData.prizes[basicData.lastTimePrizeIndex]['type']
   if (basicData.currentLuckys && basicData.currentLuckys.length > 0) {
     // todo 添加数据保存机制，以免服务器挂掉数据丢失
-    return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
+    // return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
+    return myApi.saveOneRoundLuckyData(type, JSON.stringify(basicData.luckyUsers[type]));
   }
   return Promise.resolve();
 }
@@ -610,6 +611,17 @@ const lotteryActiveFn = async () => {
     if (basicData.currentLotteryGroup) {
       const type = basicData.currentPrize.type;
       const userGroup = basicData.groupList.find(group => group.options.includes(type));
+      if (!userGroup) {
+        const loading = ElLoading.service({
+          lock: true,
+          text: '人员名单有变动,正在切换抽奖人员',
+          background: 'rgba(0, 0, 0, 0.7)',
+        })
+        bus.emit('groupListSetting')
+        await waitHandleEvent();
+        loading.close();
+        return
+      }
       if (userGroup.group_identity !== basicData.currentLotteryGroup.group_identity) {
         const loading = ElLoading.service({
           lock: true,
@@ -793,7 +805,7 @@ const groupListSetting = () => {
     cleanUp();
     bus.emit('adjuctUsersDataTips')
   } else {
-    if (userGroup && basicData.currentLotteryGroup && basicData.currentLotteryGroup.group_identity !== userGroup.group_identity) {
+    if (userGroup && basicData.currentLotteryGroup && (basicData.currentLotteryGroup.group_identity !== userGroup.group_identity || !scene)) {
       switchLotteryMemberData(userGroup);
     }
   }
