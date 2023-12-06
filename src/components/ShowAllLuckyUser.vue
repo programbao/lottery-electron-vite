@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, coumputed } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 const allLuckyUserBoxRef = ref();
@@ -104,6 +104,9 @@ const luckyUserBoxStyle = ref({
 let showTimer = null;
 const prizeTypeObjectMap = {};
 let autoScrollTimer = null;
+// const luckyCardConfigStyle = coumputed(() => {
+//   return basicData.luckyCardConfigStyle
+// })
 // 控制入场和退场动画
 watch(
   () => basicData.isShowAllLuckyUser,
