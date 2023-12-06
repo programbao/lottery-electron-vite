@@ -289,7 +289,7 @@ const confirm = async () => {
 
   if (status === 1) {
     ElMessage({
-      message: '设置成功',
+      message: textMappingConfig.value.settingSuccess.chineseText + ' ' + textMappingConfig.value.settingSuccess.otherLanguagesText,
       type: 'success',
     });
     // dialogTableVisible.value = false;
@@ -309,7 +309,7 @@ const confirm = async () => {
   //   isUsersSettingPass
   // ) {
   //   ElMessage({
-  //     message: '设置成功',
+  //     message: textMappingConfig.value.settingSuccess.chineseText + ' ' + textMappingConfig.value.settingSuccess.otherLanguagesText,
   //     type: 'success',
   //   });
   //   dialogTableVisible.value = false;
