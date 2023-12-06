@@ -158,7 +158,7 @@ const checkTotalCount = (rule, value, callback) => {
     callback(new Error('不能小于每轮抽取数'))
   } else {
     if (currentLucky && value < currentLucky.length) {
-      return callback(new Error(`当前已经有${currentLucky.length}人中奖, 不能小于${currentLucky.length}人`))
+      return callback(new Error(`当前已经有${currentLucky.length}人中奖, 中奖数不能小于${currentLucky.length}人`))
     }
     callback()
   }

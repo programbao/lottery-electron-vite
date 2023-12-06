@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, watch, coumputed } from 'vue'
+import { ref, watch } from 'vue'
 import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 const allLuckyUserBoxRef = ref();

@@ -9,10 +9,10 @@
       <div class="row" v-for="(item, index) in labelFieldArr" :key="index">
         <div class="column label">{{ item.label }}</div>
         <div class="column">
-          <el-input v-model="controlsBtnConfig[item.field].chineseText" class="input-field" />
+          <el-input v-model="textMappingConfig[item.field].chineseText" class="input-field" />
         </div>
         <div class="column">
-          <el-input v-model="controlsBtnConfig[item.field].otherLanguagesText" class="input-field" />
+          <el-input v-model="textMappingConfig[item.field].otherLanguagesText" class="input-field" />
         </div>
       </div>
     </div>
@@ -28,12 +28,12 @@ const basicData = lotteryDataStore();
 
 // 样式设置label
 const labelFieldArr = ref([])
-const controlsBtnConfig = ref({})
+const textMappingConfig = ref({})
 
 onMounted(() => {
-  controlsBtnConfig.value = JSON.parse(JSON.stringify(basicData.controlsBtnConfig))
-  Object.keys(controlsBtnConfig.value).forEach(key => {
-    let controlObj = controlsBtnConfig.value[key];
+  textMappingConfig.value = JSON.parse(JSON.stringify(basicData.textMappingConfig))
+  Object.keys(textMappingConfig.value).forEach(key => {
+    let controlObj = textMappingConfig.value[key];
     let addLabelField = {
       label: key,
       field: key,
@@ -58,7 +58,7 @@ onMounted(() => {
 //   return isPass
 // }
 defineExpose({
-  controlsBtnConfig
+  textMappingConfig
 })
 </script>
 

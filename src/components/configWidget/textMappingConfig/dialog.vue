@@ -11,7 +11,7 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text">控制按钮文本控制</span></slot>
+      <slot name="title"><span class="title-text">文案设置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         确认
@@ -22,9 +22,9 @@
       </div>
     </template>
     <div class="setting-content">
-      <controlsBtnSetting 
+      <textMappingConfig 
         :key="dialogTableVisible"
-        ref="controlsBtnConfigRef" />
+        ref="textMappingConfigRef" />
     </div>
   </el-dialog>
 </template>
@@ -35,10 +35,10 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import controlsBtnSetting from './index.vue'
+import textMappingConfig from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
-const dialogKeyStr = 'controlsBtnConfig';
+const dialogKeyStr = 'textMappingConfig';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
@@ -54,7 +54,7 @@ const toggleConfig = () => {
   }
 }
 
-const controlsBtnConfigRef = ref();
+const textMappingConfigRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {
       type: 'success',
@@ -94,11 +94,11 @@ const checkAllPassStatus = (...statuses) => {
 
 const confirm = async () => {
   // 删除不必存的字段
-  const controlsBtnConfigData = JSON.parse(JSON.stringify(controlsBtnConfigRef.value['controlsBtnConfig']));
-  const controlsBtnConfigDataPass = await handleVerifyConfig('controlsBtnConfig', controlsBtnConfigData);
+  const textMappingConfigData = JSON.parse(JSON.stringify(textMappingConfigRef.value['textMappingConfig']));
+  const textMappingConfigDataPass = await handleVerifyConfig('textMappingConfig', textMappingConfigData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    controlsBtnConfigDataPass.status
+    textMappingConfigDataPass.status
   );
 
   if (status === 1) {

@@ -8,8 +8,7 @@
     :show-close="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
-    width="70%"
-    title="系统配置">
+    width="70%">
     <template #header>
       <slot name="title"><span class="title-text">卡片配置</span></slot>
       <div class="title-btn confirm-btn" type="confirm" @click="confirm">

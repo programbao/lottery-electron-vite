@@ -52,7 +52,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
       memberListData: {}, // 抽奖人员名单数据 -- 未中奖人员
       originMemberListData: {}, // 原数据名单
       groupList: [], // 人员名单配置
-      controlsBtnConfig: {
+      textMappingConfig: {
+        // 控制按钮文案
         enter: {
           defaultText: '进入抽奖',
           chineseText: '进入抽奖',
@@ -128,9 +129,9 @@ export const lotteryDataStore = defineStore('LOTTERY', {
           chineseText: '球体设置',
           otherLanguagesText: 'ball setting'
         },
-        toggleSettingControlsBtnSetting: {
-          defaultText: '控制按钮设置',
-          chineseText: '控制按钮设置',
+        toggleSettingTextMappingConfig: {
+          defaultText: '文案设置',
+          chineseText: '文案设置',
           otherLanguagesText: 'control button setting'
         },
         toggleSettingOtherResourceSetting: {
@@ -182,6 +183,408 @@ export const lotteryDataStore = defineStore('LOTTERY', {
           defaultText: '',
           chineseText: '音乐',
           otherLanguagesText: 'music'
+        },
+
+        // 其他文案
+        cardConfiguration: {
+          defaultText: '',
+          chineseText: '卡片配置',
+          otherLanguagesText: ''
+        },
+        sphereActionSettings: {
+          defaultText: '',
+          chineseText: '球体相关动作设置',
+          otherLanguagesText: ''
+        },
+        fileList: {
+          defaultText: '',
+          chineseText: '文件列表',
+          otherLanguagesText: ''
+        },
+        otherResourcesSettings: {
+          defaultText: '',
+          chineseText: '其他资源设置',
+          otherLanguagesText: ''
+        },
+        prizeConfiguration: {
+          defaultText: '',
+          chineseText: '奖项配置',
+          otherLanguagesText: ''
+        },
+        settings: {
+          defaultText: '',
+          chineseText: '设置',
+          otherLanguagesText: ''
+        },
+        textSettings: {
+          defaultText: '',
+          chineseText: '文案设置',
+          otherLanguagesText: ''
+        },
+        userSettings: {
+          defaultText: '',
+          chineseText: '名单设置',
+          otherLanguagesText: ''
+        },
+        confirm: {
+          defaultText: '',
+          chineseText: '确认',
+          otherLanguagesText: ''
+        },
+        cancel: {
+          defaultText: '',
+          chineseText: '取消',
+          otherLanguagesText: ''
+        },
+        settingSuccess: {
+          defaultText: '',
+          chineseText: '设置成功',
+          otherLanguagesText: ''
+        },
+        settingFailure: {
+          defaultText: '',
+          chineseText: '设置失败',
+          otherLanguagesText: ''
+        },
+        noConfigurationChanges: {
+          defaultText: '',
+          chineseText: '没有修改过配置',
+          otherLanguagesText: ''
+        },
+        ballProportion: {
+          defaultText: '',
+          chineseText: '圆球比例',
+          otherLanguagesText: ''
+        },
+        rotateCycle: {
+          defaultText: '',
+          chineseText: '是否循环旋转',
+          otherLanguagesText: ''
+        },
+        lotteryRotationTime: {
+          defaultText: '',
+          chineseText: '抽奖旋转时间(毫秒ms)',
+          otherLanguagesText: ''
+        },
+        autoRotationTime: {
+          defaultText: '',
+          chineseText: '自动旋转时间(毫秒ms)',
+          otherLanguagesText: ''
+        },
+        distanceFromLeft: {
+          defaultText: '',
+          chineseText: '相对左侧距离',
+          otherLanguagesText: ''
+        },
+        cardArrangementBeforeLottery: {
+          defaultText: '',
+          chineseText: '抽奖前卡片排列及位置',
+          otherLanguagesText: ''
+        },
+        cannotModifyAfterEnter: {
+          defaultText: '',
+          chineseText: '已进入抽奖，不能修改',
+          otherLanguagesText: ''
+        },
+        winningCardArrangement: {
+          defaultText: '',
+          chineseText: '中奖-卡片排列',
+          otherLanguagesText: ''
+        },
+        columnBasedArrangement: {
+          defaultText: '',
+          chineseText: '以"列"为基准排列',
+          otherLanguagesText: ''
+        },
+        rowBasedArrangement: {
+          defaultText: '',
+          chineseText: '以"行"为基准排列',
+          otherLanguagesText: ''
+        },
+        fixedRowsColumns: {
+          defaultText: '',
+          chineseText: '固定行列',
+          otherLanguagesText: ''
+        },
+        numberOfColumns: {
+          defaultText: '',
+          chineseText: '列数',
+          otherLanguagesText: ''
+        },
+        numberOfRows: {
+          defaultText: '',
+          chineseText: '行数',
+          otherLanguagesText: ''
+        },
+        rowSpacing: {
+          defaultText: '',
+          chineseText: '行间距',
+          otherLanguagesText: ''
+        },
+        columnSpacing: {
+          defaultText: '',
+          chineseText: '列间距',
+          otherLanguagesText: ''
+        },
+        basicCardStyleSettings: {
+          defaultText: '',
+          chineseText: '基础-卡片样式设置',
+          otherLanguagesText: ''
+        },
+        winningCardStyleSettings: {
+          defaultText: '',
+          chineseText: '中奖-卡片样式设置',
+          otherLanguagesText: ''
+        },
+        distanceFromLeftPosition: {
+          defaultText: '',
+          chineseText: '距离左侧位置',
+          otherLanguagesText: ''
+        },
+        distanceFromTopPosition: {
+          defaultText: '',
+          chineseText: '距离顶部位置',
+          otherLanguagesText: ''
+        },
+        scaling: {
+          defaultText: '',
+          chineseText: '缩放',
+          otherLanguagesText: ''
+        },
+        cardWidth: {
+          defaultText: '',
+          chineseText: '卡片宽度',
+          otherLanguagesText: ''
+        },
+        cardHeight: {
+          defaultText: '',
+          chineseText: '卡片高度',
+          otherLanguagesText: ''
+        },
+        cardLogoImage: {
+          defaultText: '',
+          chineseText: '卡牌图片logo',
+          otherLanguagesText: ''
+        },
+        logoImageWidth: {
+          defaultText: '',
+          chineseText: '图片logo宽度',
+          otherLanguagesText: ''
+        },
+        logoImageHeight: {
+          defaultText: '',
+          chineseText: '图片logo高度',
+          otherLanguagesText: ''
+        },
+        logoDistanceFromTop: {
+          defaultText: '',
+          chineseText: 'logo距离顶部位置',
+          otherLanguagesText: ''
+        },
+        nameDistanceFromTop: {
+          defaultText: '',
+          chineseText: '名称距离顶部位置',
+          otherLanguagesText: ''
+        },
+        nameFontSize: {
+          defaultText: '',
+          chineseText: '名称字体大小',
+          otherLanguagesText: ''
+        },
+        otherInfoDistanceFromBottom: {
+          defaultText: '',
+          chineseText: '其他信息距离底部位置',
+          otherLanguagesText: ''
+        },
+        otherInfoFontSize: {
+          defaultText: '',
+          chineseText: '其他信息字体大小',
+          otherLanguagesText: ''
+        },
+        openFolder: {
+          defaultText: '',
+          chineseText: '打开文件夹',
+          otherLanguagesText: ''
+        },
+        openFile: {
+          defaultText: '',
+          chineseText: '打开文件',
+          otherLanguagesText: ''
+        },
+        opening: {
+          defaultText: '',
+          chineseText: '打开中...',
+          otherLanguagesText: ''
+        },
+        backgroundImageWall: {
+          defaultText: '',
+          chineseText: '背景墙图片',
+          otherLanguagesText: ''
+        },
+        screenWallImage: {
+          defaultText: '',
+          chineseText: '屏幕墙图片',
+          otherLanguagesText: ''
+        },
+        musicFile: {
+          defaultText: '',
+          chineseText: '音乐文件',
+          otherLanguagesText: ''
+        },
+        uploadMusic: {
+          defaultText: '',
+          chineseText: '请上传音乐',
+          otherLanguagesText: ''
+        },
+        changeMusic: {
+          defaultText: '',
+          chineseText: '更换音乐',
+          otherLanguagesText: ''
+        },
+        uploadImage: {
+          defaultText: '',
+          chineseText: '请上传图片',
+          otherLanguagesText: ''
+        },
+        uploadAudio: {
+          defaultText: '',
+          chineseText: '请上传音频',
+          otherLanguagesText: ''
+        },
+        addNewPrize: {
+          defaultText: '',
+          chineseText: '新增奖项',
+          otherLanguagesText: ''
+        },
+        editPrize: {
+          defaultText: '',
+          chineseText: '编辑奖项',
+          otherLanguagesText: ''
+        },
+        prizeNameCannotModify: {
+          defaultText: '',
+          chineseText: '该奖项已有中奖名单，名称不能修改',
+          otherLanguagesText: ''
+        },
+        previousPrizeAlreadyLucky: {
+          defaultText: '',
+          chineseText: '前面奖项已有中奖名单，抽取数和图片不能修改',
+          otherLanguagesText: ''
+        },
+        name: {
+          defaultText: '',
+          chineseText: '名称',
+          otherLanguagesText: ''
+        },
+        otherLanguageName: {
+          defaultText: '',
+          chineseText: '其他语言名称',
+          otherLanguagesText: ''
+        },
+        totalDraws: {
+          defaultText: '',
+          chineseText: '抽取总数',
+          otherLanguagesText: ''
+        },
+        drawsPerRound: {
+          defaultText: '',
+          chineseText: '每轮抽取数',
+          otherLanguagesText: ''
+        },
+        image: {
+          defaultText: '',
+          chineseText: '图片',
+          otherLanguagesText: ''
+        },
+        selectOnePrize: {
+          defaultText: '',
+          chineseText: '可选择一个奖项，同步相同配置',
+          otherLanguagesText: ''
+        },
+        clear: {
+          defaultText: '',
+          chineseText: '清空',
+          otherLanguagesText: ''
+        },
+        noAvailablePrizes: {
+          defaultText: '',
+          chineseText: '暂无可选奖项',
+          otherLanguagesText: ''
+        },
+        enterDrawQuantity: {
+          defaultText: '',
+          chineseText: '请输入抽取数量',
+          otherLanguagesText: ''
+        },
+        cannotExceedTotalDraws: {
+          defaultText: '',
+          chineseText: '不能大于抽取总数',
+          otherLanguagesText: ''
+        },
+        enterTotalDraws: {
+          defaultText: '',
+          chineseText: '请输入抽取总数',
+          otherLanguagesText: ''
+        },
+        cannotBeLessThanPerRoundDraws: {
+          defaultText: '',
+          chineseText: '不能小于每轮抽取数',
+          otherLanguagesText: ''
+        },
+        enterName: {
+          defaultText: '',
+          chineseText: '请输入名称',
+          otherLanguagesText: ''
+        },
+        uploadImagePrompt: {
+          defaultText: '',
+          chineseText: '请上传图片',
+          otherLanguagesText: ''
+        },
+        noPrizesAvailable: {
+          defaultText: '',
+          chineseText: '暂无奖项，请去“奖项设置”配置',
+          otherLanguagesText: ''
+        },
+        confirmAssociation: {
+          defaultText: '',
+          chineseText: '确认关联',
+          otherLanguagesText: ''
+        },
+        cancel: {
+          defaultText: '',
+          chineseText: '取消',
+          otherLanguagesText: ''
+        },
+        uploadInternalLuckyList: {
+          defaultText: '',
+          chineseText: '上传内置中奖人员名单',
+          otherLanguagesText: ''
+        },
+        add: {
+          defaultText: '',
+          chineseText: '添加',
+          otherLanguagesText: ''
+        },
+        noInternalPersons: {
+          defaultText: '',
+          chineseText: '暂无内置人员，可添加或上传',
+          otherLanguagesText: ''
+        },
+        selectGroupAndOption: {
+          defaultText: '',
+          chineseText: '请选择关联分组和选项',
+          otherLanguagesText: ''
+        },
+        uploadFailed: {
+          defaultText: '',
+          chineseText: '上传失败',
+          otherLanguagesText: ''
+        },
+        addPerson: {
+          defaultText: '',
+          chineseText: '添加人员',
+          otherLanguagesText: ''
         }
       },
       ballConfig: {

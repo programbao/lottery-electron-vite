@@ -65,7 +65,7 @@
                 size="large"
               />
           </el-form-item>
-          <el-form-item label="行间距">
+          <el-form-item label="列间距">
             <el-input
                 v-model="luckysRowColObj.columnGap"
                 :min="1"
