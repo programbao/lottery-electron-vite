@@ -155,18 +155,33 @@ const handlePrizesSetting = async () => {
     //       byIndexModifyPrize: byIndexModifyPrize
     //     })
     // }
-    if (addNum || cutNum) {
-          // 更正当前的奖项索引
-      basicData.currentPrizeIndex = modifyCurrentIndex < 0 ? 0 : modifyCurrentIndex;
-      // 更正上一轮的奖项索引
-      basicData.lastTimePrizeIndex = (modifyLastTimeIndex < 0 || (!originPrizes.length && modifyLastTimeIndex > 0)) ? 0 : modifyLastTimeIndex;
+    // if (addNum || cutNum) {
+    //       // 更正当前的奖项索引
+    //   basicData.currentPrizeIndex = modifyCurrentIndex < 0 ? 0 : modifyCurrentIndex;
+    //   // 更正上一轮的奖项索引
+    //   basicData.lastTimePrizeIndex = (modifyLastTimeIndex < 0 || (!originPrizes.length && modifyLastTimeIndex > 0)) ? 0 : modifyLastTimeIndex;
+    // }
+    // if (currentPrizeIndex < 0) {
+    //   basicData.currentPrizeIndex = 0;
+    // }
+    // if (currentPrizeIndex < 0 && addNum && originPrizes.length) {
+    //   basicData.lastTimePrizeIndex = 1
+    // }
+    let findCorrectIndex = 0;
+    let prizes = basicData.prizes
+    for (let i = 0; i < prizes.length; i++) {
+      const item = prizes[i];
+      const count = item.count - (!basicData.luckyUsers[item.type] ? 0 : basicData.luckyUsers[item.type].length)
+      if (count <= 0) {
+        findCorrectIndex = i - 1;
+        break
+      }
     }
-    if (currentPrizeIndex < 0) {
-      basicData.currentPrizeIndex = 0;
+    if (findCorrectIndex <= 0) {
+      findCorrectIndex = prizes.length - 1;
     }
-    if (currentPrizeIndex < 0 && addNum && originPrizes.length) {
-      basicData.lastTimePrizeIndex = 1
-    }
+    basicData.currentPrizeIndex = findCorrectIndex;
+    basicData.lastTimePrizeIndex = prizes[findCorrectIndex + 1] ? findCorrectIndex + 1 : findCorrectIndex
     // 纠正当前的奖项
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
