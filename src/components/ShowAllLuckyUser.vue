@@ -4,7 +4,12 @@
     ref="allLuckyUserBoxRef"
     class="all-lucky-user-box">
     <canvas ref="confettiCanvasRef" class="confetti-canvas"></canvas>
-    <div class="prize-list-box-title">
+    <div 
+      :class="{
+        'slide-in-right': basicData.isShowAllLuckyUser,
+        'slide-out-left': !basicData.isShowAllLuckyUser
+      }"
+      class="prize-list-box-title">
       中奖人员名单
     </div>
     <div 
@@ -15,7 +20,7 @@
       v-for="(currentLuckys, key) in allLuckyUsers"
       :key="key"
      >
-      <div class="prize-type-title">{{ prizeTypeObjectMap[key]['name'] }}, {{ prizeTypeObjectMap[key]['otherName'] }}</div>
+      <div class="prize-type-title">{{ prizeTypeObjectMap[key] ? prizeTypeObjectMap[key]['name'] : '' }}, {{ prizeTypeObjectMap[key] ? prizeTypeObjectMap[key]['otherName'] : '' }}</div>
       <div 
         class="lucky-content" 
         :style="lucksContentStyle(currentLuckys)">
@@ -106,12 +111,19 @@ watch(
     if (basicData.isShowAllLuckyUser) {
       showTimer = setTimeout(() => {
         luckyUserBoxStyle.value['z-index'] = '400'
-        allLuckyUsers.value = JSON.parse(JSON.stringify(basicData.luckyUsers));
-        luckysRowColObj.value = basicData.luckysRowColObj;
-        luckyCardConfigStyle.value = basicData.luckyCardConfigStyle;
         basicData.prizes.forEach((item) => {
           prizeTypeObjectMap[item.type] = item
         })
+        let filtLuckyUsers = {}
+        Object.keys(basicData.luckyUsers).forEach((key) => {
+          if ( prizeTypeObjectMap[key] ) {
+            filtLuckyUsers[key] = basicData.luckyUsers[key]
+          }
+        })
+        allLuckyUsers.value = JSON.parse(JSON.stringify(filtLuckyUsers));
+        filtLuckyUsers = null
+        luckysRowColObj.value = basicData.luckysRowColObj;
+        luckyCardConfigStyle.value = basicData.luckyCardConfigStyle;
         $.confetti.setShowContentDom(confettiCanvasRef.value)
         $.confetti.restart(); 
         setTimeout(() => {

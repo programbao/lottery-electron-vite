@@ -485,7 +485,7 @@ const saveData = () => {
     return Promise.resolve();
   }
   let type = basicData.prizes[basicData.lastTimePrizeIndex]['type']
-  if (basicData.currentLuckys.length > 0) {
+  if (basicData.currentLuckys && basicData.currentLuckys.length > 0) {
     // todo 添加数据保存机制，以免服务器挂掉数据丢失
     return myApi.setData(type, JSON.stringify(basicData.currentLuckys));
   }

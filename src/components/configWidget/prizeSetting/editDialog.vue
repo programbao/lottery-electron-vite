@@ -93,7 +93,7 @@
           {{ item.name }} 
         </div>
       </div>
-      <div class="prizes-empty">暂无可选奖项</div>
+      <div class="prizes-empty" v-else>暂无可选奖项</div>
     </div>
   </lt-dialog>
 </template>

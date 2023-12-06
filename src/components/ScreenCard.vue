@@ -153,7 +153,6 @@ const getUser = (index) => {
 }
 const adjuctScreenCardDisplay = (displayStr) => {
   if (basicData.isEnterLottery) return
-  debugger
   nextTick(() => {
     setTimeout(() => {
       document.querySelector('.screen-card') && (document.querySelector('.screen-card').style.display = displayStr)

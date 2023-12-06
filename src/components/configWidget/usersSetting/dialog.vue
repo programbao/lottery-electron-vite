@@ -70,7 +70,13 @@ const handleVerifyConfig = async (handleStr, verifyData) => {
   }
   const isPass = await myApi.savePrizesConfig(verifyConfigStr, handleStr);
   if (isPass) {
+    let isEmptyGroupList = !basicData.groupList.length
     basicData[handleStr] = JSON.parse(verifyConfigStr);
+    // 更新名单
+    Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
+    if (isEmptyGroupList) {
+      bus.emit('toInitContainerHandleData')
+    }
   } else {
     isPassSetting = {
       type: 'error',
@@ -116,7 +122,6 @@ const confirm = async () => {
       type: 'success',
     });
   // 设置关联名单
-    Object.assign(basicData.memberListData, usersSettingRef.value.userRelatedMap)
     // dialogTableVisible.value = false;
     // ...其他处理
   } else if (status === 0) {
