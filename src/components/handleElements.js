@@ -231,6 +231,7 @@ export const shineCard = (basicDataParam, paramsFieldsParam, switchTime = 500) =
   let maxCard = 20,
     maxUser;
   let shineCard = 10 + random(maxCard);
+  if (!paramsFields.totalMember) return
   shineTimer = setInterval(() => {
     // 正在抽奖停止闪烁
     // if (isLotting || currentPrizeIndex < 7 || prizeMark.style.zIndex === '6') {

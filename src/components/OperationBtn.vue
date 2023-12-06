@@ -46,6 +46,7 @@
         @click="reLottery"
         v-show="!noBeginLottery 
           && !isResetCurrentPrize
+          && basicData.currentLuckys.length
           && !isShowAllLuckys
           && !isLotting
           && !isFirstPrize">
@@ -285,7 +286,10 @@ const toggleSetting = (settingStr) => {
       break;
   }
 }
-
+const currentPrizeSurplusCount = computed(() => {
+  const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];
+  return basicData.handlePrize.count - (!basicData.luckyUsers[handlePrize.type] ? 0 : basicData.luckyUsers[handlePrize.type].length);
+})
 const isShowAllLuckys = ref(false);
 const showAllLuckyUser = (isShowAllLuckysKey) => {
   basicData.isShowAllLuckyUser = true

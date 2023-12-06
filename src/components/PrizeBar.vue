@@ -24,13 +24,13 @@
           width: prizesBarStyle.prizeBoxWidth,
           'min-height': prizesBarStyle.prizeBoxMinHeight,
           'margin-bottom': prizesBarStyle.prizeSpace,
-          'z-index': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? 1 : 0,
-          'transform': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? `scale(${prizesBarStyle.currentPrizeScale})` : 'scale(1)',
+          'z-index': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' && getItemPrizeConfig(item.type).surplusCount ? 1 : 0,
+          'transform': item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' && getItemPrizeConfig(item.type).surplusCount ? `scale(${prizesBarStyle.currentPrizeScale})` : 'scale(1)',
         }"
         :class="[
           'prize-item', 
-          item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' ? 'shine' : '',
-          getItemPrizeConfig(item.type).activeClassName == 'done' ? 'done' : ''
+          item.type == currentPrize.type && getItemPrizeConfig(item.type).activeClassName != 'done' && getItemPrizeConfig(item.type).surplusCount ? 'shine' : '',
+          getItemPrizeConfig(item.type).activeClassName == 'done' || !getItemPrizeConfig(item.type).surplusCount ? 'done' : ''
         ]">
             <div 
               :style="{

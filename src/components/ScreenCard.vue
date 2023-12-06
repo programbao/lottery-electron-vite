@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <div class="card-empty-tips" v-show="(member.length <= 0 && currentPrize) || (!currentPrize)">
+  <div class="card-empty-tips" v-show="(member.length <= 0 && currentPrize) || (!currentPrize && !basicData.isEnterLottery)">
     <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
     <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
   </div>

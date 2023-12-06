@@ -114,55 +114,67 @@ const handlePrizesSetting = async () => {
     const currentPrizeIndex =  basicData.currentPrizeIndex;
     const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
     const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;
-    const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
-    const byIndexModifyPrize = prizesData[modifyLastTimeIndex];
-    const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
-    // const originLen = basicData.prizes.length;
-    basicData.prizes = prizesData;
-    // dialogTableVisible.value = false;
-    // 更正当前的奖项索引
-    basicData.currentPrizeIndex = modifyCurrentIndex;
-    // 更正上一轮的奖项索引
-    basicData.lastTimePrizeIndex = modifyLastTimeIndex;
-
-    // 根据状态回显抽完奖的 奖项
-    const byIndexCurrentType = byIndexCurrentPrize.type;
-    const byIndexModifyType = byIndexModifyPrize.type
-    // debugger
     
-    if (
-        basicData.luckyUsers[byIndexCurrentType] &&
-        basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
-      ) {
-        basicData.currentPrizeIndex = modifyCurrentIndex + 1;
-        // 纠正是否暂时下一个奖项状态 和 当前奖项是否继续
-        basicData.isNextPrize = false;
-        basicData.isContinueLottery = true;
-        // bus.emit('adjustCurrentPrize', {
-        //   beforeModifyPrize: beforeModifyPrize,
-        //   byIndexModifyPrize: byIndexModifyPrize
-        // })
+    // const beforeModifyPrize = basicData.prizes[basicData.currentPrizeIndex];
+    // const byIndexModifyPrize = prizesData[modifyLastTimeIndex];
+    // const byIndexCurrentPrize = basicData.prizes[basicData.lastTimePrizeIndex];
+    // // const originLen = basicData.prizes.length;
+    basicData.prizes = prizesData;
+    // // dialogTableVisible.value = false;
+    // // 更正当前的奖项索引
+    // basicData.currentPrizeIndex = modifyCurrentIndex;
+    // // 更正上一轮的奖项索引
+    // basicData.lastTimePrizeIndex = modifyLastTimeIndex;
+
+    // // 根据状态回显抽完奖的 奖项
+    // const byIndexCurrentType = byIndexCurrentPrize.type;
+    // const byIndexModifyType = byIndexModifyPrize.type
+    // debugger
+    // if (
+    //     basicData.luckyUsers[byIndexCurrentType] &&
+    //     basicData.luckyUsers[byIndexCurrentType].length >= byIndexCurrentPrize.count
+    //   ) {
+    //     basicData.currentPrizeIndex = modifyCurrentIndex + 1;
+    //     // 纠正是否暂时下一个奖项状态 和 当前奖项是否继续
+    //     basicData.isNextPrize = false;
+    //     basicData.isContinueLottery = true;
+    //     // bus.emit('adjustCurrentPrize', {
+    //     //   beforeModifyPrize: beforeModifyPrize,
+    //     //   byIndexModifyPrize: byIndexModifyPrize
+    //     // })
+    // }
+    // if (byIndexModifyType ===  byIndexCurrentType && 
+    //     byIndexModifyPrize.count > byIndexCurrentPrize.count) {
+    //     bus.emit('adjustCurrentPrize', {
+    //       beforeModifyPrize: beforeModifyPrize,
+    //       byIndexModifyPrize: byIndexModifyPrize
+    //     })
+    // }
+    if (addNum || cutNum) {
+          // 更正当前的奖项索引
+      basicData.currentPrizeIndex = modifyCurrentIndex < 0 ? 0 : modifyCurrentIndex;
+      // 更正上一轮的奖项索引
+      basicData.lastTimePrizeIndex = modifyLastTimeIndex < 0 ? 0 : modifyLastTimeIndex;
     }
-    if (byIndexModifyType ===  byIndexCurrentType && 
-        byIndexModifyPrize.count > byIndexCurrentPrize.count) {
-        bus.emit('adjustCurrentPrize', {
-          beforeModifyPrize: beforeModifyPrize,
-          byIndexModifyPrize: byIndexModifyPrize
-        })
+    if (currentPrizeIndex < 0) {
+      basicData.currentPrizeIndex = 0;
+    }
+    if (currentPrizeIndex < 0 && addNum) {
+      basicData.lastTimePrizeIndex = 1
     }
     // 纠正当前的奖项
     basicData.currentPrize = basicData.prizes[basicData.currentPrizeIndex];
     basicData.eachCount = basicData.prizes.map(prize => prize.eachCount);
-    
-    if (currentPrizeIndex < 0 &&  basicData.currentPrizeIndex >= 0) {
+    debugger
+    if (currentPrizeIndex < 0) {
       basicData.currentLotteryGroup = findCurrentLotteryGroup();
       if (!basicData.isEnterLottery) {
         bus.emit('toInitContainerHandleData')
       }
     }
-    if (addNum) {
-      bus.emit('adjustCurrentPrize', { isReGet: true })
-    }
+    // if (addNum) {
+    bus.emit('adjustCurrentPrize', { isReGet: true })
+    // }
     // 重置添加和删除的记录数量
     cutNum = 0;
     addNum = 0;

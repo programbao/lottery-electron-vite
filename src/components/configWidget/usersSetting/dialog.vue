@@ -77,6 +77,8 @@ const handleVerifyConfig = async (handleStr, verifyData) => {
       status: 0
     };
   }
+  // 取消抽奖进行中 状态
+  basicData.isLotting = false
   bus.emit(handleStr + 'Setting')
   return isPassSetting; 
 }
