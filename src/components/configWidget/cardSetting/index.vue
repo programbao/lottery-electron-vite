@@ -158,36 +158,38 @@
 import { ref, onMounted, computed } from 'vue';
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
-
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 const layoutFormArr = ref([
   {
-    label: '行数',
+    label: textMappingConfig.value.numberOfRows.chineseText + ' ' + textMappingConfig.value.numberOfRows.otherLanguagesText,
     field: 'rowCount',
     type: 'number'
   },
   {
-    label: '列数',
+    label: textMappingConfig.value.numberOfColumns.chineseText + ' ' + textMappingConfig.value.numberOfColumns.otherLanguagesText,
     field: 'columnCount',
     type: 'number'
   },
   {
-    label: '距离左侧位置',
+    label: textMappingConfig.value.distanceFromLeftPosition.chineseText + ' ' + textMappingConfig.value.distanceFromLeftPosition.otherLanguagesText,
     field: 'left',
   },
   {
-    label: '距离顶部位置',
+    label: textMappingConfig.value.distanceFromTopPosition.chineseText + ' ' + textMappingConfig.value.distanceFromTopPosition.otherLanguagesText,
     field: 'top',
   },
   {
-    label: '行间距',
+    label: textMappingConfig.value.rowSpacing.chineseText + ' ' + textMappingConfig.value.rowSpacing.otherLanguagesText,
     field: 'rowGap',
   },
   {
-    label: '列间距',
+    label: textMappingConfig.value.columnSpacing.chineseText + ' ' + textMappingConfig.value.columnSpacing.otherLanguagesText,
     field: 'columnGap'
   },
   {
-    label: '缩放',
+    label: textMappingConfig.value.scaling.chineseText + ' ' + textMappingConfig.value.scaling.otherLanguagesText,
     field: 'scale',
     type: 'number',
     step: '0.1'
@@ -195,44 +197,44 @@ const layoutFormArr = ref([
 ])
 const cardStyleLabelArr = ref([
   {
-    label: '卡片宽度',
+    label: textMappingConfig.value.cardWidth.chineseText + ' ' + textMappingConfig.value.cardWidth.otherLanguagesText,
     field: 'cardWidth',
   },
   {
-    label: '卡片高度',
+    label: textMappingConfig.value.cardHeight.chineseText + ' ' + textMappingConfig.value.cardHeight.otherLanguagesText,
     field: 'cardHeight',
   },
   {
-    label: '卡牌图片logo',
+    label: textMappingConfig.value.cardLogoImage.chineseText + ' ' + textMappingConfig.value.cardLogoImage.otherLanguagesText,
     field: 'logo',
     type: 'img',
   },
   {
-    label: '图片logo宽度',
+    label: textMappingConfig.value.logoImageWidth.chineseText + ' ' + textMappingConfig.value.logoImageWidth.otherLanguagesText,
     field: 'imgWidth',
   },
   {
-    label: '图片logo高度',
+    label: textMappingConfig.value.logoImageHeight.chineseText + ' ' + textMappingConfig.value.logoImageHeight.otherLanguagesText,
     field: 'imgHeight',
   },
   {
-    label: 'logo距离顶部位置',
+    label: textMappingConfig.value.logoDistanceFromTop.chineseText + ' ' + textMappingConfig.value.logoDistanceFromTop.otherLanguagesText,
     field: 'companyTop',
   },
   {
-    label: '名称距离顶部位置',
+    label: textMappingConfig.value.nameDistanceFromTop.chineseText + ' ' + textMappingConfig.value.nameDistanceFromTop.otherLanguagesText,
     field: 'nameTop',
   },
   {
-    label: '名称字体大小',
+    label: textMappingConfig.value.nameFontSize.chineseText + ' ' + textMappingConfig.value.nameFontSize.otherLanguagesText,
     field: 'nameFontSize',
   },
   {
-    label: '其他信息距离底部位置',
+    label: textMappingConfig.value.otherInfoDistanceFromBottom.chineseText + ' ' + textMappingConfig.value.otherInfoDistanceFromBottom.otherLanguagesText,
     field: 'detailsBottom',
   },
   {
-    label: '其他信息字体大小',
+    label: textMappingConfig.value.otherInfoFontSize.chineseText + ' ' + textMappingConfig.value.otherInfoFontSize.otherLanguagesText,
     field: 'detailsFontSize',
   }
 ])

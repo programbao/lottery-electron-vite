@@ -34,37 +34,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
-
+const textMappingConfig = computed(() => {
+  return basicData.textMappingConfig
+})
 // 样式设置label
 const labelFieldArr = [
   {
-    label: '圆球比例',
+    label: textMappingConfig.value.ballProportion.chineseText + '  ' + textMappingConfig.value.ballProportion.otherLanguagesText,
     field: 'resolution',
     type: 'number',
     step: 0.1
   },
   {
-    label: '是否循环旋转',
+    label: textMappingConfig.value.rotateCycle.chineseText + ' ' + textMappingConfig.value.rotateCycle.otherLanguagesText,
     field: 'rotateLoop',
     type: 'number'
   },
   {
-    label: '抽奖旋转时间(毫秒ms)',
+    label: textMappingConfig.value.lotteryRotationTime.chineseText + ' ' + textMappingConfig.value.lotteryRotationTime.otherLanguagesText,
     field: 'rotateTime',
     type: 'number'
   },
   {
-    label: '自动旋转时间(毫秒ms)',
+    label: textMappingConfig.value.autoRotationTime.chineseText + ' ' + textMappingConfig.value.autoRotationTime.otherLanguagesText,
     field: 'autoRotateTime',
     type: 'number'
   },
   {
-    label: '相对左侧距离',
+    label: textMappingConfig.value.distanceFromLeft.chineseText + ' ' + textMappingConfig.value.distanceFromLeft.otherLanguagesText,
     field: 'ballRelativeLeftDistance'
   }
 ]
