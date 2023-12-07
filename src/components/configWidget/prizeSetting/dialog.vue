@@ -183,7 +183,8 @@ const handlePrizesSetting = async () => {
         break
       }
     }
-    if (findCorrectIndex <= 0) {
+    debugger
+    if (findCorrectIndex < 0) {
       findCorrectIndex = prizes.length - 1;
     }
     basicData.currentPrizeIndex = findCorrectIndex;
@@ -201,7 +202,10 @@ const handlePrizesSetting = async () => {
     //   const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];
 //   return basicData.handlePrize.count - (!basicData.luckyUsers[handlePrize.type] ? 0 : basicData.luckyUsers[handlePrize.type].length);
     if (basicData.currentPrizeIndex === 0 && cutNum) {
-      const currentPrizeSurplusCount = basicData.currentPrize.count - (!basicData.luckyUsers[basicData.currentPrize.type] ? 0 : basicData.luckyUsers[basicData.currentPrize.type].length);
+      let currentPrizeSurplusCount = 0;
+      if (basicData.currentPrize) {
+        currentPrizeSurplusCount = basicData.currentPrize.count - (!basicData.luckyUsers[basicData.currentPrize.type] ? 0 : basicData.luckyUsers[basicData.currentPrize.type].length)
+      }
       if (currentPrizeSurplusCount <= 0) {
         basicData.currentPrize = undefined;
         basicData.currentPrizeIndex = -1;
