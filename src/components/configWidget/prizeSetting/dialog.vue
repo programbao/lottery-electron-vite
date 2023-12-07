@@ -181,10 +181,11 @@ const handlePrizesSetting = async () => {
       if (count <= 0) {
         findCorrectIndex = i - 1;
         break
+      } else {
+        findCorrectIndex = i
       }
     }
-    debugger
-    if (findCorrectIndex < 0) {
+    if (findCorrectIndex < 0 || findCorrectIndex) {
       findCorrectIndex = prizes.length - 1;
     }
     basicData.currentPrizeIndex = findCorrectIndex;
