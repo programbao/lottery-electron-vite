@@ -35,6 +35,8 @@ import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
 import usersSetting from './draggableGroup/index.vue'
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
 const dialogKeyStr = 'usersSetting';
@@ -104,6 +106,12 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  window.operationLogTable.add({
+    id: nanoid(),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    type: 'setting',
+    value: textMappingConfig.value.userSettings.chineseText + ' ' + textMappingConfig.value.userSettings.otherLanguagesText
+  })
   // 删除不必存的字段
   const groupListData = JSON.parse(JSON.stringify(usersSettingRef.value['getGroupList']()));
   const excludeFields = ['index', 'isSelected'];

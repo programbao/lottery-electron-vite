@@ -44,6 +44,8 @@ const dialogStyle = computed(() => {
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
@@ -96,6 +98,12 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  window.operationLogTable.add({
+    id: nanoid(),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    type: 'setting',
+    value: textMappingConfig.value.otherResourcesSettings.chineseText + ' ' + textMappingConfig.value.otherResourcesSettings.otherLanguagesText
+  })
   const isPass = await otherResourceSettingRef.value.validateForm();
   if (!isPass) {
     return

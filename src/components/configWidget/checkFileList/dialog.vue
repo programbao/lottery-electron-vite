@@ -41,6 +41,8 @@ const dialogStyle = computed(() => {
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value

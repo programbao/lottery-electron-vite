@@ -16,6 +16,9 @@ import { lotteryDataStore } from '../store'
 const basicData = lotteryDataStore();
 import { shineCard, getCardWithParentHtml, createCardWithParentDom, random, removeShineCard } from './handleElements'
 import { ElMessage, ElLoading } from 'element-plus'
+import { nanoid } from 'nanoid';
+import dayjs from 'dayjs'
+
 let camera;
 let scene;
 let renderer;
@@ -447,6 +450,12 @@ const lottery = () => {
     // 抽中之后要处理的事
     basicData.isShowLuckyUser = true;
     console.log(basicData.currentLuckys);
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'lucky_user',
+      value: basicData.currentLuckys
+    })
     // selectCard();
   });
 }
@@ -773,7 +782,6 @@ const resetCurrentPrizeBtnClick = async () => {
 const exportData = () => {
   saveData().then(async res => {
     let result = await myApi.handleExportData(); 
-    console.log(result)
     if (!result || result.type === 'error') {
       ElMessage({
         type: 'error',

@@ -11,20 +11,20 @@
     width="70%"
     >
     <template #header>
-      <slot name="title"><span class="title-text">{{ textMappingConfig.toggleSettingTextMappingConfig.chineseText + ' ' + textMappingConfig.toggleSettingTextMappingConfig.otherLanguagesText }}</span></slot>
-      <div class="title-btn confirm-btn" type="confirm" @click="confirm">
+      <slot name="title"><span class="title-text">{{ textMappingConfig.operationLog.chineseText + ' ' + textMappingConfig.operationLog.otherLanguagesText }}</span></slot>
+      <!-- <div class="title-btn confirm-btn" type="confirm" @click="confirm">
         <div class="label label-confirm"></div>
         {{ textMappingConfig.confirm.chineseText + ' ' + textMappingConfig.confirm.otherLanguagesText }}
-      </div>
+      </div> -->
       <div class="title-btn cancel-btn" type="cancel"  @click="dialogTableVisible = false" >
         <div class="label label-cancel"></div>
         {{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}
       </div>
     </template>
     <div class="setting-content">
-      <textMappingConfigSetting 
+      <operationLog 
         :key="dialogTableVisible"
-        ref="textMappingConfigRef" />
+        ref="operationLogRef" />
     </div>
   </el-dialog>
 </template>
@@ -35,18 +35,18 @@ import { ElMessage } from 'element-plus'
 import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
-import textMappingConfigSetting from './index.vue'
-import dayjs from 'dayjs'
-import { nanoid } from 'nanoid';
+import operationLog from './index.vue'
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
-const dialogKeyStr = 'textMappingConfig';
+const dialogKeyStr = 'operationLog';
 const dialogStyle = computed(() => {
   return basicData['dialogStyle_' + dialogKeyStr] || basicData.dialogStyle
 });
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
@@ -59,7 +59,7 @@ const toggleConfig = () => {
   }
 }
 
-const textMappingConfigRef = ref();
+const operationLogRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {
       type: 'success',
@@ -82,6 +82,9 @@ const handleVerifyConfig = async (handleStr, verifyData) => {
       status: 0
     };
   }
+  if (handleStr === 'ballConfig') {
+    window.ballRelativeLeftDistance = basicData[handleStr].ballRelativeLeftDistance
+  }
   bus.emit(handleStr + 'Setting')
   return isPassSetting; 
 }
@@ -102,14 +105,14 @@ const confirm = async () => {
     id: nanoid(),
     date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
     type: 'setting',
-    value: textMappingConfig.value.toggleSettingTextMappingConfig.chineseText + ' ' + textMappingConfig.value.toggleSettingTextMappingConfig.otherLanguagesText
+    value: textMappingConfig.value.sphereActionSettings.chineseText + ' ' + textMappingConfig.value.sphereActionSettings.otherLanguagesText
   })
   // 删除不必存的字段
-  const textMappingConfigData = JSON.parse(JSON.stringify(textMappingConfigRef.value['textMappingConfig']));
-  const textMappingConfigDataPass = await handleVerifyConfig('textMappingConfig', textMappingConfigData);
+  const ballConfigData = JSON.parse(JSON.stringify(operationLogRef.value['operationLog']));
+  const ballConfigDataPass = await handleVerifyConfig('operationLog', ballConfigData);
    // 检查所有状态
   const status = checkAllPassStatus(
-    textMappingConfigDataPass.status
+    ballConfigDataPass.status
   );
 
   if (status === 1) {

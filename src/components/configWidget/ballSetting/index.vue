@@ -1,6 +1,6 @@
 <template>
  <div class="lottery-layout">
-    <div class="header-txt">球体相关动作设置</div>
+    <div class="header-txt">{{ textMappingConfig.sphereActionSettings.chineseText + ' ' + textMappingConfig.sphereActionSettings.otherLanguagesText }}</div>
     <div class="layout-form">
       <el-form
         ref="form"

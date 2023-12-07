@@ -37,6 +37,8 @@ import bus from '../../../libs/bus'
 import { initMoveEvent } from '../moveEvent'
 import { lotteryDataStore } from '../../../store'
 import prizeSetting from './index.vue'
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 const basicData = lotteryDataStore();
 const dialogTableVisible = ref(false);
 const dialogKeyStr = 'prizeSetting';
@@ -260,6 +262,12 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  window.operationLogTable.add({
+    id: nanoid(),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    type: 'setting',
+    value: textMappingConfig.value.prizeConfiguration.chineseText + ' ' + textMappingConfig.value.prizeConfiguration.otherLanguagesText
+  })
   const prizeSettingPass = await handlePrizesSetting();
   const prizesBarStylePass = await handleVerifyConfig('prizesBarStyle', prizeSettingRef.value['prizesBarStyle']);
 

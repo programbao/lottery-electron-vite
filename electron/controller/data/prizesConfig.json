@@ -676,6 +676,11 @@
       "defaultText": "",
       "chineseText": "已在中奖名单，不可取消关联",
       "otherLanguagesText": ""
+    },
+    "operationLog": {
+      "defaultText": "操作日志",
+      "chineseText": "操作日志",
+      "otherLanguagesText": "operation log"
     }
   }
 }

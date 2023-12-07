@@ -45,6 +45,8 @@ const dialogStyle = computed(() => {
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 let isFirstVisible = false;
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
@@ -99,6 +101,12 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  window.operationLogTable.add({
+    id: nanoid(),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    type: 'setting',
+    value: textMappingConfig.value.sphereActionSettings.chineseText + ' ' + textMappingConfig.value.sphereActionSettings.otherLanguagesText
+  })
   // 删除不必存的字段
   const ballConfigData = JSON.parse(JSON.stringify(ballConfigSettingRef.value['ballConfig']));
   const ballConfigDataPass = await handleVerifyConfig('ballConfig', ballConfigData);

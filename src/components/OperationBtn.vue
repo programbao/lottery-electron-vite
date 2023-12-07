@@ -9,7 +9,7 @@
       class="lottery-operation-btn"
       :style="operationBtnStyle">
       <div class="begin-lottery">
-        <button class="btn" id="enter"  v-if="noBeginLottery" @click="enterLottery">
+        <button class="btn" id="enter"  v-if="noBeginLottery" @click="(e) => enterLottery(e)">
           {{ textMappingConfig.enter.chineseText }}
           <span v-if="textMappingConfig.enter.otherLanguagesText">
             <br/>
@@ -19,13 +19,17 @@
         <button 
           class="btn"
           id="showPrize" 
-          @click="showPrize" 
+          @click="(e) => showPrize(e)" 
           v-if="!noBeginLottery && isNextPrize && currentPrize">
           <div v-html="currentPrize.name">
           </div>
           <!-- <br/>奖项 undian selanjutnya -->
         </button>
-        <button class="btn" id="lottery" v-show="!noBeginLottery && !isNextPrize" @click="beginLottery">
+        <button 
+          class="btn" 
+          id="lottery" 
+          v-show="!noBeginLottery && !isNextPrize" 
+          @click="(e) => beginLottery(e)">
           {{ isLotting ? textMappingConfig.lotteryEnd.chineseText : isContinueLottery ?  textMappingConfig.continueLottery.chineseText : textMappingConfig.lottery.chineseText }}
           <span v-if="textMappingConfig.lotteryEnd.otherLanguagesText && isLotting">
             <br/>
@@ -61,7 +65,11 @@
             {{ textMappingConfig.reLottery.otherLanguagesText }}
           </span>
       </button>
-      <button id="showAllLucks" class="btn" v-if="!currentPrize"  @click="showAllLuckyUser('showAllLuckys')">
+      <button 
+        id="showAllLucks" 
+        class="btn" 
+        v-if="!currentPrize"  
+        @click="(e) => showAllLuckyUser('showAllLuckys', e)">
         {{ textMappingConfig.showAllLucks.chineseText }}
           <span v-if="textMappingConfig.showAllLucks.otherLanguagesText">
             <br/>
@@ -96,21 +104,21 @@
       }"
       class="bottom-bar">
       <div class="quick-operation">
-        <button class="btn" @click="bgWallClick">
+        <button class="btn" @click="(e) => bgWallClick(e)">
           {{ textMappingConfig.bgWallClick.chineseText }}
           <span v-if="textMappingConfig.bgWallClick.otherLanguagesText">
             <br/>
             {{ textMappingConfig.bgWallClick.otherLanguagesText }}
           </span>
         </button>
-        <button class="btn" @click="toggleScreenImg">
+        <button class="btn" @click="(e) => toggleScreenImg(e)">
           {{ textMappingConfig.toggleScreenImg.chineseText }}
           <span v-if="textMappingConfig.toggleScreenImg.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleScreenImg.otherLanguagesText }}
           </span>
         </button>
-        <button class="btn" @click="showLotteryClick">
+        <button class="btn" @click="(e) => showLotteryClick(e)">
           {{ textMappingConfig.showLotteryClick.chineseText }}
           <span v-if="textMappingConfig.showLotteryClick.otherLanguagesText">
             <br/>
@@ -119,88 +127,95 @@
         </button>
       </div>
       <div class="setting">
-        <button class="btn" @click="toggleSetting('usersSetting')">
+        <button class="btn" @click="(e) => toggleSetting('usersSetting', e)">
           {{ textMappingConfig.toggleSettingUsersSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingUsersSetting.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingUsersSetting.otherLanguagesText }}
           </span>
         </button>
-        <button class="btn" @click="toggleSetting('prizeSetting')">
+        <button class="btn" @click="(e) => toggleSetting('prizeSetting', e)">
           {{ textMappingConfig.toggleSettingPrizeSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingPrizeSetting.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingPrizeSetting.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" @click="toggleSetting('cardSetting')">
+        <button class="btn" @click="(e) => toggleSetting('cardSetting', e)">
           {{ textMappingConfig.toggleSettingCardSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingCardSetting.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingCardSetting.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" @click="toggleSetting('ballSetting')">
+        <button class="btn" @click="(e) => toggleSetting('ballSetting', e)">
           {{ textMappingConfig.toggleSettingBallSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingBallSetting.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingBallSetting.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" @click="toggleSetting('textMappingConfig')">
+        <button class="btn" @click="(e) => toggleSetting('textMappingConfig', e)">
           {{ textMappingConfig.toggleSettingTextMappingConfig.chineseText }}
           <span v-if="textMappingConfig.toggleSettingTextMappingConfig.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingTextMappingConfig.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" @click="toggleSetting('otherResourceSetting')">
+        <button class="btn" @click="(e) => toggleSetting('otherResourceSetting', e)">
           {{ textMappingConfig.toggleSettingOtherResourceSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingOtherResourceSetting.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingOtherResourceSetting.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn lock-btn" @click="toggleSetting('secretSetting')"><el-icon :size="30"><Lock /></el-icon></button>
-        <button class="btn lock-btn" @click="toggleSetting('openDevTools')"><el-icon :size="30"><SetUp /></el-icon></button>
+       <button class="btn" @click="(e) => toggleSetting('operationLog', e)">
+          {{ textMappingConfig.operationLog.chineseText }}
+          <span v-if="textMappingConfig.operationLog.otherLanguagesText">
+            <br/>
+            {{ textMappingConfig.operationLog.otherLanguagesText }}
+          </span>
+       </button>
+        <button class="btn lock-btn" @click="(e) => toggleSetting('secretSetting', e)"><el-icon :size="30"><Lock /></el-icon></button>
+        <button class="btn lock-btn" @click="(e) => toggleSetting('openDevTools', e)"><el-icon :size="30"><SetUp /></el-icon></button>
       </div>
       <div class="other">
-        <button :key="tipsOpenFileKey" class="btn bounce-top" @click="toggleSetting('checkFileList')">
+        <button :key="tipsOpenFileKey" class="btn bounce-top" @click="(e) => toggleSetting('checkFileList', e)">
           {{ textMappingConfig.toggleSettingCheckFileList.chineseText }}
           <span v-if="textMappingConfig.toggleSettingCheckFileList.otherLanguagesText">
             <br/>
             {{ textMappingConfig.toggleSettingCheckFileList.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" @click="showAllLuckyUser">
+        <button class="btn" @click="(e) => showAllLuckyUser(null, e)">
           {{ textMappingConfig.showAllLuckyUser.chineseText }}
           <span v-if="textMappingConfig.showAllLuckyUser.otherLanguagesText">
             <br/>
             {{ textMappingConfig.showAllLuckyUser.otherLanguagesText }}
           </span>
        </button>
-        <button id="save" class="fixed-btn btn" @click="exportData">
+        <button id="save" class="fixed-btn btn" @click="(e) => exportData(e)">
           {{ textMappingConfig.exportData.chineseText }}
           <span v-if="textMappingConfig.exportData.otherLanguagesText">
             <br/>
             {{ textMappingConfig.exportData.otherLanguagesText }}
           </span>
        </button>
-        <button id="reset" class="fixed-btn btn" @click="resetCurrentPrizeBtnClick">
+        <button id="reset" class="fixed-btn btn" @click="(e) => resetCurrentPrizeBtnClick(e)">
           {{ textMappingConfig.resetCurrentPrizeBtnClick.chineseText }}
           <span v-if="textMappingConfig.resetCurrentPrizeBtnClick.otherLanguagesText">
             <br/>
             {{ textMappingConfig.resetCurrentPrizeBtnClick.otherLanguagesText }}
           </span>
        </button>
-        <button id="reset" class="fixed-btn btn" @click="resetBtnClick">
+        <button id="reset" class="fixed-btn btn" @click="(e) => resetBtnClick(e)">
           {{ textMappingConfig.resetBtnClick.chineseText }}
           <span v-if="textMappingConfig.resetBtnClick.otherLanguagesText">
             <br/>
             {{ textMappingConfig.resetBtnClick.otherLanguagesText }}
           </span>
        </button>
-        <button class="btn" id="fullScreen" @click="toggleFullScreen">
+        <button class="btn" id="fullScreen" @click="(e) => toggleFullScreen(e)">
           {{ isFullScreen ? textMappingConfig.quitFullScreen.chineseText : textMappingConfig.enterFullScreen.chineseText }}
           <span v-if="textMappingConfig.quitFullScreen.otherLanguagesText && isFullScreen">
             <br/>
@@ -223,6 +238,7 @@
     <ballSettingDialog ref="ballSettingDialogRef" />
     <checkFileListDialog ref="checkFileListDialogRef" />
     <textMappingConfigDialog ref="textMappingConfigDialogRef" />
+    <operationLogDialog ref="operationLogRef" />
   </div>
 </template>
 
@@ -239,11 +255,13 @@ import prizeSettingDialog from "../components/configWidget/prizeSetting/dialog.v
 import cardSettingDialog from "../components/configWidget/cardSetting/dialog.vue"
 import secretSettingDialog from "../components/configWidget/secretSetting/dialog.vue"
 import otherResourceSettingDialog from "../components/configWidget/otherResourceSetting/dialog.vue"
+import operationLogDialog from "../components/configWidget/operationLog/dialog.vue"
 import ballSettingDialog from "../components/configWidget/ballSetting/dialog.vue"
 import checkFileListDialog from "../components/configWidget/checkFileList/dialog.vue"
 import textMappingConfigDialog from "../components/configWidget/textMappingConfig/dialog.vue"
 const operationBtnStyle = ref({});
-
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 // 打开设置
 const usersSettingDialogRef = ref();
 const prizeSettingDialogRef = ref();
@@ -253,7 +271,14 @@ const secretSettingDialogRef = ref();
 const ballSettingDialogRef = ref();
 const checkFileListDialogRef = ref();
 const textMappingConfigDialogRef = ref();
-const toggleSetting = (settingStr) => {
+const operationLogRef = ref();
+const toggleSetting = (settingStr, event) => {
+  // window.operationLogTable.add({
+  //   id: nanoid(),
+  //   date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+  //   type: 'control_btn',
+  //   value: settingStr
+  // })
   switch (settingStr) {
     case 'usersSetting':
       usersSettingDialogRef.value.toggleConfig()
@@ -266,6 +291,9 @@ const toggleSetting = (settingStr) => {
       break;
     case 'otherResourceSetting': 
       otherResourceSettingDialogRef.value.toggleConfig()
+      break;
+    case 'operationLog': 
+      operationLogRef.value.toggleConfig()
       break;
     case 'secretSetting':
       secretSettingDialogRef.value.toggleConfig()
@@ -355,16 +383,24 @@ const isFirstPrize = ref(true);
 const noBeginLottery = ref(true);
 const isFullScreen = ref(false)
 const isResetCurrentPrize = ref(false)
-const enterLottery = () => {
+const enterLottery = (e) => {
   bus.emit('enterLottery')
   basicData.isEnterLottery = true
   isResetCurrentPrize.value = false
   noBeginLottery.value = false
+  if (e && e.currentTarget) {
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
 }
-const beginLottery = () => {
+const beginLottery = (e) => {
   if (basicData.isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
       timeout: 2000
@@ -374,13 +410,37 @@ const beginLottery = () => {
   bus.emit('beginLottery')
   isFirstPrize.value = false
   isResetCurrentPrize.value = false
+  if (e && e.currentTarget) {
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
-const showPrize = () => {
+const showPrize = (e) => {
   bus.emit('showPrize')
+  if (e && e.currentTarget) {
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
-const reLottery = () => {
+const reLottery = (e) => {
   bus.emit('reLottery')
   bus.emit('hidePrizeMark');
+  if (e && e.currentTarget) {
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
 
 // const showPrizeEnd = () => {
@@ -397,16 +457,33 @@ const findCurrentLotteryGroup = () => {
   return userGroup;
 }
 
-const toggleFullScreen = async () => {
+const toggleFullScreen = async (e) => {
   let fullScreenStatus = await myApi.toggleFullScreen();
   isFullScreen.value = fullScreenStatus;
+  if (e && e.currentTarget) {
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
-const exportData = () => {
+const exportData = (e) => {
   bus.emit('exportData')
   tipsOpenFileKey.value = new Date().getTime();
+  if (e && e.currentTarget) {
+    console.log( e.currentTarget.innerText, 'e.currentTargete.currentTarget')
+    window.operationLogTable.add({
+      id: nanoid(),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      type: 'control_btn',
+      value: e.currentTarget.innerText
+    })
+  }
 }
 
-const resetCurrentPrizeBtnClick = () => {
+const resetCurrentPrizeBtnClick = (e) => {
   ElMessageBox.confirm(
     '当前中奖记录都将被清空，确认要重置吗?',
     '警告',
@@ -423,9 +500,17 @@ const resetCurrentPrizeBtnClick = () => {
         message: '当前奖项已重置成功',
       })
       isResetCurrentPrize.value = true
+      if (e && e.currentTarget) {
+        window.operationLogTable.add({
+          id: nanoid(),
+          date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+          type: 'control_btn',
+          value: e.currentTarget.innerText
+        })
+      }
     }) 
 }
-const resetBtnClick = () => {
+const resetBtnClick = (e) => {
   ElMessageBox.confirm(
     '所有中奖记录都将被清空，确认要重置吗? 系统将会导出历史中奖记录，请注意查看文件列表',
     '警告',
@@ -445,6 +530,14 @@ const resetBtnClick = () => {
         type: 'success',
         message: '重置成功',
       })
+      if (e && e.currentTarget) {
+        window.operationLogTable.add({
+          id: nanoid(),
+          date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+          type: 'control_btn',
+          value: e.currentTarget.innerText
+        })
+      }
     })
 }
 // const toggleConfig = () => {

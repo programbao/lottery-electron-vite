@@ -12,7 +12,10 @@ import ScreenCard from "./components/ScreenCard.vue"
 // 引入store
 import { lotteryDataStore } from './store'
 const lotteryData = lotteryDataStore();
-
+import GoDB from 'godb';
+const operationDB = new GoDB('operationDB'); // 连接数据库
+window.operationLogTable = operationDB.table('operation_log'); // 获取数据表
+console.log(window.operationLogTable, 'window.operation_log')
 const isLoadingFinish = ref(false)
 onMounted(async () => {
   await lotteryData.initConfigData();

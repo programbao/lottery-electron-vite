@@ -48,6 +48,8 @@ const dialogStyle = computed(() => {
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid';
 const toggleConfig = () => {
   let isOpen = !dialogTableVisible.value
   dialogTableVisible.value = isOpen
@@ -125,6 +127,12 @@ const checkAllPassStatus = (...statuses) => {
 };
 
 const confirm = async () => {
+  window.operationLogTable.add({
+    id: nanoid(),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    type: 'setting',
+    value: textMappingConfig.value.cardConfiguration.chineseText + ' ' + textMappingConfig.value.cardConfiguration.otherLanguagesText
+  })
   const beforeLotteryLayoutPass = await handleBeforeLotteryLayout();
   const cardConfigStylePass = await handleVerifyConfig('cardConfigStyle', cardSettingRef.value['cardConfigStyle']);
   const luckyCardConfigStylePass = await handleVerifyConfig('luckyCardConfigStyle', cardSettingRef.value['luckyCardConfigStyle']);
