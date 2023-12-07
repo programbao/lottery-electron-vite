@@ -145,8 +145,8 @@ export const lotteryDataStore = defineStore('LOTTERY', {
           otherLanguagesText: '内置中奖名单'
         },
         toggleSettingCheckFileList: {
-          defaultText: '打开中奖名单文件列表',
-          chineseText: '打开中奖名单文件列表',
+          defaultText: '名单文件列表',
+          chineseText: '名单文件列表',
           otherLanguagesText: 'open file list'
         },
         showAllLuckyUser: {

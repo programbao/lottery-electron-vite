@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
@@ -27,8 +27,24 @@ const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
 const fileInfoList = ref([])
+// 自定义排序函数
+const customSort = (a, b) => {
+    const regex = /抽奖结果-/;
+    const aHasPrefix = regex.test(a.fileName);
+    const bHasPrefix = regex.test(b.fileName);
+
+    if (!aHasPrefix || !bHasPrefix) {
+        return a.fileName.localeCompare(b.fileName);
+    }
+
+    const aDate = a.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}/)[0];
+    const bDate = b.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}/)[0];
+    return new Date(bDate.replace('#', 'T').replaceAll('.', ':')) - new Date(aDate.replaceAll('#', 'T').replaceAll('.', ':'));
+};
+
 onMounted(async () => {
   fileInfoList.value = await myApi.getSaveExcelFileInfoList();
+  fileInfoList.value.sort(customSort)
 })
 const openFileOrFolder = async (filePath) => {
   const loading = ElLoading.service({
