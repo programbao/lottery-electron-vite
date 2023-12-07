@@ -1,17 +1,32 @@
 <template>
   <div class="lottery-layout">
-     <div class="operation-open-folder">
-       <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0].saveFolderPath)">{{ textMappingConfig.openFolder.chineseText + ' ' + textMappingConfig.openFolder.otherLanguagesText }}</el-button>
-     </div>
-     <div v-for="(file, index) in fileInfoList" :key="index" class="file-item">
-       <div class="left-info">
-         <el-icon :size="15"><Document /></el-icon>
-         <span class="file-name">{{ file.fileName }}</span>
-       </div>
-       <div class="operation-btn">
-         <el-button link type="primary" plain @click="openFileOrFolder(file.filePath)">{{ textMappingConfig.openFile.chineseText + ' ' + textMappingConfig.openFile.otherLanguagesText }}</el-button>
-       </div>
-     </div>
+    <el-table
+      :data="operationLogList"
+      height="650"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="type"
+        label="操作类型"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="value"
+        label="名称/名单">
+        <template #default="scope">
+          <span v-if="scope.row.type !== 'lucky_user'">{{ scope.row.value }}</span>
+          <div v-else>
+            <div v-for="item in scope.row.value" :key="item">
+              <span class="lucky-user">{{ item ? item.join(',') : '' }}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
    </div>
  </template>
  
@@ -25,27 +40,34 @@
  const textMappingConfig = computed(() => {
    return basicData.textMappingConfig
  })
- const fileInfoList = ref([])
+ const operationLogList = ref([])
  
  onMounted(async () => {
-   fileInfoList.value = await myApi.getSaveExcelFileInfoList();
+  let list = await window.operationLogTable.getAll();
+  list.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+})
+  list.forEach(item => {
+    if (item.type === 'lucky_user') {
+      item.value = JSON.parse(item.value)
+    }
+  })
+  operationLogList.value = list;
  })
- const openFileOrFolder = async (filePath) => {
-   const loading = ElLoading.service({
-     lock: true,
-     text: textMappingConfig.value.opening.chineseText + ' ' + textMappingConfig.value.opening.otherLanguagesText,
-     background: 'rgba(0, 0, 0, 0.7)',
-   })
-   await myApi.openFileOrFolder(filePath);
-   setTimeout(() => {
-     loading.close();
-   }, 500)
- }
- defineExpose({
- })
+ 
  </script>
  
  <style lang="scss" scoped>
+ .lucky-user {
+  padding: 4px;
+  margin: 2px;
+  font-size: 13px;
+  align-items: center;
+  background: #f0f0f0;
+  border-radius: 4px;
+  color: #9da4ad;
+  display: inline-block;
+ }
   .lottery-layout {
    .operation-open-folder {
      text-align: right;

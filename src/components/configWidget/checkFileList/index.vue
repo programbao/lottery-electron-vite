@@ -37,8 +37,8 @@ const customSort = (a, b) => {
         return a.fileName.localeCompare(b.fileName);
     }
 
-    const aDate = a.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}/)[0];
-    const bDate = b.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}/)[0];
+    const aDate = a.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}.\d{3}/)[0];
+    const bDate = b.fileName.match(/\d{4}-\d{2}-\d{2}#\d{2}.\d{2}.\d{2}.\d{3}/)[0];
     return new Date(bDate.replace('#', 'T').replaceAll('.', ':')) - new Date(aDate.replaceAll('#', 'T').replaceAll('.', ':'));
 };
 

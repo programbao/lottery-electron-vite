@@ -275,7 +275,7 @@ const operationLogRef = ref();
 const toggleSetting = (settingStr, event) => {
   // window.operationLogTable.add({
   //   id: nanoid(),
-  //   date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+  //   date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
   //   type: 'control_btn',
   //   value: settingStr
   // })
@@ -391,7 +391,7 @@ const enterLottery = (e) => {
   if (e && e.currentTarget) {
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -413,7 +413,7 @@ const beginLottery = (e) => {
   if (e && e.currentTarget) {
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -424,7 +424,7 @@ const showPrize = (e) => {
   if (e && e.currentTarget) {
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -436,7 +436,7 @@ const reLottery = (e) => {
   if (e && e.currentTarget) {
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -463,7 +463,7 @@ const toggleFullScreen = async (e) => {
   if (e && e.currentTarget) {
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -476,7 +476,7 @@ const exportData = (e) => {
     console.log( e.currentTarget.innerText, 'e.currentTargete.currentTarget')
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'control_btn',
       value: e.currentTarget.innerText
     })
@@ -503,7 +503,7 @@ const resetCurrentPrizeBtnClick = (e) => {
       if (e && e.currentTarget) {
         window.operationLogTable.add({
           id: nanoid(),
-          date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+          date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
           type: 'control_btn',
           value: e.currentTarget.innerText
         })
@@ -533,7 +533,7 @@ const resetBtnClick = (e) => {
       if (e && e.currentTarget) {
         window.operationLogTable.add({
           id: nanoid(),
-          date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+          date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
           type: 'control_btn',
           value: e.currentTarget.innerText
         })

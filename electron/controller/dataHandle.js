@@ -134,7 +134,7 @@ const hanldeExportDataFn = async () => {
   });
   let result = {};
   try {
-    let fileName = `抽奖结果-${dayjs().format("YYYY-MM-DD#hh.mm.ss")}.xlsx`
+    let fileName = `抽奖结果-${dayjs().format("YYYY-MM-DD#hh.mm.ss.SSS")}.xlsx`
     const savePath = await writeXML(outData, fileName)
     result = {
       type: "success",

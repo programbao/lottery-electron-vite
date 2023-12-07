@@ -452,9 +452,9 @@ const lottery = () => {
     console.log(basicData.currentLuckys);
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
       type: 'lucky_user',
-      value: basicData.currentLuckys
+      value: JSON.stringify(basicData.currentLuckys)
     })
     // selectCard();
   });

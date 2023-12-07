@@ -264,7 +264,7 @@ const checkAllPassStatus = (...statuses) => {
 const confirm = async () => {
   window.operationLogTable.add({
     id: nanoid(),
-    date: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+    date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
     type: 'setting',
     value: textMappingConfig.value.prizeConfiguration.chineseText + ' ' + textMappingConfig.value.prizeConfiguration.otherLanguagesText
   })

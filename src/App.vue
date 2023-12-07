@@ -16,6 +16,10 @@ import GoDB from 'godb';
 const operationDB = new GoDB('operationDB'); // 连接数据库
 window.operationLogTable = operationDB.table('operation_log'); // 获取数据表
 console.log(window.operationLogTable, 'window.operation_log')
+// console.log(window.operationLogTable.getAll(), 'window.operation_log')
+// window.operationLogTable.getAll().then((res) => {
+//         console.log(res, 'window.operationLogTable.getAll()window.operationLogTable.getAll()')
+// })
 const isLoadingFinish = ref(false)
 onMounted(async () => {
   await lotteryData.initConfigData();
