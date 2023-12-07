@@ -42,7 +42,7 @@
     "wait-on": "^7.0.1"
   },
   "build": {
-    "productName": "Electron + Vue3 开发桌面应用",
+    "productName": "抽奖程序",
     "copyright": "Copyright © year",
     "files": [
       "dist/**/*",
