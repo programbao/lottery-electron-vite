@@ -1,4 +1,4 @@
-const { app, BrowserWindow, protocol, Menu } = require('electron')
+const { app, BrowserWindow, protocol, Menu, dialog } = require('electron')
 const path = require('path')
 const WinState = require('electron-win-state').default;
 const NODE_ENV = process.env.NODE_ENV
@@ -15,15 +15,18 @@ global.sharedObject = {
 
 const openDialog = require('./controller/openDialog')
 const { getTempData } = require('./controller/getTempData')
-const { getStaticUsersData, setData, resetData, resetOneRoundLuckyData, saveOneRoundLuckyData, handleExportData, getSaveExcelFileInfoList, openFileOrFolder } = require('./controller/dataHandle')
+const { getStaticUsersData, setData, resetData, resetOneRoundLuckyData, 
+  saveOneRoundLuckyData, handleExportData, getSaveExcelFileInfoList, 
+  openFileOrFolder } = require('./controller/dataHandle')
 const { toggleFullScreen, savePrizesConfig, openDevTools } = require('./controller/systemEventHandle')
 const { importFile } = require('./controller/prizesConfigHandle')
+let win = null
 const createWindow = () => {
   const winState = new WinState({
     // defaultWidth: 1000,
     // defaultHeight: 800
   })
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     // width: 1000,
     // height: 800,
     ...winState.winOptions,
@@ -41,8 +44,8 @@ const createWindow = () => {
 
   winState.manage(win);
   // 最大化
-  win.maximize()
-  win.show() 
+  // win.maximize()
+  // win.show() 
 
   // Alt + Enter 切换全屏
   win.on('keyup', (e) => {
@@ -60,7 +63,10 @@ const createWindow = () => {
     NODE_ENV === 'development' ?
     'http://localhost:5173' : 
     `file://${path.join(__dirname, "../dist/index.html")}`
-  );
+  ) .then(() => { 
+    win.maximize();
+    win.show(); 
+  });;
   if (NODE_ENV === 'development') {
     win.webContents.openDevTools();
   }
@@ -68,7 +74,31 @@ const createWindow = () => {
   app.on('activate', function() {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-  // global.sharedObject.win = win;
+  // 监听关闭窗口的事件
+  win.on('close', (event) => {
+    // 阻止默认的窗口关闭行为
+    event.preventDefault();
+    
+    // 弹出确认对话框
+    const choice = dialog.showMessageBoxSync(win, {
+      type: 'question',
+      buttons: ['是', '否'],
+      title: '确认关闭',
+      message: '确定要关闭应用吗？'
+    });
+
+    // 如果用户选择“是”，则关闭窗口
+    if (choice === 0) {
+      win.destroy();
+      // 发送确认关闭窗口的事件到渲染进程
+      // event.sender.send('confirm-close-window');
+    }
+  });
+
+  win.on('closed', () => {
+    win = null;
+  });
+  global.sharedObject.win = win;
 
   // 打开dialog
   openDialog();
@@ -111,6 +141,7 @@ const createWindow = () => {
 
   // 打开开发者工具
   openDevTools();
+
 }
 
 app.whenReady().then(() => {
