@@ -1,5 +1,6 @@
 <template>
   <div class="qd-optiongroup-question">
+    <el-button class="check-users-btn" @click="checkUserTemplateFormat" type="primary" plain>{{ textMappingConfig.viewUploadTemplateFormat.chineseText + ' ' + textMappingConfig.viewUploadTemplateFormat.otherLanguagesText }}</el-button>
     <el-button class="upload-users-btn" @click="uploadUsers">{{ textMappingConfig.uploadPersonList.chineseText + ' ' + textMappingConfig.uploadPersonList.otherLanguagesText }}</el-button>
     <!--  分组  -->
     <transition-group
@@ -192,6 +193,18 @@ const groupCancel = (emitObj) => {
     groupList.value.splice(groupIndex, 1)
   }
 }
+// 查看上传名单模板格式
+const checkUserTemplateFormat = async (filePath) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: textMappingConfig.value.opening.chineseText + ' ' + textMappingConfig.value.opening.otherLanguagesText,
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  await myApi.openFileOrFolder('users_template');
+  setTimeout(() => {
+    loading.close();
+  }, 500)
+}
 // 上传人员名单
 const uploadUsers = async () => {
   const loading = ElLoading.service({
@@ -250,6 +263,9 @@ defineExpose({
   margin-bottom: 20px;
   color: orange;
   font-weight: 700;
+}
+.check-users-btn {
+  margin: 0px 16px;
 }
 .upload-users-btn {
   margin: 10px 16px;

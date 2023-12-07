@@ -4,6 +4,7 @@ const dataBath = __dirname;
 const { ipcMain, dialog, shell } = require('electron')
 const path = require('path')
 const fs = require('fs');
+const url = require('url');
 const dayjs = require('dayjs');
 const {
   loadXML,
@@ -197,13 +198,18 @@ const getSaveExcelFileInfoList = async () => {
     return result; 
   })
 }
-
+let usersTemplatePath = path.join(__dirname, "./data/users_template.xlsx");
+const destPath = path.join(path.join(__dirname, '../assets'), 'users_template.xlsx')
 // 打开目录或文件
 const openFileOrFolder = async (data) => {
   ipcMain.handle('openFileOrFolder', async (e, ...args) => {
     let isOpen = false;
-    const filePath = args[0]
+    let filePath = args[0]
     try {
+      if (filePath === "users_template") {
+        fs.copyFileSync(usersTemplatePath, destPath)
+        filePath = url.pathToFileURL(destPath).href
+      }
       try {
         isOpen = await shell.openPath(filePath)
       } catch (error) {
@@ -216,6 +222,7 @@ const openFileOrFolder = async (data) => {
   }) 
 }
 
+// 查看文件
 module.exports = {
   getStaticUsersData,
   setData,

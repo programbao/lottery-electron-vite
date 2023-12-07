@@ -703,6 +703,26 @@
       "defaultText": "操作日志",
       "chineseText": "操作日志",
       "otherLanguagesText": "operation log"
+    },
+    "viewUploadTemplateFormat": {
+      "defaultText": "",
+      "chineseText": "查看-上传模板格式",
+      "otherLanguagesText": ""
+    },
+    "date": {
+      "defaultText": "",
+      "chineseText": "日期",
+      "otherLanguagesText": ""
+    },
+    "operationType": {
+      "defaultText": "",
+      "chineseText": "操作类型",
+      "otherLanguagesText": ""
+    },
+    "nameList": {
+      "defaultText": "",
+      "chineseText": "名称/名单",
+      "otherLanguagesText": ""
     }
   }
 }

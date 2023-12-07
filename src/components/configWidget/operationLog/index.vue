@@ -6,17 +6,18 @@
       style="width: 100%">
       <el-table-column
         prop="date"
-        label="日期"
+        :label="textMappingConfig.date.chineseText + ' ' + textMappingConfig.date.otherLanguagesText"
         width="180">
       </el-table-column>
       <el-table-column
         prop="type"
-        label="操作类型"
+        :label="textMappingConfig.operationType.chineseText + ' ' + textMappingConfig.operationType.otherLanguagesText"
         width="180">
       </el-table-column>
       <el-table-column
         prop="value"
-        label="名称/名单">
+        :label="textMappingConfig.nameList.chineseText + ' ' + textMappingConfig.nameList.otherLanguagesText"
+        >
         <template #default="scope">
           <span v-if="scope.row.type !== 'lucky_user'">{{ scope.row.value }}</span>
           <div v-else>
