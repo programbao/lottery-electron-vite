@@ -171,6 +171,7 @@ const handlePrizesSetting = async () => {
     // if (currentPrizeIndex < 0 && addNum && originPrizes.length) {
     //   basicData.lastTimePrizeIndex = 1
     // }
+    // 纠正奖项index
     let findCorrectIndex = 0;
     let prizes = basicData.prizes
     for (let i = 0; i < prizes.length; i++) {

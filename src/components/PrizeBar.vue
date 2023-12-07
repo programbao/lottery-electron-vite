@@ -149,12 +149,15 @@ const setPrizeData = ({currentPrizeIndex, count, isInit}) => {
     const isCpThenLP = currentPrizeIndex > basicData.lasetPrizeIndex;
     let handleIndex = isCpThenLP ? currentPrizeIndex : basicData.lasetPrizeIndex;
     let lastPrize = basicData.prizes[handleIndex];
-    const needHandlePrize = prizesListConfig.value[lastPrize.type]
-    needHandlePrize.activeClassName = "done"
-    prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "shine");
-
+    let needHandlePrize;
+    if (lastPrize) {
+      needHandlePrize = prizesListConfig.value[lastPrize.type]
+      needHandlePrize.activeClassName = "done"
+      prizesListConfig.value[type] && (prizesListConfig.value[type].activeClassName = "shine");
+      changeScrollStep += 1;
+    }
+   
     basicData.lasetPrizeIndex = currentPrizeIndex;
-    changeScrollStep += 1;
   }
 
   prizesListConfig.value[type] && (prizesListConfig.value[type].surplusCount = count);
@@ -189,16 +192,17 @@ const initHandlePrizeData = (toInit = false) => {
     // 初始化奖项相关样式类名和数量配置
     prizes.forEach((item, index) => {
       const type = item.type;
+      const surplusCount = item.count - (!basicData.luckyUsers[type] ? 0 : basicData.luckyUsers[type].length);
       prizesListConfig.value[type] = {
         totalCount: item.count,
-        surplusCount: item.count,
-        activeClassName: "",
+        surplusCount: surplusCount,
+        activeClassName: surplusCount <= 0 ? "done" : "",
         defaultClassName: "prize-item",
       }
     })
+    if (needCount <= 0) return
     // 滚动位置
     !toInit && scrollTop();
-    if (needCount <= 0) return
     for (let i = 0; i < needCount + 1; i++) {
       let itemLucky = basicData.luckyUsers[prizes[needChangeIndex]["type"]]
       if (itemLucky === undefined) {
