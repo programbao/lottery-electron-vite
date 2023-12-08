@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const xlsx = require("node-xlsx").default;
+const { dialog } = require('electron')
+
 const isBuild = process.env.NODE_ENV !== 'development';
 let cwd = path.join(__dirname,  `${isBuild ? '../../../../' : '../../'}assets/json`);
 if (!fs.existsSync(cwd)) {
@@ -69,6 +71,37 @@ function loadXML(xmlPath) {
     return {
       type: "error",
       msg: "人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
+    }
+  }
+  if (outData && Array.isArray(outData)) {
+    const handleIdSet = new Set();
+    let index = 1;
+    for (const item of outData) {
+      index++
+      if (!Array.isArray(item) || item.length !== 3) {
+        dialog.showErrorBox("导入失败", 'excel格式有误')
+        return {
+          type: "error",
+          msg: `excel格式有误`
+        };
+      }
+      const [id, department, name] = item;
+      // 验证工号是否唯一和不能为空
+      if (!id) {
+        dialog.showErrorBox("导入失败", `第${index}行工号为空`);
+        return {
+          type: "error",
+          msg: `第${index}行工号为空`
+        };
+      }
+      if (handleIdSet.has(id+'')) {
+        dialog.showErrorBox("导入失败", `工号 ${id} 重复或为空`);
+        return {
+          type: "error",
+          msg: `工号 ${id} 重复或为空`
+        };
+      }
+      handleIdSet.add(id+'');
     }
   }
   outData = outData.filter(item => item.length > 0);

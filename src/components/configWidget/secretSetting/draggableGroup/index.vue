@@ -269,6 +269,13 @@ const groupCancel = (emitObj) => {
 }
 // 上传人员名单
 const uploadUsers = async () => {
+  if (basicData.prizes <= 0) {
+    ElMessage({
+      type: 'error',
+      message: textMappingConfig.value.noPrizesAvailable.chineseText + ' ' + textMappingConfig.value.noPrizesAvailable.otherLanguagesText
+    })
+    return
+  }
   const loading = ElLoading.service({
     lock: true,
     text: 'Loading',
@@ -278,6 +285,24 @@ const uploadUsers = async () => {
     const group_identity = `secret_users_${nanoid()}`;
     const { fileUrl, savePath, fileName, users } = await myApi.importFile('xlsx_write', JSON.stringify(["xlsx", "xls"]), group_identity, lotteryCount);
     console.log(users, 'usersusersusers')
+    if (!Array.isArray(users)) {
+      if (users && users.type && users.type === 'error') {
+        ElMessage({
+          type: 'error',
+          message: users.msg
+        })
+        loading.close()
+        return
+      }
+    }
+    if (!users) {
+      ElMessage({
+          type: 'error',
+          message: '导入失败'
+        })
+      loading.close()
+      return
+    }
     // const isHasGroup = optionList.value.some(item => item.group_name === fileName);
     // if (isHasGroup) {
     //   ElMessage({
