@@ -8,6 +8,9 @@ const {
   saveErrorDataFile
 } = require("./utils/help");
 const path = require('path')
+
+// const isBuild = process.env.NODE_ENV === 'production'
+
 const dbPath = path.join(__dirname, '../assets')
 const url = require('url');
 const fs = require("fs");

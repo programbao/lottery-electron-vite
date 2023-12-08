@@ -57,7 +57,6 @@ const toggleConfig = () => {
   }
 }
 let isFirstVisible = false;
-
 const usersSettingRef = ref();
 const handleVerifyConfig = async (handleStr, verifyData) => {
   let isPassSetting = {

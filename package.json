@@ -1,5 +1,5 @@
 {
-  "name": "vue_vite_electron",
+  "name": "lottery_pc",
   "private": true,
   "version": "0.0.0",
   "main": "electron/main.js",
@@ -47,6 +47,12 @@
     "files": [
       "dist/**/*",
       "electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "electron/assets", 
+        "to": "assets"
+      }
     ],
     "directories": {
       "buildResources": "assets",

@@ -204,6 +204,12 @@ const destPath = path.join(path.join(__dirname, '../assets'), 'users_template.xl
 const openFileOrFolder = async (data) => {
   ipcMain.handle('openFileOrFolder', async (e, ...args) => {
     let isOpen = false;
+    let resultObj = {
+      type: "success",
+      code: 0,
+      isPass: false,
+      msg: "打开文件成功！",
+    };
     let filePath = args[0]
     try {
       if (filePath === "users_template") {
@@ -211,14 +217,19 @@ const openFileOrFolder = async (data) => {
         filePath = url.pathToFileURL(destPath).href
       }
       try {
-        isOpen = await shell.openPath(filePath)
+        resultObj.isPass = await shell.openPath(filePath)
       } catch (error) {
-        isOpen = await shell.showItemInFolder(filePath)
+        resultObj.isPass = await shell.showItemInFolder(filePath)
+        resultObj.msg = error
       }
     } catch (error) {
+      resultObj.isPass = false
+      resultObj.msg = error
       console.log(error, '2348092384')
     }
-    return isOpen; 
+    resultObj.isPass = true
+    console.log(resultObj, 'resultObjresultObj')
+    return resultObj; 
   }) 
 }
 

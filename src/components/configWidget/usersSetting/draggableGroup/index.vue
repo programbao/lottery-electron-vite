@@ -200,7 +200,8 @@ const checkUserTemplateFormat = async (filePath) => {
     text: textMappingConfig.value.opening.chineseText + ' ' + textMappingConfig.value.opening.otherLanguagesText,
     background: 'rgba(0, 0, 0, 0.7)',
   })
-  await myApi.openFileOrFolder('users_template');
+  const openResult = await myApi.openFileOrFolder('users_template');
+  console.log(openResult, 'resultObjresultObj')
   setTimeout(() => {
     loading.close();
   }, 500)
