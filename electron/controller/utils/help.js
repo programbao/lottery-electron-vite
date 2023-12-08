@@ -65,14 +65,24 @@ function loadXML(xmlPath) {
     excelHeader = outData.shift();
     return false;
   });
+  // 过滤空白用户
+  outData = outData.filter(user => user && user.length)
+  if (outData && Array.isArray(outData) && outData.length <= 0) {
+    dialog.showErrorBox("导入失败", 'excel没有名单，请确保之后一个sheet和存在名单')
+    return {
+      type: "error",
+      msg: `excel没有名单，请确保只有一个sheet和存在名单`
+    };
+  }
   const headerTemp = ["工号", "部门", "姓名"];
-  const isCorrect = excelHeader.length > 0 && excelHeader.every((headerTxt, i) => headerTxt.includes(headerTemp[i]))
+  const isCorrect = excelHeader && excelHeader.length > 0 && excelHeader.every((headerTxt, i) => headerTxt.includes(headerTemp[i]))
   if (!isCorrect) {
     return {
       type: "error",
       msg: "人员名单 表头不符合规范, 顺序名称是：工号、部门、姓名"
     }
   }
+ 
   if (outData && Array.isArray(outData)) {
     const handleIdSet = new Set();
     let index = 1;

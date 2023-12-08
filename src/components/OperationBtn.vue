@@ -844,12 +844,12 @@ onBeforeUnmount(() => {
 //   flex-direction: column;
 // }
 #reLottery {
-  position: fixed;
-  bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  margin-left: 50px;
-  left: 60%;
+  // position: fixed;
+  // bottom: 20px;
+  // display: flex;
+  // flex-direction: column;
+  // margin-left: 50px;
+  // left: 60%;
 }
 // #fullScreen {
 //   position: fixed;

@@ -61,6 +61,7 @@
     "mac": {
       "category": "public.app.category.utilities"
     },
+    "win": { "icon": "electron/controller/data/img/lottery_icon.ico" },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true

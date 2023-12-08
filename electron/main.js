@@ -31,7 +31,7 @@ const createWindow = () => {
     // height: 800,
     ...winState.winOptions,
     // frame: false, // 隐藏窗口的默认操作菜单
-    // icon: path.join(__dirname, 'path/to/your/icon.png'), // 设置程序图标
+    icon: path.join(__dirname, './controller/data/img/lottery_icon.png'), // 设置程序图标
     title: 'Your App Title', // 设置标题
     webPreferences: {
       preload: path.join(__dirname, './preload.js'),
