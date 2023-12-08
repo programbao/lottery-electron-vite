@@ -680,18 +680,17 @@ const keydownEvent = (event) => {
     let lotteryDom = document.getElementById('lottery')
     let showAllLucksDom = document.getElementById('showAllLucks')
     let luckyCloseBtnDom = document.getElementById('lucky-close-btn')
-    if (enterDom && noBeginLottery.value) {
+    if (basicData.isShowLuckyUser) {
+      luckyCloseBtnDom.click();
+    } else if (enterDom && noBeginLottery.value) {
       document.getElementById('enter').click();
     } else if (!noBeginLottery.value && isNextPrize.value && currentPrize.value) {
       showPrizeDom.click();
     } else if (!noBeginLottery.value && !isNextPrize.value) {
       lotteryDom.click();
-    } else if (basicData.isShowLuckyUser) {
-      luckyCloseBtnDom.click();
-    } else if (!currentPrize.value) {
+    }else if (!currentPrize.value) {
       showAllLuckyUser('showAllLuckys', showAllLucksDom)
     }
-
   } 
   // 重新抽奖 / 或上一轮抽奖
   if (['r', 'R'].indexOf(event.key) > -1) {
