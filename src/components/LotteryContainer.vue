@@ -460,7 +460,7 @@ const lottery = () => {
     console.log(basicData.currentLuckys);
     window.operationLogTable.add({
       id: nanoid(),
-      date: dayjs().format("YYYY-MM-DD hh:mm:ss:SSS"),
+      date: dayjs().format("YYYY-MM-DD HH:mm:ss:SSS"),
       type: 'lucky_user',
       value: JSON.stringify(basicData.currentLuckys)
     })
