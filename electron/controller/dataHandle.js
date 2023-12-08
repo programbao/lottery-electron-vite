@@ -233,7 +233,6 @@ const openFileOrFolder = async (data) => {
       console.log(error, '2348092384')
     }
     resultObj.isPass = true
-    console.log(resultObj, 'resultObjresultObj')
     return resultObj; 
   }) 
 }

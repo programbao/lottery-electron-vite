@@ -556,11 +556,11 @@ const resetBtnClick = (e) => {
     }
   )
     .then(() => {
+      // exportData();
       bus.emit('resetBtnClick')
       noBeginLottery.value = true;
       basicData.isEnterLottery = false
       handleHideCommonBtn();
-      exportData();
       ElMessage({
         type: 'success',
         message: '重置成功',

@@ -14,7 +14,7 @@
   "cardConfigStyle": {
     "cardWidth": "3vw",
     "cardHeight": "6vh",
-    "logo": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/logo.png",
+    "logo": "",
     "companyTop": "0.05vh",
     "companyFontSize": "8px",
     "nameTop": "1.5vh",
@@ -34,15 +34,15 @@
   "groupList": [],
   "otherResource": {
     "screenImg": {
-      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/bg2.jpg",
+      "fileUrl": "",
       "fileName": "bg2.jpg"
     },
     "bgImg": {
-      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/bg1.jpg",
+      "fileUrl": "",
       "fileName": "bg1.jpg"
     },
     "musicFile": {
-      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/music.mp3",
+      "fileUrl": "",
       "fileName": "music.mp3"
     }
   },
@@ -717,7 +717,7 @@
   "luckyCardConfigStyle": {
     "cardWidth": "16vw",
     "cardHeight": "24vh",
-    "logo": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/logo.png",
+    "logo": "",
     "companyTop": "19px",
     "companyFontSize": "16px",
     "nameTop": "7vh",

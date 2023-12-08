@@ -137,7 +137,7 @@ export const getCardWithParentHtml = (user, isBold, id, showTable, row_column, b
     height: ${cardConfigStyle.cardHeight};
   `
   return `
-    <div id="${"card-" + id}" class="${elementClassName}" style="${elementCss}">
+    <div id="${"card-" + id}" class="${elementClassName} bind-user-${user[0]}" style="${elementCss}">
        ${getCardHTML(user, basicData, isLucky)} 
     </div>
   `
@@ -168,7 +168,7 @@ export const createCardWithParentDom = (user, isBold, id, showTable, row_column,
   `
   let dom = document.createElement("div");
   dom.id = "card-" + id;
-  dom.className = elementClassName;
+  dom.className = elementClassName + ` bind-user-${user[0]}`;
   dom.style = elementCss;
   dom.innerHTML = getCardHTML(user, basicData);
   return dom

@@ -410,7 +410,13 @@ const lottery = () => {
     }
     for (let i = 0; i < perCount; i++) {
       let luckyId = random(leftCount);
-      basicData.currentLuckys.push(paramsFields.member.splice(luckyId, 1)[0]);
+      let getLuckyObj = paramsFields.member.splice(luckyId, 1)[0]
+      basicData.currentLuckys.push(getLuckyObj);
+      // 让存在的dom隐藏
+      let bindUserDom = document.querySelector(`.bind-user-${getLuckyObj[0]}`)
+      if (bindUserDom) {
+        bindUserDom.style && (bindUserDom.style.opacity = '0')
+      }
       paramsFields.totalMember -= 1;
       leftCount--;
       leftPrizeCount--;
@@ -680,6 +686,13 @@ const lotteryActiveFn = async () => {
   });
 }
 const beginLottery = () => {
+  // 当前同时抽取的数目,当前奖品抽完还可以继续抽，但是不记录数据
+  let perCount = basicData.eachCount[basicData.currentPrizeIndex];
+  let leftCount = paramsFields.totalMember;
+  if (leftCount < perCount) {
+    toast.error(`剩余${leftCount}人，而每轮要抽${perCount}人；所有参与抽奖人员不足，不能进行下去；可去“奖项设置”调整每轮抽奖个数或调整所有参与抽奖人员！`);
+    return
+  }
   if (basicData.isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
       timeout: 2000
@@ -701,6 +714,7 @@ const beginLottery = () => {
   lotteryActiveFn();
 }
 const resetBtnClick = async () => {
+  await exportData();
   basicData.currentLuckys = [];
   basicData.luckyUsers = {};
   basicData.currentPrizeIndex = basicData.prizes.length - 1;
@@ -726,7 +740,12 @@ const resetBtnClick = async () => {
 const removeLuckyUser = () => {
   let type = basicData.currentPrize.type;
   let currentLuckys = basicData.currentLuckys.map(item => item[0]); // 提取currentLuckys的第一个元素
-
+  currentLuckys.forEach(id => {
+    let bindUserDom = document.querySelector(`.bind-user-${id}`)
+    if (bindUserDom) {
+      bindUserDom.style && (bindUserDom.style.opacity = '1')
+    }
+  })
   if (basicData.luckyUsers[type]) {
     basicData.luckyUsers[type] = basicData.luckyUsers[type].filter(user => {
       return !currentLuckys.some(current => current === user[0]);
@@ -781,22 +800,21 @@ const resetCurrentPrizeBtnClick = async () => {
   }
 }
 // 导出数据
-const exportData = () => {
-  saveData().then(async res => {
-    let result = await myApi.handleExportData(); 
-    if (!result || result.type === 'error') {
-      ElMessage({
-        type: 'error',
-        message: `导出失败，请联系管理员`
-      })
-    } else if (result.type === 'success') {
-      ElMessage({
-        type: 'success',
-        message: `导出成功, 请前往文件列表查看`,
-        duration: 5000
-      })
-    }
-  })
+const exportData = async () => {
+  await saveData()
+  let result = await myApi.handleExportData(); 
+  if (!result || result.type === 'error') {
+    ElMessage({
+      type: 'error',
+      message: `导出失败，请联系管理员`
+    })
+  } else if (result.type === 'success') {
+    ElMessage({
+      type: 'success',
+      message: `导出成功, 请前往文件列表查看`,
+      duration: 5000
+    })
+  }
 }
 const adjustCardConfigStyleSetting = (resetPrizeStatus = true) => {
   if (!basicData.isEnterLottery) return
