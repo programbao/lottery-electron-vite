@@ -276,7 +276,7 @@ const uploadUsers = async () => {
   })
   try {
     const group_identity = `secret_users_${nanoid()}`;
-    const { fileUrl, savePath, fileName, users } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]), group_identity, lotteryCount);
+    const { fileUrl, savePath, fileName, users } = await myApi.importFile('xlsx_write', JSON.stringify(["xlsx", "xls"]), group_identity, lotteryCount);
     console.log(users, 'usersusersusers')
     // const isHasGroup = optionList.value.some(item => item.group_name === fileName);
     // if (isHasGroup) {

@@ -198,8 +198,8 @@ const getSaveExcelFileInfoList = async () => {
     return result; 
   })
 }
-let usersTemplatePath = path.join(__dirname, "./data/users_template.xlsx");
-const destPath = path.join(path.join(__dirname, '../assets'), 'users_template.xlsx')
+let usersTemplatePath = path.join(__dirname, "../assets/xlsx_read/users_template.xlsx");
+const destPath = path.join(path.join(__dirname, '../assets/xlsx_write'), 'users_template.xlsx')
 // 打开目录或文件
 const openFileOrFolder = async (data) => {
   ipcMain.handle('openFileOrFolder', async (e, ...args) => {

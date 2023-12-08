@@ -281,7 +281,7 @@ const luckysRowColObj = ref({
   type: 1 // 1 以列 为基准排列 2 以行 为基准排列 3 固定行列
 })
 const importFile = async (key) => {
-  let { fileUrl } = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  let { fileUrl } = await myApi.importFile('other_file', JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (fileUrl) {
     if (key === 'luckyCardConfigStyle') {
       luckyCardConfigStyle.value.logo = fileUrl

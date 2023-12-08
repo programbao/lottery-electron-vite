@@ -128,7 +128,7 @@ const importFile = async (key) => {
   if (key === 'musicFile') {
     extensions = JSON.stringify(['mp3', 'm4a'])
   }
-  let { fileUrl, fileName } = await myApi.importFile(extensions);
+  let { fileUrl, fileName } = await myApi.importFile('other_file', extensions);
   if (fileUrl) {
     formLabelAlign.value[key] = {
       fileUrl,

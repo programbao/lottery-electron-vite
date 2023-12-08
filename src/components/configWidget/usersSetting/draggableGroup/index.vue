@@ -215,7 +215,7 @@ const uploadUsers = async () => {
   })
   try {
     const group_identity = `users_${nanoid()}`;
-    const { fileUrl, savePath, saveFolderPath, fileName, users } = await myApi.importFile(JSON.stringify(["xlsx", "xls"]), group_identity);
+    const { fileUrl, savePath, saveFolderPath, fileName, users } = await myApi.importFile('xlsx_write', JSON.stringify(["xlsx", "xls"]), group_identity);
     const isHasGroup = groupList.value.some(item => item.group_name === fileName);
     if (isHasGroup) {
       ElMessage({

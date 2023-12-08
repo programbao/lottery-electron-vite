@@ -30,9 +30,10 @@ const importFile = () => {
   ipcMain.handle('importFile', async (e, ...args) => {
     let sharedObject =  global.sharedObject;
     console.log(args, 'argsargs')
-    let extensions = args[0]
-    let userName = args[1]
-    let lotteryCount = args[2]
+    let saveType = args[0] || ''
+    let extensions = args[1]
+    let userName = args[2]
+    let lotteryCount = args[3]
     if (!extensions) {
       extensions = []
     } else {
@@ -51,8 +52,8 @@ const importFile = () => {
         const filePath = res.filePaths[0]
     
         const fileName = path.basename(filePath)
-        const destPath = path.join(dbPath, fileName)
-        const saveFolderPath = path.join(dbPath);
+        const destPath = path.join(dbPath, saveType, fileName)
+        const saveFolderPath = path.join(dbPath, saveType);
         let users;
         if (userName) {
           users = loadData(filePath)

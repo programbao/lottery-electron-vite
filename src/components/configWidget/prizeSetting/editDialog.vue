@@ -252,7 +252,7 @@ onMounted(() => {
 })
 const importFile = async (disabled) => {
   if (disabled) return
-  const importData = await myApi.importFile(JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
+  const importData = await myApi.importFile('other_file', JSON.stringify(['jpg', 'jpeg', 'png', 'gif', 'bmp']));
   if (!importData) return
   let { fileUrl } = importData;
   if (fileUrl) {
