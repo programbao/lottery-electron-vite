@@ -87,6 +87,7 @@
     </div>
     <button 
       v-if="basicData.isShowLuckyUser"
+      id="lucky-close-btn"
       class="btn closeBtn slide-in-bottom" 
       @click="closeBtn">
       Close

@@ -46,8 +46,9 @@
         </button>
       </div>
       <button 
-        class="btn" 
-        @click="reLottery"
+        class="btn"
+        id="reLottery"
+        @click="(e) => reLottery(e)"
         v-show="!noBeginLottery 
           && !isResetCurrentPrize
           && basicData.currentLuckys.length
@@ -68,7 +69,7 @@
       <button 
         id="showAllLucks" 
         class="btn" 
-        v-if="!currentPrize"  
+        v-if="!currentPrize"
         @click="(e) => showAllLuckyUser('showAllLuckys', e)">
         {{ textMappingConfig.showAllLucks.chineseText }}
           <span v-if="textMappingConfig.showAllLucks.otherLanguagesText">
@@ -390,6 +391,13 @@ const noBeginLottery = ref(true);
 const isFullScreen = ref(false)
 const isResetCurrentPrize = ref(false)
 const enterLottery = (e) => {
+  if (basicData.prizes.length === 0 || !noHideBtn.value) {
+    ElMessage({
+      type: 'error',
+      message: '不可操作',
+    })
+    return
+  }
   bus.emit('enterLottery')
   basicData.isEnterLottery = true
   isResetCurrentPrize.value = false
@@ -407,6 +415,13 @@ const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
 }
 const beginLottery = (e) => {
+  if (basicData.prizes.length === 0 || !noHideBtn.value) {
+    ElMessage({
+      type: 'error',
+      message: '不可操作',
+    })
+    return
+  }
   if (basicData.isAnimating) {
     toast.info(`请等待动画加载完成  harap tunggu hingga animasi dimuat`, { 
       timeout: 2000
@@ -490,6 +505,13 @@ const exportData = (e) => {
 }
 
 const resetCurrentPrizeBtnClick = (e) => {
+  if (basicData.prizes.length === 0) {
+    ElMessage({
+      type: 'error',
+      message: '暂无奖项可重置',
+    })
+    return
+  }
   ElMessageBox.confirm(
     '当前中奖记录都将被清空，确认要重置吗?',
     '警告',
@@ -517,6 +539,13 @@ const resetCurrentPrizeBtnClick = (e) => {
     }) 
 }
 const resetBtnClick = (e) => {
+  if (basicData.prizes.length === 0) {
+    ElMessage({
+      type: 'error',
+      message: '暂无奖项可重置',
+    })
+    return
+  }
   ElMessageBox.confirm(
     '所有中奖记录都将被清空，确认要重置吗? 系统将会导出历史中奖记录，请注意查看文件列表',
     '警告',
@@ -629,6 +658,66 @@ const adjustLotteryActionBtn = () => {
     }
   }, 620)
 }
+
+// 键盘事件
+let keyDownOpen = false
+let keyDownTimer = null;
+const keydownEvent = (event) => {
+  if (['Enter', 'b', 'B', ' ', 'PageDown', 'PageUp'].indexOf(event.key) > -1) {
+    if (keyDownOpen) {
+      clearTimeout(keyDownTimer)
+      keyDownTimer = setTimeout(() => {
+        if (keyDownOpen) keyDownOpen = false
+      }, 1000);
+      return
+    }
+    keyDownOpen = true
+    keyDownTimer = setTimeout(() => {
+      keyDownOpen = false
+    }, 500);
+    let enterDom = document.getElementById('enter')
+    let showPrizeDom = document.getElementById('showPrize')
+    let lotteryDom = document.getElementById('lottery')
+    let showAllLucksDom = document.getElementById('showAllLucks')
+    let luckyCloseBtnDom = document.getElementById('lucky-close-btn')
+    if (enterDom && noBeginLottery.value) {
+      document.getElementById('enter').click();
+    } else if (!noBeginLottery.value && isNextPrize.value && currentPrize.value) {
+      showPrizeDom.click();
+    } else if (!noBeginLottery.value && !isNextPrize.value) {
+      lotteryDom.click();
+    } else if (basicData.isShowLuckyUser) {
+      luckyCloseBtnDom.click();
+    } else if (!currentPrize.value) {
+      showAllLuckyUser('showAllLuckys', showAllLucksDom)
+    }
+
+  } 
+  // 重新抽奖 / 或上一轮抽奖
+  if (['r', 'R'].indexOf(event.key) > -1) {
+    if (keyDownOpen) {
+      clearTimeout(keyDownTimer)
+      keyDownTimer = setTimeout(() => {
+        if (keyDownOpen) keyDownOpen = false
+      }, 1000);
+      return
+    }
+    keyDownOpen = true
+    keyDownTimer = setTimeout(() => {
+      keyDownOpen = false
+    }, 500);
+    
+    if (!noBeginLottery.value
+          && !isResetCurrentPrize.value
+          && basicData.currentLuckys.length
+          && !isShowAllLuckys.value
+          && !isLotting.value
+          && !isFirstPrize.value) {
+      document.getElementById('reLottery').click();
+    }
+  }
+}
+
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd);
   handleHideCommonBtn();
@@ -643,11 +732,13 @@ onBeforeMount(() => {
     bottomBar.value.addEventListener('mouseenter', barMouseenter)
     bottomBar.value.addEventListener('mouseleave', barMouseleave)
   })
+  document.addEventListener('keydown', keydownEvent);
 })
 onBeforeUnmount(() => {
   bus.off('enterLotteryEnd', handleEnterLotteryEnd)
   document.removeEventListener('mousemove', mousemoveEvent);
   document.removeEventListener('mouseleave', mouseleaveEvent);
+  document.removeEventListener('keydown', keydownEvent);
   bottomBar.value.removeEventListener('mouseenter', barMouseenter)
   bottomBar.value.removeEventListener('mouseleave', barMouseleave)
 })
@@ -673,13 +764,13 @@ onBeforeUnmount(() => {
   transition: bottom 0.3s ease-out; /* 过渡动画 */
   z-index: 100;
   display: flex;
-  justify-content: flex-end;
+  // justify-content: flex-end;
   align-items: center;
   box-sizing: border-box;
   padding: 7px 0;
   > div {
     display: flex;
-    justify-content: flex-end;
+    // justify-content: flex-end;
     align-items: center;
     // padding: 0 10px;
     border-right: 1px solid rgba(127, 255, 255, 0.75);

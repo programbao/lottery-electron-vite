@@ -4,7 +4,7 @@
     :class="dialogKeyStr"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    :modal="false"
+    :modal="true"
     :show-close="false"
     :style="dialogStyle"
     v-model="dialogTableVisible"
