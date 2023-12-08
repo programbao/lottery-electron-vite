@@ -601,7 +601,7 @@ const mousemoveEvent = (event) => {
   debounceTimer = setTimeout(() => {
     const mouseY = event.clientY;
     const windowHeight = window.innerHeight;
-    const bottomOffset = 15; // 底部操作栏高度
+    const bottomOffset = 30; // 底部操作栏高度
     // 如果鼠标位置在窗口底部一定范围内，则显示操作栏
     clearTimeout(showBarTimer);
     if (mouseY > windowHeight - bottomOffset) {
@@ -722,6 +722,8 @@ onBeforeMount(() => {
   handleHideCommonBtn();
   bus.on('toInitContainerHandleData', handleHideCommonBtn);
   bus.on('groupListSetting', handleHideCommonBtn);
+  bus.on('adjuctUsersDataTips', handleHideCommonBtn)
+
   bus.on('adjustLotteryActionBtn', adjustLotteryActionBtn);
   bus.on('showPrize', adjustLotteryActionBtn);
   // 监听鼠标移动事件
@@ -813,7 +815,7 @@ onBeforeUnmount(() => {
 .lottery-operation-btn {
   position: fixed;
   display: flex;
-  bottom: 20px;
+  bottom: 40px;
   left: 60%;
   transition: all .2s;
 }

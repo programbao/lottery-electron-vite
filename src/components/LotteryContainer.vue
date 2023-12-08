@@ -233,16 +233,20 @@ const findCurrentLotteryGroup = () => {
   }
   return userGroup;
 }
-const initParamsFieldsData = (userGroup) => {
+const initParamsFieldsData = (userGroup, isSwitchAnimation) => {
   let isPass = true
   basicData.currentLotteryGroup = userGroup || {};
   const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity] || []));
   if (member.length <= 0 && basicData.prizes.length > 0) {
     ElMessage({
-      type: 'error',
+      type: 'warning',
       message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
     })
-    bus.emit('groupListSetting')
+    // !isSwitchAnimation && bus.emit('groupListSetting')
+     // 移除闪烁定时器
+    removeShineCard();
+    cleanUp();
+    bus.emit('adjuctUsersDataTips')
     isPass = false
   }
   paramsFields = {
@@ -262,7 +266,7 @@ const adjuctLotteryGroup = (cb) => {
   if (!userGroup) {
     if (basicData.prizes.length > 0) {
       ElMessage({
-        type: 'error',
+        type: 'warning',
         message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
       })
     }
@@ -592,7 +596,7 @@ const waitHandleEvent = () => {
 // 重新/切换设置抽奖名单
 const switchLotteryMemberData = (userGroup, resetPrizeStatus = true) => {
   basicData.currentLotteryGroup = userGroup;
-  const isPass = initParamsFieldsData(userGroup);
+  const isPass = initParamsFieldsData(userGroup, true);
   adjustCardConfigStyleSetting(resetPrizeStatus);
   return isPass
 }

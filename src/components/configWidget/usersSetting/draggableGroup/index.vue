@@ -30,7 +30,7 @@
     </div>
     <div class="relate-box" v-if="isSelectMode">
       <el-button type="primary" plain @click="confirmRelated">{{ textMappingConfig.confirmAssociation.chineseText + ' ' + textMappingConfig.confirmAssociation.otherLanguagesText }}</el-button>
-      <el-button plain @click="cancelSelect">{{ textMappingConfig.add.chineseText + ' ' + textMappingConfig.add.otherLanguagesText }}</el-button>
+      <el-button plain @click="cancelSelect">{{ textMappingConfig.cancel.chineseText + ' ' + textMappingConfig.cancel.otherLanguagesText }}</el-button>
     </div>
     <!--  选项  -->
     <div class="option-container">
