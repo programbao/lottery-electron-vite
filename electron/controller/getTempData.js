@@ -2,6 +2,10 @@ const { ipcMain } = require('electron')
 const {
   loadTempData,
 } = require("./utils/help");
+const path = require('path')
+const isBuild = process.env.NODE_ENV !== 'development';
+const dbPath = path.join(__dirname,  `${isBuild ? '../../../' : '../'}assets/other_file`)
+const url = require('url');
 
 const getLeftUsers = (notRepeatForAllUser = true) => {
   const sharedObject = global.sharedObject
@@ -58,6 +62,21 @@ const getTempData = () => {
     if (!sharedObject.cfg) {
       const prizeConfig = await loadTempData("prizesConfig.json");
       sharedObject.cfg = prizeConfig[0];
+    }
+    if (sharedObject.cfg.cardConfigStyle && !sharedObject.cfg.cardConfigStyle.logo) {
+      sharedObject.cfg.cardConfigStyle.logo = url.pathToFileURL(path.join(dbPath, 'logo.png')).href
+    }
+    if (sharedObject.cfg.luckyCardConfigStyle && !sharedObject.cfg.luckyCardConfigStyle.logo) {
+      sharedObject.cfg.luckyCardConfigStyle.logo = url.pathToFileURL(path.join(dbPath, 'logo.png')).href
+    }
+    if (sharedObject.cfg.otherResource && sharedObject.cfg.otherResource.screenImg && !sharedObject.cfg.otherResource.screenImg.fileUrl) {
+      sharedObject.cfg.otherResource.screenImg.fileUrl = url.pathToFileURL(path.join(dbPath, 'bg2.jpg')).href
+    }
+    if (sharedObject.cfg.otherResource && sharedObject.cfg.otherResource.bgImg && !sharedObject.cfg.otherResource.bgImg.fileUrl) {
+      sharedObject.cfg.otherResource.bgImg.fileUrl = url.pathToFileURL(path.join(dbPath, 'bg1.jpg')).href
+    }
+    if (sharedObject.cfg.otherResource && sharedObject.cfg.otherResource.musicFile && !sharedObject.cfg.otherResource.musicFile.fileUrl) {
+      sharedObject.cfg.otherResource.musicFile.fileUrl = url.pathToFileURL(path.join(dbPath, 'music.mp3')).href
     }
     const { luckyData, errorData, curData, leftUsers } = getLeftUsers();
     return {

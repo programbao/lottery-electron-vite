@@ -67,6 +67,9 @@ html,body {
 }
 </style>
 <style>
+.el-dialog {
+  max-width: 950px;
+}
 #lucky-close-icon {
   position: fixed;
   right: 20px;

@@ -145,12 +145,12 @@
     "toggleSettingTextMappingConfig": {
       "defaultText": "文案设置",
       "chineseText": "文案设置",
-      "otherLanguagesText": "control button setting"
+      "otherLanguagesText": ""
     },
     "toggleSettingOtherResourceSetting": {
       "defaultText": "其他资源设置",
       "chineseText": "其他资源设置",
-      "otherLanguagesText": "other resource setting"
+      "otherLanguagesText": ""
     },
     "toggleSettingSecretSetting": {
       "defaultText": "",
@@ -701,6 +701,29 @@
       "defaultText": "",
       "chineseText": "名称/名单",
       "otherLanguagesText": ""
+    },
+    "openFolderError": {
+      "defaultText": "",
+      "chineseText": "暂无文件",
+      "otherLanguagesText": ""
+    },
+    "clickHidden": {
+      "defaultText": "",
+      "chineseText": "点击隐藏",
+      "otherLanguagesText": ""
     }
+  },
+  "luckyCardConfigStyle": {
+    "cardWidth": "16vw",
+    "cardHeight": "24vh",
+    "logo": "",
+    "companyTop": "19px",
+    "companyFontSize": "16px",
+    "nameTop": "7vh",
+    "nameFontSize": "18px",
+    "detailsBottom": "1vh",
+    "detailsFontSize": "18px",
+    "imgWidth": "100%",
+    "imgHeight": "10px"
   }
 }

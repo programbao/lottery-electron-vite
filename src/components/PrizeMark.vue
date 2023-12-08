@@ -128,7 +128,7 @@ bus.on('hidePrizeMark', hidePrizeMark);
   height: 100%;
 }
 .next-prize .prize-text {
-  width: 35vw;
+  max-width: 35vw;
   height: 40vh;
   display: flex;
   flex-direction: column;

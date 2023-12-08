@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const xlsx = require("node-xlsx").default;
-let cwd = path.join(__dirname, "../../assets/json");
-// const dbPath = path.join(__dirname, '../../assets')
+const isBuild = process.env.NODE_ENV !== 'development';
+let cwd = path.join(__dirname,  `${isBuild ? '../../../../' : '../../'}assets/json`);
 if (!fs.existsSync(cwd)) {
   fs.mkdirSync(cwd);
 }
@@ -91,7 +91,7 @@ function writeXML(data, name) {
       data: data
     }
   ]);
-  let savePath = path.join(path.join(__dirname, '../../assets/xlsx_write'), name)
+  let savePath = path.join(path.join(__dirname,  `${isBuild ? '../../../../' : '../../'}assets/xlsx_write`), name)
   return new Promise((resolve, reject) => {
     fs.writeFile(savePath, buffer, err => {
       if (err) {

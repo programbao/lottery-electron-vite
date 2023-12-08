@@ -63,7 +63,7 @@ export const  getCardHTML = (user, basicData, isLucky) => {
       ">
       <div class="image-text-container">
         <img 
-          src="http://172.90.0.10/_nuxt/img/logo.acb8f74.png" 
+          src="${cardConfigStyle.logo}" 
           style="${cardConfigStyle.imgWidth};
           height: ${cardConfigStyle.imgHeight};
           object-fit: contain;">
@@ -237,7 +237,7 @@ export const shineCard = (basicDataParam, paramsFieldsParam, switchTime = 500) =
     // if (isLotting || currentPrizeIndex < 7 || prizeMark.style.zIndex === '6') {
     //   return;
     // }
-    if (paramsFields.isLotting || basicData.currentPrizeIndex < 2) {
+    if (paramsFields.isLotting) {
       return;
     }
     maxUser = paramsFields.totalMember;

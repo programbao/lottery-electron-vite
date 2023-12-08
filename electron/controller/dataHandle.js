@@ -6,6 +6,7 @@ const path = require('path')
 const fs = require('fs');
 const url = require('url');
 const dayjs = require('dayjs');
+const isBuild = process.env.NODE_ENV !== 'development';
 const {
   loadXML,
   loadTempData,
@@ -126,7 +127,7 @@ const saveOneRoundLuckyData = async () => {
   })
 }
 const hanldeExportDataFn = async () => {
-  let outData = [["工号", "DEPT部门", "NAMA 姓名"]];
+  let outData = [["工号", "部门", "姓名"]];
   let sharedObject =  global.sharedObject;
   
   sharedObject.cfg.prizes.forEach(item => {
@@ -135,7 +136,7 @@ const hanldeExportDataFn = async () => {
   });
   let result = {};
   try {
-    let fileName = `抽奖结果-${dayjs().format("YYYY-MM-DD#hh.mm.ss.SSS")}.xlsx`
+    let fileName = `结果-${dayjs().format("YYYY-MM-DD#hh.mm.ss.SSS")}.xlsx`
     const savePath = await writeXML(outData, fileName)
     result = {
       type: "success",
@@ -165,7 +166,7 @@ const handleExportData = async () => {
   })
 }
 
-const dbPath = path.join(__dirname, '../assets')
+const dbPath = path.join(__dirname,  `${isBuild ? '../../../' : '../'}assets/xlsx_write`)
 
 const readExcelFilesInDirectory = () => {
   const files = fs.readdirSync(dbPath); // 读取目录下所有文件和文件夹
@@ -198,9 +199,10 @@ const getSaveExcelFileInfoList = async () => {
     return result; 
   })
 }
-let usersTemplatePath = path.join(__dirname, "../assets/xlsx_read/users_template.xlsx");
-const destPath = path.join(path.join(__dirname, '../assets/xlsx_write'), 'users_template.xlsx')
+
 // 打开目录或文件
+let usersTemplatePath = path.join(__dirname, `${isBuild ? '../../../' : '../'}assets/xlsx_read/users_template.xlsx`);
+const destPath = path.join(path.join(__dirname, `${isBuild ? '../../../' : '../'}assets/xlsx_write`), 'users_template.xlsx')
 const openFileOrFolder = async (data) => {
   ipcMain.handle('openFileOrFolder', async (e, ...args) => {
     let isOpen = false;
@@ -209,6 +211,9 @@ const openFileOrFolder = async (data) => {
       code: 0,
       isPass: false,
       msg: "打开文件成功！",
+      dirname: __dirname,
+      positionPath:  path.join(__dirname, '../../../'),
+      env: isBuild ? 'production' : 'development'
     };
     let filePath = args[0]
     try {

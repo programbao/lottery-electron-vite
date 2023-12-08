@@ -237,7 +237,7 @@ const initParamsFieldsData = (userGroup) => {
   let isPass = true
   basicData.currentLotteryGroup = userGroup || {};
   const member = JSON.parse(JSON.stringify(basicData.memberListData[userGroup.group_identity] || []));
-  if (member.length <= 0) {
+  if (member.length <= 0 && basicData.prizes.length > 0) {
     ElMessage({
       type: 'error',
       message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
@@ -260,10 +260,12 @@ const adjuctLotteryGroup = (cb) => {
   // 找到要展示的member
   const userGroup = findCurrentLotteryGroup();
   if (!userGroup) {
-    ElMessage({
-      type: 'error',
-      message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
-    })
+    if (basicData.prizes.length > 0) {
+      ElMessage({
+        type: 'error',
+        message: `未找到${basicData.currentPrize ? basicData.currentPrize.name : ''}的抽奖人员名单,请检查人员名单和奖项关联设置情况`
+      })
+    }
     return false
   }
   if (cb) {

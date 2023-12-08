@@ -119,7 +119,6 @@ const handlePrizesSetting = async () => {
     })
   }
   if (isPass) {
-    debugger
     const currentPrizeIndex =  basicData.currentPrizeIndex;
     const modifyCurrentIndex = basicData.currentPrizeIndex - cutNum + addNum;
     const modifyLastTimeIndex = basicData.lastTimePrizeIndex - cutNum + addNum;

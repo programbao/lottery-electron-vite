@@ -94,7 +94,13 @@
       v-if="isTipsBottomBar" 
       @click="isTipsBottomBar = false"
       class="tips-bottom bounce-top-infinite">
-      点击隐藏
+      <span>
+        {{ textMappingConfig.clickHidden.chineseText }}
+          <span v-if="textMappingConfig.clickHidden.otherLanguagesText">
+            <br/>
+            {{ textMappingConfig.clickHidden.otherLanguagesText }}
+          </span>
+      </span>
       <el-icon :size="40"><CaretBottom /></el-icon>
     </div>
     <div
@@ -608,13 +614,20 @@ let adjustBtnTimer = null;
 const adjustLotteryActionBtn = () => {
   clearTimeout(adjustBtnTimer);
   adjustBtnTimer = setTimeout(() => {
-    const bottomCardDom = document.querySelector("#card-0");
+    let bottomCardDom = document.querySelector("#card-0");
+    if (basicData.isShowPrizeMark) {
+      bottomCardDom = document.querySelector(".next-prize");
+      if (bottomCardDom) {
+        operationBtnStyle.value.left = bottomCardDom.getBoundingClientRect().x + bottomCardDom.clientWidth / 2 + 'px'
+        return
+      }
+    }
     if (!bottomCardDom || !basicData.isEnterLottery) {
       operationBtnStyle.value.left = '60%';
     } else {
       operationBtnStyle.value.left = bottomCardDom.getBoundingClientRect().x + 'px'
     }
-  }, 500)
+  }, 620)
 }
 onBeforeMount(() => {
   bus.on('enterLotteryEnd', handleEnterLotteryEnd);
@@ -622,6 +635,7 @@ onBeforeMount(() => {
   bus.on('toInitContainerHandleData', handleHideCommonBtn);
   bus.on('groupListSetting', handleHideCommonBtn);
   bus.on('adjustLotteryActionBtn', adjustLotteryActionBtn);
+  bus.on('showPrize', adjustLotteryActionBtn);
   // 监听鼠标移动事件
   document.addEventListener('mousemove', mousemoveEvent);
   document.addEventListener('mouseleave', mouseleaveEvent);

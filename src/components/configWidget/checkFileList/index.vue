@@ -2,7 +2,7 @@
  <div class="lottery-layout">
     <!-- <div class="header-txt">文件列表</div> -->
     <div class="operation-open-folder">
-      <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0].saveFolderPath)">{{ textMappingConfig.openFolder.chineseText + ' ' + textMappingConfig.openFolder.otherLanguagesText }}</el-button>
+      <el-button type="primary" plain @click="openFileOrFolder(fileInfoList[0], 'folder')">{{ textMappingConfig.openFolder.chineseText + ' ' + textMappingConfig.openFolder.otherLanguagesText }}</el-button>
     </div>
     <div v-for="(file, index) in fileInfoList" :key="index" class="file-item">
       <div class="left-info">
@@ -10,7 +10,7 @@
         <span class="file-name">{{ file.fileName }}</span>
       </div>
       <div class="operation-btn">
-        <el-button link type="primary" plain @click="openFileOrFolder(file.filePath)">{{ textMappingConfig.openFile.chineseText + ' ' + textMappingConfig.openFile.otherLanguagesText }}</el-button>
+        <el-button link type="primary" plain @click="openFileOrFolder(file)">{{ textMappingConfig.openFile.chineseText + ' ' + textMappingConfig.openFile.otherLanguagesText }}</el-button>
       </div>
     </div>
   </div>
@@ -22,14 +22,14 @@ const ruleFormRef = ref()
 const emit = defineEmits(['close', 'confirm']);
 import { lotteryDataStore } from '../../../store'
 const basicData = lotteryDataStore();
-import { ElLoading } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 const textMappingConfig = computed(() => {
   return basicData.textMappingConfig
 })
 const fileInfoList = ref([])
 // 自定义排序函数
 const customSort = (a, b) => {
-    const regex = /抽奖结果-/;
+    const regex = /结果-/;
     const aHasPrefix = regex.test(a.fileName);
     const bHasPrefix = regex.test(b.fileName);
 
@@ -46,7 +46,20 @@ onMounted(async () => {
   fileInfoList.value = await myApi.getSaveExcelFileInfoList();
   fileInfoList.value.sort(customSort)
 })
-const openFileOrFolder = async (filePath) => {
+const openFileOrFolder = async (file, type) => {
+  let filePath;
+  if (type === 'folder') {
+    if (!file) {
+      ElMessage({
+        type: 'error',
+        message: textMappingConfig.value.openFolderError.chineseText + ' ' + textMappingConfig.value.openFolderError.otherLanguagesText
+      })
+      return
+    }
+    filePath = file.saveFolderPath
+  } else {
+    filePath = file.filePath
+  }
   const loading = ElLoading.service({
     lock: true,
     text: textMappingConfig.value.opening.chineseText + ' ' + textMappingConfig.value.opening.otherLanguagesText,
