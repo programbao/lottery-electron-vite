@@ -1,5 +1,6 @@
 {
-  "prizes": [],
+  "prizes": [
+  ],
   "company": "IWIP",
   "beforeLotteryLayout": {
     "columnCount": 17,
@@ -13,7 +14,7 @@
   "cardConfigStyle": {
     "cardWidth": "3vw",
     "cardHeight": "6vh",
-    "logo": "",
+    "logo": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/logo.png",
     "companyTop": "0.05vh",
     "companyFontSize": "8px",
     "nameTop": "1.5vh",
@@ -33,15 +34,15 @@
   "groupList": [],
   "otherResource": {
     "screenImg": {
-      "fileUrl": "",
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/bg2.jpg",
       "fileName": "bg2.jpg"
     },
     "bgImg": {
-      "fileUrl": "",
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/bg1.jpg",
       "fileName": "bg1.jpg"
     },
     "musicFile": {
-      "fileUrl": "",
+      "fileUrl": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/music.mp3",
       "fileName": "music.mp3"
     }
   },
@@ -716,7 +717,7 @@
   "luckyCardConfigStyle": {
     "cardWidth": "16vw",
     "cardHeight": "24vh",
-    "logo": "",
+    "logo": "file:///D:/Users/Desktop/vue_vite_electron/electron/assets/other_file/logo.png",
     "companyTop": "19px",
     "companyFontSize": "16px",
     "nameTop": "7vh",

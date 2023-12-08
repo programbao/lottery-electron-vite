@@ -215,7 +215,7 @@ const uploadUsers = async () => {
   })
   try {
     const group_identity = `users_${nanoid()}`;
-    const { fileUrl, savePath, saveFolderPath, fileName, users } = await myApi.importFile('xlsx_write', JSON.stringify(["xlsx", "xls"]), group_identity);
+    const { fileUrl, savePath, saveFolderPath, fileName, users } = await myApi.importFile('xlsx_user', JSON.stringify(["xlsx", "xls"]), group_identity);
     if (!Array.isArray(users)) {
       if (users && users.type && users.type === 'error') {
         ElMessage({
