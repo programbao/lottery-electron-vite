@@ -134,13 +134,6 @@
         </button>
       </div>
       <div class="setting">
-        <button class="btn" @click="(e) => toggleSetting('usersSetting', e)">
-          {{ textMappingConfig.toggleSettingUsersSetting.chineseText }}
-          <span v-if="textMappingConfig.toggleSettingUsersSetting.otherLanguagesText">
-            <br/>
-            {{ textMappingConfig.toggleSettingUsersSetting.otherLanguagesText }}
-          </span>
-        </button>
         <button class="btn" @click="(e) => toggleSetting('prizeSetting', e)">
           {{ textMappingConfig.toggleSettingPrizeSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingPrizeSetting.otherLanguagesText">
@@ -148,6 +141,13 @@
             {{ textMappingConfig.toggleSettingPrizeSetting.otherLanguagesText }}
           </span>
        </button>
+        <button class="btn" @click="(e) => toggleSetting('usersSetting', e)">
+          {{ textMappingConfig.toggleSettingUsersSetting.chineseText }}
+          <span v-if="textMappingConfig.toggleSettingUsersSetting.otherLanguagesText">
+            <br/>
+            {{ textMappingConfig.toggleSettingUsersSetting.otherLanguagesText }}
+          </span>
+        </button>
         <button class="btn" @click="(e) => toggleSetting('cardSetting', e)">
           {{ textMappingConfig.toggleSettingCardSetting.chineseText }}
           <span v-if="textMappingConfig.toggleSettingCardSetting.otherLanguagesText">

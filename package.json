@@ -18,6 +18,7 @@
     "electron-win-state": "^1.1.22",
     "element-plus": "^2.4.2",
     "godb": "^0.6.2",
+    "intro.js": "^7.2.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
     "nanoid": "^3.3.6",
@@ -50,7 +51,7 @@
     ],
     "extraResources": [
       {
-        "from": "electron/assets", 
+        "from": "electron/assets",
         "to": "assets"
       }
     ],
@@ -61,7 +62,9 @@
     "mac": {
       "category": "public.app.category.utilities"
     },
-    "win": { "icon": "electron/controller/data/img/lottery_icon.ico" },
+    "win": {
+      "icon": "electron/controller/data/img/lottery_icon.ico"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true

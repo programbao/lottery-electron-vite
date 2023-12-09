@@ -6,14 +6,6 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>抽奖系统</title>
-    <script src="./lib/three.min.js"></script>
-    <script src="./lib/tween.min.js"></script>
-    <script src="./lib/TrackballControls.js"></script>
-    <script src="./lib/CSS3DRenderer.js"></script>
-    <script src="./lib/ajax.js"></script>
-    <script src="./lib/lodash.min.js"></script>
-    <script src="./lib/jquery.js"></script>
-    <script src="./lib/anime.min.js"></script>
     <style>
       .loading-box {
         position: fixed;
@@ -156,27 +148,37 @@
       </h1>
     </div>
     <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script src="./lib/anime.min.js"></script>
     <script>
-       // Wrap every letter in a span
-      var textWrapper = document.querySelector('.ml6 .letters');
-      textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+      // Wrap every letter in a span
+     var textWrapper = document.querySelector('.ml6 .letters');
+     textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
 
-      anime.timeline({loop: true})
-        .add({
-          targets: '.ml6 .letter',
-          translateY: ["1.1em", 0],
-          translateZ: 0,
-          duration: 750,
-          delay: (el, i) => 50 * i
-        }).add({
-          targets: '.ml6',
-          opacity: 0,
-          duration: 1000,
-          easing: "easeOutExpo",
-          delay: 1000
-        });
-    </script>
+     anime.timeline({loop: true})
+       .add({
+         targets: '.ml6 .letter',
+         translateY: ["1.1em", 0],
+         translateZ: 0,
+         duration: 750,
+         delay: (el, i) => 50 * i
+       }).add({
+         targets: '.ml6',
+         opacity: 0,
+         duration: 1000,
+         easing: "easeOutExpo",
+         delay: 1000
+       });
+   </script>
+    <link rel="stylesheet" href="./css/introjs.min.css" />
+    <script src="./lib/three.min.js"></script>
+    <script src="./lib/tween.min.js"></script>
+    <script src="./lib/TrackballControls.js"></script>
+    <script src="./lib/CSS3DRenderer.js"></script>
+    <script src="./lib/ajax.js"></script>
+    <script src="./lib/lodash.min.js"></script>
+    <script src="./lib/jquery.js"></script>
+    <script src="./lib/intro.min.js"></script>
+    <script type="module" src="/src/main.js"></script>
     <script src="./lib/jquery.confetti.js"></script>
   </body>
 </html>

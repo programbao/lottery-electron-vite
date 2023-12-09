@@ -73,11 +73,11 @@
     class="card-empty-tips" 
     v-show="basicData.prizes.length 
       && ((member.length <= 0 && currentPrize) || (!currentPrize && !basicData.isEnterLottery))">
-    <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往名单设置进行设置</span>
-    <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往奖项设置进行设置</span>
+    <span v-if="member.length <= 0 && currentPrize">奖项没有抽奖人员名单，请前往“名单设置”进行设置</span>
+    <span v-if="!currentPrize">抽奖已结束，谢谢参与；如想添加抽奖奖项，请前往“奖项设置”进行设置</span>
   </div>
   <div class="prizes-empty-tips" v-if="!basicData.prizes.length">
-    <span>暂无抽奖奖项，请前往奖项设置进行设置</span>
+    <span>暂无抽奖奖项，请前往“奖项设置”进行设置</span>
   </div>
 </template>
 
