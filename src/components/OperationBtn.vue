@@ -235,6 +235,15 @@
         </button>
         <MusicBtn />
       </div>
+      <div class="help">
+        <button class="btn bounce-top" @click="(e) => helpClick(e)">
+          {{ textMappingConfig.help.chineseText }}
+          <span v-if="textMappingConfig.help.otherLanguagesText">
+            <br/>
+            {{ textMappingConfig.help.otherLanguagesText }}
+          </span>
+       </button>
+      </div>
     </div>
 
     <usersSettingDialog ref="usersSettingDialogRef" />
@@ -266,6 +275,7 @@ import operationLogDialog from "../components/configWidget/operationLog/dialog.v
 import ballSettingDialog from "../components/configWidget/ballSetting/dialog.vue"
 import checkFileListDialog from "../components/configWidget/checkFileList/dialog.vue"
 import textMappingConfigDialog from "../components/configWidget/textMappingConfig/dialog.vue"
+import openHelp from '../libs/help.js'
 const operationBtnStyle = ref({});
 import dayjs from 'dayjs'
 import { nanoid } from 'nanoid';
@@ -321,6 +331,13 @@ const toggleSetting = (settingStr, event) => {
       break;
   }
 }
+
+//帮助
+const helpClick = (e) => {
+  isTipsBottomBar.value = true
+  openHelp(basicData);
+}
+
 // const currentPrizeSurplusCount = computed(() => {
 //   console.log(basicData.lastTimePrizeIndex, 'basicData.lastTimePrizeIndex')
 //   const handlePrize = basicData.currentPrize ? basicData.currentPrize : basicData.prizes[basicData.lastTimePrizeIndex];

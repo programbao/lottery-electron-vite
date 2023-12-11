@@ -7,6 +7,7 @@ import PrizeBar from './components/PrizeBar.vue'
 import PrizeMark from './components/PrizeMark.vue'
 import LuckyUser from './components/LuckyUser.vue'
 import ShowAllLuckyUser from './components/ShowAllLuckyUser.vue'
+import openHelp from './libs/help.js'
 // import ConfigDialog from "./components/configWidget/index.vue"
 import ScreenCard from './components/ScreenCard.vue'
 // 引入store
@@ -15,7 +16,6 @@ const lotteryData = lotteryDataStore()
 import GoDB from 'godb'
 const operationDB = new GoDB('operationDB') // 连接数据库
 window.operationLogTable = operationDB.table('operation_log') // 获取数据表
-console.log(window.operationLogTable, 'window.operation_log')
 // console.log(window.operationLogTable.getAll(), 'window.operation_log')
 // window.operationLogTable.getAll().then((res) => {
 //         console.log(res, 'window.operationLogTable.getAll()window.operationLogTable.getAll()')
@@ -34,90 +34,7 @@ onMounted(async () => {
       nextTick(() => {
         let isIntroFirstScreen = localStorage.getItem("isIntroFirstScreen")
         if (isIntroFirstScreen && isIntroFirstScreen === "true") return
-        introJs()
-          .setOptions({
-                overlayOpacity: 0.9,
-                exitOnOverlayClick: false,
-                exitOnEsc: false,
-            steps: [
-              {
-                title: '欢迎使用抽奖系统',
-                intro: '欢迎使用抽奖系统! 👋'
-              },
-              {
-                element: document.querySelector('.prizes-empty-tips'),
-                intro: '这是屏幕提示'
-              },
-              {
-                title: '互动操作区',
-                element: document.querySelector('.bottom-bar'),
-                intro: `
-                  <ul>
-                    <li>1. 该程序能使用的功能</li>
-                    <li>2. 一些必用的设置需知道："奖项设置","名单设置","导出抽奖结果","全屏"</li>
-                  </ul>
-                `
-              },
-              {
-                title: '屏幕/背景图切换',
-                element: document.querySelector('.bottom-bar .quick-operation'),
-                intro: `
-                  <ul>
-                    <li>背景墙：该功能会把奖项和旋转人员名单隐藏，显示背景图</li>
-                    <li>屏幕墙：该功能会把背景图、奖项和旋转人员名单隐藏，显示在最上面；图片可和背景图一样，也可不一样，根据实际需求来使用</li>
-                    <li>展示奖项：该功能会显示出奖项和抽奖人员</li>
-                  </ul> 
-                `
-              },
-              {
-                title: '抽奖设置',
-                element: document.querySelector('.bottom-bar .setting'),
-                intro: `
-                  <ul>
-                        <li><strong style="color:red">奖项设置</strong>: 管理奖项设置。<br>
-                                <ul>
-                                <li><strong>功能</strong>:
-                                        <ul>
-                                        <li>增加奖项：添加新的奖项。</li>
-                                        <li>删除奖项：移除现有的奖项。</li>
-                                        <li>修改奖项：编辑现有奖项的名称或描述。</li>
-                                        </ul>
-                                </li>
-                                </ul>
-                        </li>
-                        <li><strong style="color:red">名单设置</strong>: 用于管理参与抽奖的名单。</li> 
-                        <li><strong>卡片设置</strong>: 管理显示卡片的设置。</li> 
-                        <li><strong>球体设置</strong>: 定制球体效果的设置。</li> 
-                        <li><strong>文案设置</strong>: 管理文案显示的设置。</li> 
-                        <li><strong>其他资源设置</strong>: 管理其他资源的设置，（用于更换背景、屏幕图以及音乐文件）。</li> 
-                        <li><strong>操作日志</strong>: 记录操作日志。</li> 
-                  </ul> 
-                `
-              },
-              {
-                title: '名单与导出',
-                element: document.querySelector('.bottom-bar .other'),
-                intro: `<ul>
-                                <li><strong style="color:red">导出抽奖结果</strong>: 将抽奖结果导出为文件。</li>
-                                <li><strong style="color:red">全屏</strong>: 展示界面全屏。</li>
-                                <li><strong>文件列表</strong>: 查看上传的文件列表。</li> 
-                                <li><strong>展示中奖名单</strong>: 展示当前中奖名单。</li> 
-                                <li><strong>重置当前/上一轮奖项中奖名单</strong>: 重置当前或上一轮的中奖名单。</li> 
-                                <li><strong>重置所有中奖名单</strong>: 重置所有中奖名单记录。</li> 
-                        </ul>
-                `
-              },
-              {
-                title: '隐藏操作区',
-                element: document.querySelector('.tips-bottom'),
-                intro: '可隐藏操作区, 避免影响抽奖操作'
-              }
-            ]
-          }) // 确认完毕之后执行的事件
-            .onbeforeexit(() => {
-              localStorage.setItem("isIntroFirstScreen", "true")
-            })
-          .start()
+        openHelp();
       })
     }, 500)
   }, 500)

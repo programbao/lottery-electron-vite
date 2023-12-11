@@ -712,6 +712,11 @@
       "defaultText": "",
       "chineseText": "点击隐藏",
       "otherLanguagesText": ""
+    },
+    "help": {
+      "defaultText": "",
+      "chineseText": "帮助",
+      "otherLanguagesText": ""
     }
   },
   "luckyCardConfigStyle": {
