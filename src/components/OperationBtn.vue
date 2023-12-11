@@ -29,7 +29,7 @@
           class="btn" 
           id="lottery" 
           v-show="!noBeginLottery && !isNextPrize" 
-          @click="(e) => beginLottery(e)">
+          @click="(e) => beginLottery(e, isLotting ? textMappingConfig.lotteryEnd.chineseText : isContinueLottery ?  textMappingConfig.continueLottery.chineseText : textMappingConfig.lottery.chineseText)">
           {{ isLotting ? textMappingConfig.lotteryEnd.chineseText : isContinueLottery ?  textMappingConfig.continueLottery.chineseText : textMappingConfig.lottery.chineseText }}
           <span v-if="textMappingConfig.lotteryEnd.otherLanguagesText && isLotting">
             <br/>
@@ -414,7 +414,7 @@ const enterLottery = (e) => {
 const handleEnterLotteryEnd = () => {
   noBeginLottery.value = false
 }
-const beginLottery = (e) => {
+const beginLottery = (e, btnTxt) => {
   if (basicData.prizes.length === 0 || !noHideBtn.value) {
     ElMessage({
       type: 'error',
@@ -427,6 +427,9 @@ const beginLottery = (e) => {
       timeout: 2000
     });
     return
+  }
+  if (btnTxt === textMappingConfig.value.lottery.chineseText) {
+    bus.emit('adjustLotteryActionBtn')
   }
   bus.emit('beginLottery')
   isFirstPrize.value = false
